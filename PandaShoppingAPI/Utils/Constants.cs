@@ -1,0 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace PandaShoppingAPI.Utils
+{
+    public class Constants
+    {
+        public const string CLAIM_USER_ID = "user_id";
+        public const string CLAIM_ACCOUNT_ID = "account_id";
+        public const string POLICY_CORS_ALL = "PolicyAll";
+        public const string POLICY_UPLOAD_FILE = "PolicyUpdateFile";
+        public const string ID_MODEL_MAINTENANCE = "model";
+        public const string ID_OIL_MAINTENACE = "oil";
+    }
+}

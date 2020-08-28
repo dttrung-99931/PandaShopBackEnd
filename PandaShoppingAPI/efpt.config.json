@@ -1,0 +1,139 @@
+﻿{
+   "ContextClassName": "EcommerceDBContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "IncludeConnectionString": true,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "DataAccess\\EF",
+   "ProjectRootNamespace": "PandaShoppingAPI",
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "Tables": [
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[Address]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[Cart]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[CartDetail]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[Category]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[Delivery]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[DeliveryMethod]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[DeliveryPartner]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[Feedback]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[Image]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[Invoice]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[Order_]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[OrderDetail]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[PaymentMethod]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[Permission]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[Product]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[ProductImage]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[ProductOption]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[ProductOptionImage]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[ProductOptionValue]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[ProductPropertyValue]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[Property]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[PropertyTemplate]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[PropertyTemplateValue]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[Resource]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[Role]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[Shop]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[Template]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[User_]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[UserRole]"
+      }
+   ],
+   "UseDatabaseNames": true,
+   "UseDbContextSplitting": false,
+   "UseFluentApiOnly": false,
+   "UseHandleBars": false,
+   "UseInflector": false,
+   "UseLegacyPluralizer": false,
+   "UseNodaTime": false,
+   "UseSpatial": false,
+   "UseStoredProcedures": false
+}
