@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PandaShoppingAPI.Services;
+using System;
 
 namespace PandaShoppingAPI.Utils
 {
@@ -26,6 +27,11 @@ namespace PandaShoppingAPI.Utils
                 this.page_size = 50;
                 this.page_number = 1;
             }
+        }
+
+        internal static Meta ProcessAndCreate<TFilter>(int total, TFilter filter) where TFilter : Filter
+        {
+            return ProcessAndCreate(total, filter.page_size, filter.page_number);
         }
 
         internal static Meta ProcessAndCreate(int total, int? page_size, int? page_number)

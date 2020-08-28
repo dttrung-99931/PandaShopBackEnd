@@ -17,29 +17,39 @@ namespace PandaShoppingAPI.Utils
         public static IEnumerable<T> Page<T>(IQueryable<T> iQueryable, int? page_size, int? page_number)
         {
             if (page_size != null && page_number != null)
+            {
                 return iQueryable
                         .Skip(Convert.ToInt32(page_size) * (Convert.ToInt32(page_number) - 1))
                         .Take(Convert.ToInt32(page_size));
-            else
-                return iQueryable;
+            }
+            else return iQueryable;
         }
+
+        internal static List<TEntity> Page<TEntity>(IQueryable<TEntity> queryable, Filter filter)
+        {
+            return Page(queryable, filter.page_size, filter.page_number).ToList();
+        }
+
         public static IEnumerable<T> Page<T>(IEnumerable<T> iQueryable, int? page_size, int? page_number)
         {
             if (page_size != null && page_number != null)
+            {
                 return iQueryable
                         .Skip(Convert.ToInt32(page_size) * (Convert.ToInt32(page_number) - 1))
                         .Take(Convert.ToInt32(page_size));
-            else
-                return iQueryable;
+            }
+            else return iQueryable;
         }
+
         public static IEnumerable<T> Page<T>(List<T> iQueryable, int? page_size, int? page_number)
         {
             if (page_size != null && page_number != null)
+            {
                 return iQueryable
                         .Skip(Convert.ToInt32(page_size) * (Convert.ToInt32(page_number) - 1))
                         .Take(Convert.ToInt32(page_size));
-            else
-                return iQueryable;
+            }
+            else return iQueryable;
         }
 
         internal static string GetAppDataFilePath(string fileName)

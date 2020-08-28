@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PandaShoppingAPI.Models.Category_
+namespace PandaShoppingAPI.Models
 {
     public class CategoryModel: BaseModel<Category, CategoryModel>
     {
         public string name { get; set; }
+        public int? parentId { get; set; }
     }
 }

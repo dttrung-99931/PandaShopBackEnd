@@ -14,17 +14,14 @@ using PandaShoppingAPI.Models;
 namespace PandaShoppingAPI.Controllers
 {
     //[EnableCors("PolicyAll")]
-    [Route("v1/[controller]")]
     [ApiController]
-    public class BaseApiController<T> : ControllerBase
+    public class BaseApiController<TService> : ControllerBase
     {
-        protected readonly T _service;
-        protected readonly IMapper _mapper;
+        protected readonly TService _service;
         
-        public BaseApiController(T service, IMapper mapper)
+        public BaseApiController(TService service)
         {
             _service = service;
-            _mapper = mapper;
         }
 
         protected ResponseWrapper error(HttpStatusCode code, string msg)

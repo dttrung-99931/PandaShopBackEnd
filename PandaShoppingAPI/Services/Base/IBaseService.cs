@@ -1,21 +1,24 @@
-﻿using System;
+﻿using PandaShoppingAPI.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Services
 {
-    public interface IBaseService<T> where T: class
+    public interface IBaseService<TEntity, TFilter> where TEntity: class
     {
-        List<T> GetAll();
+        List<TEntity> Fill(TFilter filter, out Meta meta);
 
-        T GetById(object id);
+        List<TEntity> GetAll();
+
+        TEntity GetById(object id);
 
         void Delete(object id);
 
-        T Insert(T entity);
+        TEntity Insert(TEntity entity);
 
-        void Update(T entity, object id);
+        void Update(TEntity entity, object id);
 
         bool Exist(object id);
     }
