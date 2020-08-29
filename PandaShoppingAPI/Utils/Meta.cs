@@ -31,7 +31,7 @@ namespace PandaShoppingAPI.Utils
 
         internal static Meta ProcessAndCreate<TFilter>(int total, TFilter filter) where TFilter : Filter
         {
-            return ProcessAndCreate(total, filter.page_size, filter.page_number);
+            return ProcessAndCreate(total, filter.pageSize, filter.pageNum);
         }
 
         internal static Meta ProcessAndCreate(int total, int? page_size, int? page_number)

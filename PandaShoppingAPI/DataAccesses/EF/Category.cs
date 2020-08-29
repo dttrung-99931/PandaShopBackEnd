@@ -21,7 +21,12 @@ namespace PandaShoppingAPI.DataAccesses.EF
         [Required]
         [StringLength(50)]
         public string name { get; set; }
+        public int level { get; set; }
+        public int? imageId { get; set; }
 
+        [ForeignKey(nameof(imageId))]
+        [InverseProperty(nameof(Image.Category))]
+        public virtual Image image { get; set; }
         [ForeignKey(nameof(parentId))]
         [InverseProperty(nameof(Category.Inverseparent))]
         public virtual Category parent { get; set; }

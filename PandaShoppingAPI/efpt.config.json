@@ -5,7 +5,7 @@
    "IncludeConnectionString": true,
    "ModelNamespace": null,
    "OutputContextPath": null,
-   "OutputPath": "DataAccess\\EF",
+   "OutputPath": "DataAccesses\\EF",
    "ProjectRootNamespace": "PandaShoppingAPI",
    "SelectedHandlebarsLanguage": 0,
    "SelectedToBeGenerated": 0,

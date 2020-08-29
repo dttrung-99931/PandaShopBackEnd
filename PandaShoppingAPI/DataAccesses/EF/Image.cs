@@ -10,6 +10,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
     {
         public Image()
         {
+            Category = new HashSet<Category>();
             ProductImage = new HashSet<ProductImage>();
             ProductOptionImage = new HashSet<ProductOptionImage>();
         }
@@ -22,6 +23,8 @@ namespace PandaShoppingAPI.DataAccesses.EF
         [StringLength(100)]
         public string fileName { get; set; }
 
+        [InverseProperty("image")]
+        public virtual ICollection<Category> Category { get; set; }
         [InverseProperty("image")]
         public virtual ICollection<ProductImage> ProductImage { get; set; }
         [InverseProperty("image")]

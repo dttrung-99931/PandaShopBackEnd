@@ -27,7 +27,7 @@ namespace PandaShoppingAPI.Utils
 
         internal static List<TEntity> Page<TEntity>(IQueryable<TEntity> queryable, Filter filter)
         {
-            return Page(queryable, filter.page_size, filter.page_number).ToList();
+            return Page(queryable, filter.pageSize, filter.pageNum).ToList();
         }
 
         public static IEnumerable<T> Page<T>(IEnumerable<T> iQueryable, int? page_size, int? page_number)

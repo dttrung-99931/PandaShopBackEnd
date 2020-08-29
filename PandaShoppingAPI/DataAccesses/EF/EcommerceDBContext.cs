@@ -79,6 +79,13 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<Category>(entity =>
             {
+                entity.Property(e => e.level).HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.image)
+                    .WithMany(p => p.Category)
+                    .HasForeignKey(d => d.imageId)
+                    .HasConstraintName("FK_Category_Image");
+
                 entity.HasOne(d => d.parent)
                     .WithMany(p => p.Inverseparent)
                     .HasForeignKey(d => d.parentId)

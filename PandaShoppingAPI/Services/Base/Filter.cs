@@ -8,7 +8,13 @@ namespace PandaShoppingAPI.Services
     public class Filter
     {
         public string q { get; set; }
-        public int? page_size { get; set; }
-        public int? page_number { get; set; }
+        public int? pageSize { get; set; }
+        public int? pageNum { get; set; }
+
+        public  string UnescapeQ()
+        {
+            return Uri.UnescapeDataString(q);
+        }
+
     }
 }
