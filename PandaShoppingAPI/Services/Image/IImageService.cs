@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace PandaShoppingAPI.Services
 {
-    public interface IImageService : IBaseService<Image, ImageFilter>
+    public interface IImageService : IBaseService<Image, ImageModel, ImageFilter>
     {
         Image InsertImg(string based64Img);
         //void InsertMaintenanceImages(int maintenanceId, List<ImageModel> imgs);

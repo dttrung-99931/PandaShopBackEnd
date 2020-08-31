@@ -18,7 +18,7 @@ namespace PandaShoppingAPI.Controllers.Base
         where TRequestModel: BaseModel<TEntity, TRequestModel>
         where TResponseModel: BaseModel<TEntity, TResponseModel>
         where TFilter: Filter
-        where TService: IBaseService<TEntity, TFilter>        
+        where TService: IBaseService<TEntity, TRequestModel, TFilter>        
     {
         public CrudApiController(TService service) : base(service)
         {
@@ -70,8 +70,7 @@ namespace PandaShoppingAPI.Controllers.Base
             try
             {
                 responseModel = Mapper.Map<TResponseModel>(
-                    _service.Insert(
-                    Mapper.Map<TEntity>(requestModel))
+                    _service.Insert(requestModel)
                 );
             }
             catch (Exception e)
@@ -93,7 +92,7 @@ namespace PandaShoppingAPI.Controllers.Base
             try
             {
                 _service.Update(
-                    Mapper.Map<TEntity>(requestModel), requestModel.id
+                    requestModel, requestModel.id
                  );
             }
             catch (Exception e)

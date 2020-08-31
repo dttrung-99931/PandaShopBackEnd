@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Services
 {
-    public interface IBaseService<TEntity, TFilter> where TEntity: class
+    public interface IBaseService<TEntity, TRequestModel, TFilter>
+        where TEntity: class
+        where TRequestModel : class
+        where TFilter: Filter
     {
         List<TEntity> Fill(TFilter filter, out Meta meta);
 
@@ -16,9 +19,9 @@ namespace PandaShoppingAPI.Services
 
         void Delete(object id);
 
-        TEntity Insert(TEntity entity);
+        TEntity Insert(TRequestModel requestModel);
 
-        void Update(TEntity entity, object id);
+        void Update(TRequestModel requestModel, object id);
 
         bool Exist(object id);
     }

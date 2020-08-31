@@ -1,12 +1,15 @@
-﻿using PandaShoppingAPI.DataAccesses.Repos;
+﻿using AutoMapper;
+using PandaShoppingAPI.DataAccesses.Repos;
 using PandaShoppingAPI.Utils;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace PandaShoppingAPI.Services
 {
-    public abstract class BaseService<TRepo, TEntity, TFilter> : IBaseService<TEntity, TFilter> 
+    public abstract class BaseService<TRepo, TEntity, TRequestModel, TFilter> : 
+        IBaseService<TEntity, TRequestModel, TFilter> 
         where TEntity: class
+        where TRequestModel : class
         where TFilter: Filter
         where TRepo: IBaseRepo<TEntity>
     {
@@ -50,14 +53,14 @@ namespace PandaShoppingAPI.Services
             return _repo.GetById(id);
         }
 
-        public virtual TEntity Insert(TEntity entity)
+        public virtual TEntity Insert(TRequestModel requestModel)
         {
-            return _repo.Insert(entity);
+            return _repo.Insert(Mapper.Map<TEntity>(requestModel));
         }
 
-        public void Update(TEntity entity, object id)
+        public void Update(TRequestModel requestModel, object id)
         {
-            _repo.Update(entity, id);
+            _repo.Update(Mapper.Map<TEntity>(requestModel), id);
         }       
     }
 }

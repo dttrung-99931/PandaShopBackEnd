@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
+using PandaShoppingAPI.Models;
 using PandaShoppingAPI.Services;
 using PandaShoppingAPI.Utils;
 using System;
@@ -10,7 +11,8 @@ using System.IO;
 
 namespace GarageSystem.Services
 {
-    public class ImageService : BaseService<IImageRepo, Image, ImageFilter>, IImageService
+    public class ImageService : BaseService<IImageRepo, Image, ImageModel, ImageFilter>, 
+        IImageService
     {
         private readonly ConfigUtil _configUtil;
         
