@@ -9,24 +9,27 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
-namespace GarageSystem.Services
+namespace PandaShoppingAPI.Services
 {
     public class ImageService : BaseService<IImageRepo, Image, ImageModel, ImageFilter>, 
         IImageService
     {
         private readonly ConfigUtil _configUtil;
         
-        public ImageService(IImageRepo repo, 
-            ConfigUtil configUtil, IMapper mapper) : base(repo)
+        public ImageService(IImageRepo repo, ConfigUtil configUtil) : base(repo)
         {
             _configUtil = configUtil;
         }
 
-        public Image InsertImg(string based64Img)
+        public Image InsertCategoryImg(string based64Img)
+        {
+            return InsertImg(based64Img, _configUtil.GetCategoryImgDirPath());
+        }
+
+        public Image InsertImg(string based64Img, string storeDirPath)
         {
             var imgFileName = UploadBase64.UploadBased64Img(
-                    based64Img,
-                    _configUtil.GetCustomerImgDirPath()
+                    based64Img, storeDirPath
             );
 
             Image image = new Image()
@@ -37,26 +40,37 @@ namespace GarageSystem.Services
             return _repo.Insert(image);
         }
 
+        /***
+         * Ignore to use this func
+         * 
+         * Use specified DeleteXXX instead, for ex: DeleteCategoryImg 
+         */
         public override void Delete(object id)
         {
-            var img = _repo.GetById(id);
-            if (img != null)
-            {
-                DeleteImgFile(img);
-                base.Delete(id);
-            }
+            throw new Exception("Use specified DeleteXXX instead, for ex: DeleteCategoryImg");
         }
 
-        private void DeleteImgFile(Image img)
+        public void DeleteCategoryImg(int imageId)
         {
-            string deletedImgPath = "";
+            DeleteImg(imageId, _configUtil.GetCategoryImgDirPath());
+        }
 
-            if (img.Category.Count > 0)
+        private void DeleteImg(int imgId, string imgStoreDirPath)
+        {
+            var deletedImg = GetById(imgId);
+
+            if (deletedImg != null)
             {
-                deletedImgPath = Path.Combine(
-                                _configUtil.GetCustomerImgDirPath(), img.fileName);
-            } 
+                DeleteImgFile(deletedImg, imgStoreDirPath);
+                
+                _repo.Delete(imgId);                   
+            } else throw new Exception("Image not found to delete, id = " + imgId);
+        }
 
+        private void DeleteImgFile(Image img, string imgStoreDirPath)
+        {
+            string deletedImgPath = Path.Combine(
+                    imgStoreDirPath, img.fileName);
             try
             {
                 if (!string.IsNullOrEmpty(deletedImgPath))

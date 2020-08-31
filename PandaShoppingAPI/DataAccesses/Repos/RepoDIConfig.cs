@@ -11,6 +11,7 @@ namespace PandaShoppingAPI.DataAccesses.Repos
         static public void Config(IServiceCollection services)
         {
             services.AddScoped<ICategoryRepo, CategoryRepo>();
+            services.AddScoped<IImageRepo, ImageRepo>();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using PandaShoppingAPI.Models.Base;
 using System;
 using System.Collections.Generic;
@@ -10,24 +11,20 @@ namespace PandaShoppingAPI.Configs
 {
     public static class MapperConfig
     {
-        public static void Config()
+        public static void Config(IConfiguration sysConfig)
         {
             Mapper.Initialize(config =>
             {
-                config.AddMapperProfiles(Assembly.GetEntryAssembly());
+                config.AddMapperProfiles(sysConfig, Assembly.GetEntryAssembly());
             });
 
             //Compile mapping after configuration to boost map speed
             Mapper.Configuration.CompileMappings();
         }
 
-        //public static void AddMappingProfiles(this IMapperConfigurationExpression config)
-        //{
-        //    config.AddMappingProfiles(Assembly.GetEntryAssembly());
-        //}
-
         public static void AddMapperProfiles(
             this IMapperConfigurationExpression config,
+            IConfiguration sysConfig,
             params Assembly[] assemblies)
         {
             var allTypes = assemblies.SelectMany(a => a.ExportedTypes);
@@ -38,7 +35,7 @@ namespace PandaShoppingAPI.Configs
                     type.GetInterfaces().Contains(typeof(IMapperProfile)))
                 .Select(type => (IMapperProfile)Activator.CreateInstance(type));
 
-            var profile = new CompositeMapperProfile(mappingProfileImpls);
+            var profile = new CompositeMapperProfile(mappingProfileImpls, sysConfig);
 
             config.AddProfile(profile);
         }

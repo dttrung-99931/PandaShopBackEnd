@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using PandaShoppingAPI.Configs;
 using System;
 using System.Collections.Generic;
@@ -15,12 +16,13 @@ namespace PandaShoppingAPI.Models.Base
     {
         public TId id { get; set; }
 
-        public void CreateMappings(Profile profile)
+        public void CreateMappings(Profile profile,
+             IConfiguration config)
         {
-            IMappingExpression<TEntity, TModel> expression = 
-                profile.CreateMap<TEntity, TModel>();
+            IMappingExpression<TModel, TEntity> expression = 
+                profile.CreateMap<TModel, TEntity> ();
             
-            CustomMapping(expression.ReverseMap());
+            CustomMapping(expression.ReverseMap(), config);
         }
 
         public static TModel FromEntity(TEntity entity)
@@ -33,7 +35,8 @@ namespace PandaShoppingAPI.Models.Base
             return Mapper.Map<TEntity>(this);
         }
 
-        virtual protected void CustomMapping(IMappingExpression<TModel, TEntity> mappingExpression)
+        virtual protected void CustomMapping(IMappingExpression<TEntity, TModel> mappingExpression,
+            IConfiguration config)
         {
         }
     }

@@ -58,7 +58,7 @@ namespace PandaShoppingAPI.Services
             return _repo.Insert(Mapper.Map<TEntity>(requestModel));
         }
 
-        public void Update(TRequestModel requestModel, object id)
+        virtual public void Update(TRequestModel requestModel, object id)
         {
             _repo.Update(Mapper.Map<TEntity>(requestModel), id);
         }       

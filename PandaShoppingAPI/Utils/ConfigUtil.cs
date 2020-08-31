@@ -18,11 +18,11 @@ namespace PandaShoppingAPI.Utils
             _config = config;
         }
 
-        internal string GetCustomerImgDirPath()
+        internal string GetCategoryImgDirPath()
         {
             try
             {
-                return _config["Path:CustomerImgDir"];
+                return _config["Path:CategoryImgDir"];
             }
             catch (Exception e)
             {
