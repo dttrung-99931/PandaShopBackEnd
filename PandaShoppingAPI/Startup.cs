@@ -15,6 +15,7 @@ using Microsoft.OpenApi.Models;
 using PandaShoppingAPI.Configs;
 using PandaShoppingAPI.DataAccesses.Repos;
 using PandaShoppingAPI.Services;
+using PandaShoppingAPI.Utils;
 
 namespace PandaShoppingAPI
 {
@@ -35,7 +36,9 @@ namespace PandaShoppingAPI
             ServiceDIConfig.Config(services);
             
             RepoDIConfig.Config(services);
-            
+
+            services.AddSingleton<ConfigUtil>();
+
             services.AddControllers()
                 // Make [DataContract] working in asp.net core
                 .AddNewtonsoftJson();
@@ -88,7 +91,8 @@ namespace PandaShoppingAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, 
+            IWebHostEnvironment env, ConfigUtil configUtil)
         {
             if (env.IsDevelopment())
             {
@@ -109,6 +113,10 @@ namespace PandaShoppingAPI
             {
                 endpoints.MapControllers();
             });
+
+            // Config image storing folder, base request image url 
+            configUtil.ConfigStaticCategoryImages(app);
+
         }
     }
 }

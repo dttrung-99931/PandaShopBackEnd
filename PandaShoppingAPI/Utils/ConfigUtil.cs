@@ -73,11 +73,11 @@ namespace PandaShoppingAPI.Utils
             });
         }
 
-        internal void ConfigStaticCustomerImages(IApplicationBuilder app)
+        internal void ConfigStaticCategoryImages(IApplicationBuilder app)
         {
             ConfigStaticImages(
-                _config["Path:CustomerImgDir"],
-                _config["Path:CustomerImgRequestPath"],
+                _config["Path:CategoryImgDir"],
+                _config["Path:CategoryImgRequestPath"],
                 app
             );
         }

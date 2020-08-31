@@ -11,5 +11,6 @@ namespace PandaShoppingAPI.Models
     {
         public string name { get; set; }
         public int? parentId { get; set; }
+        public string based64Img { get; set; }
     }
 }
