@@ -179,5 +179,11 @@ namespace PandaShoppingAPI.DataAccesses.Repos
         {
             _dbContext.Entry(entity).Collection(exp).Load();
         }
+
+        public IQueryable<T> Where(Expression<Func<T, bool>> condition)
+        {
+            return _dbSet.Where(condition);
+        }
+
     }
 }

@@ -21,7 +21,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public string name { get; set; }
         [StringLength(50)]
         public string secondaryId { get; set; }
-        public bool? isRequired { get; set; }
 
         [InverseProperty("property")]
         public virtual ICollection<ProductOptionValue> ProductOptionValue { get; set; }

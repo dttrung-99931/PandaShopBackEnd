@@ -14,7 +14,7 @@ namespace PandaShoppingAPI.Models.Base
 
     public abstract class BaseModel<TEntity, TModel, TId> : IMapperProfile
     {
-        public TId id { get; set; }
+        virtual public TId id { get; set; }
 
         public void CreateMappings(Profile profile,
              IConfiguration config)

@@ -12,6 +12,8 @@ namespace PandaShoppingAPI.Services
         {
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<ITemplateService, TemplateService>();
+            services.AddScoped<IPropertyService, PropertyService>();
         }
     }
 }

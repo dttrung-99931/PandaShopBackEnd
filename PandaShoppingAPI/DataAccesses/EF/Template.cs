@@ -10,18 +10,15 @@ namespace PandaShoppingAPI.DataAccesses.EF
     {
         public Template()
         {
+            Category = new HashSet<Category>();
             PropertyTemplate = new HashSet<PropertyTemplate>();
         }
 
         [Key]
         public int id { get; set; }
-        [StringLength(50)]
-        public string name { get; set; }
-        public int categoryId { get; set; }
 
-        [ForeignKey(nameof(categoryId))]
-        [InverseProperty(nameof(Category.Template))]
-        public virtual Category category { get; set; }
+        [InverseProperty("template")]
+        public virtual ICollection<Category> Category { get; set; }
         [InverseProperty("template")]
         public virtual ICollection<PropertyTemplate> PropertyTemplate { get; set; }
     }

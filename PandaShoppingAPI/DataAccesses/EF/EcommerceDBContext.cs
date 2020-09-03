@@ -92,6 +92,11 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .WithMany(p => p.Inverseparent)
                     .HasForeignKey(d => d.parentId)
                     .HasConstraintName("FK_Category_Category");
+
+                entity.HasOne(d => d.template)
+                    .WithMany(p => p.Category)
+                    .HasForeignKey(d => d.templateId)
+                    .HasConstraintName("FK_Category_Template");
             });
 
             modelBuilder.Entity<Delivery>(entity =>
@@ -283,13 +288,13 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasName("UQ__Property__2D08ACCF846D2992")
                     .IsUnique();
 
-                entity.Property(e => e.isRequired).HasDefaultValueSql("((0))");
-
                 entity.Property(e => e.secondaryId).IsUnicode(false);
             });
 
             modelBuilder.Entity<PropertyTemplate>(entity =>
             {
+                entity.Property(e => e.isRequired).HasDefaultValueSql("((1))");
+
                 entity.HasOne(d => d.property)
                     .WithMany(p => p.PropertyTemplate)
                     .HasForeignKey(d => d.propertyId)
@@ -307,14 +312,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .WithMany(p => p.PropertyTemplateValue)
                     .HasForeignKey(d => d.propertyTemplateId)
                     .HasConstraintName("FK_PropertyTemplateValue_PropertyTemplate");
-            });
-
-            modelBuilder.Entity<Template>(entity =>
-            {
-                entity.HasOne(d => d.category)
-                    .WithMany(p => p.Template)
-                    .HasForeignKey(d => d.categoryId)
-                    .HasConstraintName("FK_Template_Category");
             });
 
             modelBuilder.Entity<UserRole>(entity =>

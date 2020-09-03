@@ -10,6 +10,8 @@ namespace PandaShoppingAPI.DataAccesses.Repos
     public interface IBaseRepo<T> where T : class
     {
         IQueryable<T> GetIQueryable();
+        
+        IQueryable<T> Where(Expression<Func<T, bool>> condition);
 
         T GetById(object id);
 
@@ -20,6 +22,7 @@ namespace PandaShoppingAPI.DataAccesses.Repos
         T Insert(T entity);
 
         List<T> InsertRange(List<T> entites);
+
         void DeleteIf(Expression<Func<T, bool>> e);
         void Update(T entity, object id);
         

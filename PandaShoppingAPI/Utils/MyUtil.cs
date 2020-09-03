@@ -30,6 +30,17 @@ namespace PandaShoppingAPI.Utils
             return Page(queryable, filter.pageSize, filter.pageNum).ToList();
         }
 
+        internal static List<TListTo> MapList<TListFrom, TListTo>(
+            List<TListFrom> list, 
+            Func<TListFrom, TListTo> mapper)
+        {
+            var res = new List<TListTo>();
+            list.ForEach(
+                e => res.Add(mapper.Invoke(e))
+            );
+            return res;
+        }
+
         public static IEnumerable<T> Page<T>(IEnumerable<T> iQueryable, int? page_size, int? page_number)
         {
             if (page_size != null && page_number != null)

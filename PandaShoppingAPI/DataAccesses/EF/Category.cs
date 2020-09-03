@@ -12,7 +12,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
         {
             Inverseparent = new HashSet<Category>();
             Product = new HashSet<Product>();
-            Template = new HashSet<Template>();
         }
 
         [Key]
@@ -23,6 +22,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public string name { get; set; }
         public int level { get; set; }
         public int? imageId { get; set; }
+        public int? templateId { get; set; }
 
         [ForeignKey(nameof(imageId))]
         [InverseProperty(nameof(Image.Category))]
@@ -30,11 +30,12 @@ namespace PandaShoppingAPI.DataAccesses.EF
         [ForeignKey(nameof(parentId))]
         [InverseProperty(nameof(Category.Inverseparent))]
         public virtual Category parent { get; set; }
+        [ForeignKey(nameof(templateId))]
+        [InverseProperty(nameof(Template.Category))]
+        public virtual Template template { get; set; }
         [InverseProperty(nameof(Category.parent))]
         public virtual ICollection<Category> Inverseparent { get; set; }
         [InverseProperty("category")]
         public virtual ICollection<Product> Product { get; set; }
-        [InverseProperty("category")]
-        public virtual ICollection<Template> Template { get; set; }
     }
 }

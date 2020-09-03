@@ -14,7 +14,8 @@ namespace PandaShoppingAPI.Models
     {
         public string name { get; set; }
         public string imgLink { get; set; }
-        public int? parentId { get; set; }
+        //public int? parentId { get; set; }
+        //public int level { get; set; }
 
         protected override void CustomMapping(
             IMappingExpression<Category, CategoryResponseModel> mappingExpression, 

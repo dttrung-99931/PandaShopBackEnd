@@ -17,6 +17,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public int id { get; set; }
         public int templateId { get; set; }
         public int propertyId { get; set; }
+        public bool? isRequired { get; set; }
 
         [ForeignKey(nameof(propertyId))]
         [InverseProperty(nameof(Property.PropertyTemplate))]

@@ -8,14 +8,9 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Models
 {
-    public class CategoryModel: BaseModel<Category, CategoryModel>
+    public class PropertyModel: BaseModel<Property, PropertyModel>
     {
         public string name { get; set; }
-        public int? parentId { get; set; }
-        public string based64Img { get; set; }
-        public int level { get; set; }
-
-        [JsonIgnore]
-        public int imageId { get; set; }
+        public string secondaryId { get; set; }
     }
 }
