@@ -16,6 +16,10 @@ namespace PandaShoppingAPI.DataAccesses.Repos
             services.AddScoped<IPropertyRepo, PropertyRepo>();
             services.AddScoped<IPropertyTemplateRepo, PropertyTemplateRepo>();
             services.AddScoped<IPropertyTemplateValueRepo, PropertyTemplateValueRepo>();
+            services.AddScoped<IProductRepo, ProductRepo>();
+            services.AddScoped<IUserRepo, UserRepo>();
+            services.AddScoped<ICartRepo, CartRepo>();
+            services.AddScoped<IShopRepo, ShopRepo>();
         }
     }
 }

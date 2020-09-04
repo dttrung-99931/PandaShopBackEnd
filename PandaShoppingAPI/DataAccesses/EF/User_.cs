@@ -22,7 +22,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         [Required]
         [StringLength(15)]
         public string phone { get; set; }
-        [StringLength(15)]
+        [StringLength(100)]
         public string email { get; set; }
         [Required]
         [StringLength(500)]
