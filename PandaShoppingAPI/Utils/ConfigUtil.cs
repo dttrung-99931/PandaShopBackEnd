@@ -81,5 +81,19 @@ namespace PandaShoppingAPI.Utils
                 app
             );
         }
+
+        internal string GetProductImgDirPath()
+        {
+            return _config["Path:ProductImgDir"];
+        }
+
+        internal void ConfigStaticProductImages(IApplicationBuilder app)
+        {
+            ConfigStaticImages(
+                _config["Path:ProductImgDir"],
+                _config["Path:ProductImgRequestPath"],
+                app
+            );
+        }
     }
 }

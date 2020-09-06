@@ -15,18 +15,21 @@ namespace PandaShoppingAPI.Services
         IImageService
     {
         private readonly ConfigUtil _configUtil;
+        private readonly IProductImageRepo _productImageRepo;
         
-        public ImageService(IImageRepo repo, ConfigUtil configUtil) : base(repo)
+        public ImageService(IImageRepo repo, ConfigUtil configUtil,
+            IProductImageRepo productImageRepo) : base(repo)
         {
             _configUtil = configUtil;
+            _productImageRepo = productImageRepo;
         }
 
         public Image InsertCategoryImg(string based64Img)
         {
-            return InsertImg(based64Img, _configUtil.GetCategoryImgDirPath());
+            return InsertImg(based64Img, "", _configUtil.GetCategoryImgDirPath());
         }
 
-        public Image InsertImg(string based64Img, string storeDirPath)
+        public Image InsertImg(string based64Img, string description, string storeDirPath)
         {
             var imgFileName = UploadBase64.UploadBased64Img(
                     based64Img, storeDirPath
@@ -113,6 +116,44 @@ namespace PandaShoppingAPI.Services
             {
                 Delete(id);
             }
+        }
+
+        public List<ProductImage> InsertProductImages(int productId, 
+            List<ProductImageRequest> images)
+        {
+            var productImages = new List<ProductImage>();
+
+            images.ForEach(img =>
+            {
+                var imgId = InsertImg(img.based64Img, 
+                    img.description, 
+                    _configUtil.GetProductImgDirPath()).id;
+                
+                productImages.Add
+                (
+                    new ProductImage()
+                    {
+                        productId = productId,
+                        imageId = imgId
+                    }
+                );
+            });
+
+            _productImageRepo.InsertRange(productImages);
+
+            return productImages;
+        }
+
+        public void UpdateProductImages(int productId, List<ProductImageRequest> productImages)
+        {
+            productImages.ForEach(
+                img =>
+                {
+                    if (string.IsNullOrEmpty(img.based64Img))
+                    {
+
+                    }
+                });
         }
 
         //public void UpdateRange(List<ImageModel> updatedImgs)

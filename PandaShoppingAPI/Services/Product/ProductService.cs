@@ -15,16 +15,19 @@ namespace PandaShoppingAPI.Services
         private readonly IProductOptionRepo _productOptionRepo;
         private readonly IProductPropertyValueRepo _productPropertyValueRepo;
         private readonly ICategoryService _categoryService;
+        private readonly IImageService _imageService;
 
         public ProductService(
             IProductRepo repo,
             IProductOptionRepo productOptionRepo,
             IProductPropertyValueRepo productPropertyValueRepo,
+            IImageService imageService, 
             ICategoryService categoryService) : base(repo)
         {
             _productOptionRepo = productOptionRepo;
             _productPropertyValueRepo = productPropertyValueRepo;
             _categoryService = categoryService;
+            _imageService = imageService;
         }
 
         public void DeletePropertyValues(int id, List<int> propertyValueIDs)
@@ -106,6 +109,16 @@ namespace PandaShoppingAPI.Services
                     || product.category.name.Contains(unescapedQ));
             }
             return filledProducts;
+        }
+
+        public List<ProductImage> InsertImages(int productId, List<ProductImageRequest> images)
+        {
+            return _imageService.InsertProductImages(productId, images);
+        }
+
+        public void UpdateImages(int productId, List<ProductImageRequest> images)
+        {
+            _imageService.UpdateProductImages(productId, images);
         }
     }
 }

@@ -118,6 +118,7 @@ namespace PandaShoppingAPI
 
             // Config image storing folder, base request image url 
             configUtil.ConfigStaticCategoryImages(app);
+            configUtil.ConfigStaticProductImages(app);
 
         }
     }

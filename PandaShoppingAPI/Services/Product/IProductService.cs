@@ -9,5 +9,7 @@ namespace PandaShoppingAPI.Services
         void UpdatePropertyValue(int productId, PropertyValueRequest propertyValueReq);
         void UpdatePropertyValues(int productId, List<PropertyValueRequest> propertyValueReqs);
         void DeletePropertyValues(int id, List<int> propertyValueIDs);
+        List<ProductImage> InsertImages(int productId, List<ProductImageRequest> images);
+        void UpdateImages(int productId, List<ProductImageRequest> images);
     }
 }

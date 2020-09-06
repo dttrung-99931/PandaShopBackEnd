@@ -18,18 +18,29 @@ namespace PandaShoppingAPI.Models
         public string description { get; set; }
         public int sellingNum { get; set; }
         public int remainingNum { get; set; }
+        public string thumbImgLink { get; set; }
         public int categoryId { get; set; }
         public int shopId { get; set; }
-        
+
         [JsonProperty("propertyValues")]
         public List<ProductPropertyResponse> ProductPropertyValue { get; set; }
-        
+
         [JsonProperty("options")]
         public List<ProductOptionResponse> ProductOption { get; set; }
-        
+
         protected override void CustomMapping(IMappingExpression<Product, ProductResponse> mappingExpression, IConfiguration config)
         {
-            base.CustomMapping(mappingExpression, config);
+            mappingExpression.ForMember
+            (
+                productRes => productRes.thumbImgLink,
+                option => option.MapFrom(
+                        product => product.ProductImage.Count != 0
+                                ? Path.Combine(
+                                    config["Path:ProductImgEndPoint"],
+                                    product.ProductImage.First().image.fileName)
+                                : null
+                )
+            );
         }
     }
 

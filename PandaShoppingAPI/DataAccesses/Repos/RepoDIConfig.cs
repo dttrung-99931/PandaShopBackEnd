@@ -23,6 +23,7 @@ namespace PandaShoppingAPI.DataAccesses.Repos
             services.AddScoped<IProductOptionRepo, ProductOptionRepo>();
             services.AddScoped<IProductPropertyValueRepo, ProductPropertyValueRepo>();
             services.AddScoped<IProductOptionValueRepo, ProductOptionValueRepo>();
+            services.AddScoped<IProductImageRepo, ProductImageRepo>();
         }
     }
 }

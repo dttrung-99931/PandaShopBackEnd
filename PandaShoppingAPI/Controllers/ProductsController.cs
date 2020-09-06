@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using PandaShoppingAPI.Controllers.Base;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.Models;
@@ -39,6 +40,52 @@ namespace PandaShoppingAPI.Controllers
                 );
         
             return exceptionResponse == null ? ok_delete() : exceptionResponse;
+        }
+
+        [HttpPost("{id}/Images")]
+        public ActionResult<ResponseWrapper> InsertImages(
+            int id, [FromBody] List<ProductImageRequest> images)
+        {
+            List<ProductImageResponse> insertedImages = null;
+            
+            var exceptionResponse = HandleExceptions(() =>
+                    {
+                        insertedImages = Mapper.Map<List<ProductImageResponse>>
+                        (
+                            _service.InsertImages(id, images)
+                        );
+                    }
+                );
+
+            return exceptionResponse == null ? ok_create(insertedImages) : exceptionResponse;
+        }
+
+        [HttpGet("{id}/Images")]
+        public ActionResult<ResponseWrapper> GetImages(int id)
+        {
+            List<ProductImageResponse> images = null;
+
+            var exceptionResponse = HandleExceptions(() =>
+                    {
+                        images = Mapper.Map<List<ProductImageResponse>>
+                        (
+                            _service.GetById(id).ProductImage
+                        );
+                    }
+                );
+
+            return exceptionResponse == null ? ok_create(images) : exceptionResponse;
+        }
+
+        [HttpPut("{id}/Images")]
+        public ActionResult<ResponseWrapper> UpdateImages(
+           int id, [FromBody] List<ProductImageRequest> images)
+        {
+            var exceptionResponse = HandleExceptions(
+                    () => _service.UpdateImages(id, images)
+                );
+
+            return exceptionResponse == null ? ok_update() : exceptionResponse;
         }
 
     }
