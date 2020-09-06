@@ -27,7 +27,7 @@ namespace PandaShoppingAPI.DataAccesses.Repos
                 _dbSet.Remove(entity);
                 Save();
             }
-            else throw new Exception("Not found");
+            else throw new KeyNotFoundException("Not found entity with id " + id);
         }
 
 
@@ -185,5 +185,18 @@ namespace PandaShoppingAPI.DataAccesses.Repos
             return _dbSet.Where(condition);
         }
 
+        public void Update(object id, IBaseRepo<T>.Updater updater)
+        {
+            var entity = GetById(id);
+
+            if (entity == null)
+            {
+                throw new KeyNotFoundException();
+            }
+
+            updater.Invoke(entity);
+
+            Update(entity, id);
+        }
     }
 }

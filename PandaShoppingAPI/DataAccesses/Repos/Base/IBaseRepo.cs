@@ -50,6 +50,8 @@ namespace PandaShoppingAPI.DataAccesses.Repos
         // changeUpdate is used to change update.
         // For example: ignore update for some fields like created_at, ...
         void Update(T entity, object id, ChangeUpdate changeUpdate);
-
+        
+        delegate void Updater(T entity);
+        void Update(object id, Updater updater);
     }
 }

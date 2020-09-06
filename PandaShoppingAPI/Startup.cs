@@ -88,6 +88,8 @@ namespace PandaShoppingAPI
                     );
                 }
             );
+
+            //services.AddAuthentication().AddOAuth();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -108,7 +110,7 @@ namespace PandaShoppingAPI
             app.UseRouting();
 
             app.UseAuthorization();
-
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

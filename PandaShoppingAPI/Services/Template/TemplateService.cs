@@ -73,5 +73,33 @@ namespace PandaShoppingAPI.Services
                     (int)templatePropertyId, model.values);
             }
         }
+
+        public override Template Insert(TemplateModel requestModel)
+        {
+            var template = base.Insert(requestModel);
+
+            requestModel.templateProperties.ForEach(
+                tempProperty => AddPropertyValues(template.id, tempProperty));
+
+            return template;
+        }
+
+        public List<int> GetRequiredPropertyIDs(int templateId)
+        {
+            return GetRequiredProperties(templateId)
+                .Select(property => property.id)
+                .ToList();
+        }
+
+        private List<Property> GetRequiredProperties(int templateId)
+        {
+            return _propertyTemplateRepo
+                .Where(tempProperty => 
+                    tempProperty.templateId == templateId && 
+                    (bool)tempProperty.isRequired)
+                .Select(tempProperty => tempProperty.property)
+                .ToList();
+        }
+
     }
 }

@@ -8,11 +8,9 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Models
 {
-    public class TemplateModel: BaseModel<Template, TemplateModel>
+    public class PropertyValueRequest: BaseModel<ProductPropertyValue, PropertyValueRequest>
     {
-        [JsonIgnore]
-        override public int id { get; set; }
-
-        public List<PropertyValuesModel> templateProperties { get; set; }
+        public int propertyId { get; set; }
+        public string value { get; set; }
     }
 }

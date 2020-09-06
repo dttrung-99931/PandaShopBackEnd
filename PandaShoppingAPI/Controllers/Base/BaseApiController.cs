@@ -10,6 +10,8 @@ using System.Net;
 using System.Security.Claims;
 using System.Text;
 using PandaShoppingAPI.Models;
+using System.Collections.Generic;
+using PandaShoppingAPI.Utils.Exceptions;
 
 namespace PandaShoppingAPI.Controllers
 {
@@ -166,6 +168,42 @@ namespace PandaShoppingAPI.Controllers
         protected bool IsInvalidUser()
         {
             return GetUserIdFromToken() == -1;
+        }
+
+        protected ActionResult<ResponseWrapper> HandleExceptions(Action action)
+        {
+            if (!ModelState.IsValid)
+            {
+                return error(HttpStatusCode.BadRequest, GetModelStateErrMsg());
+            }
+            
+            try
+            {
+                action.Invoke();
+            }
+            catch (KeyNotFoundException e)
+            {
+                return notFound(e.Message);
+            }
+            catch (ConflictException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (ForbiddenException e)
+            {
+                return forbid(e.Message);
+            }
+            catch (Exception e)
+            {
+                return error(e.Message);
+            }
+            
+            return null;
+        }
+
+        private ActionResult<ResponseWrapper> forbid(string message)
+        {
+            return new ResponseWrapper(HttpStatusCode.Forbidden, message);
         }
     }
 }

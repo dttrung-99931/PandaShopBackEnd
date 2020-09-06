@@ -8,14 +8,10 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Models
 {
-    public class ProductModel: BaseModel<Product, ProductModel>
+    public class ProductOptionModel: BaseModel<ProductOption, ProductOptionModel>
     {
         public string name { get; set; }
-        public string description { get; set; }
-        public int sellingNum { get; set; }
-        public int categoryId { get; set; }
-        public int shopId { get; set; }
-        public List<ProductOptionModel> productOptions { get; set; }
+        public decimal price { get; set; }
         public List<PropertyValueRequest> properties { get; set; }
     }
 }

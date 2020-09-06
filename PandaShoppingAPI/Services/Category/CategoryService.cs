@@ -1,6 +1,8 @@
 ﻿using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
 using PandaShoppingAPI.Models;
+using PandaShoppingAPI.Utils;
+using PandaShoppingAPI.Utils.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +14,14 @@ namespace PandaShoppingAPI.Services
         ICategoryService
     {
         private readonly IImageService _imageService;
-        public CategoryService(ICategoryRepo repo, IImageService imageService) : base(repo)
+        private readonly ITemplateService _templateService;
+        public CategoryService(
+            ICategoryRepo repo, 
+            IImageService imageService,
+            ITemplateService templateService) : base(repo)
         {
             _imageService = imageService;
+            _templateService = templateService;
         }
 
         /***
@@ -82,6 +89,44 @@ namespace PandaShoppingAPI.Services
             }
 
             return filledCategories;
+        }
+
+        public void InsertTemplateForCategory(int categoryId, TemplateModel model)
+        {
+            var category = GetById(categoryId);
+            if (category == null)
+            {
+                throw new KeyNotFoundException();
+            }
+
+            if (category.templateId != null)
+            {
+                throw new ConflictException();
+            }
+
+            var templateId = _templateService.Insert(model).id;
+
+            category.templateId = templateId;
+
+            _repo.Update(category, category.id);
+        }
+
+        public List<int> GetRequiredPropertyIDs(int categoryId)
+        {
+            var category = GetById(categoryId);
+
+            if (category == null)
+            {
+                throw new NotFoundException("Category", categoryId);
+            }
+
+            if (category.templateId == null)
+            {
+                throw new NotFoundException(
+                    "Not found template of category id " + categoryId);
+            }
+
+            return _templateService.GetRequiredPropertyIDs((int)category.templateId);
         }
     }
 }

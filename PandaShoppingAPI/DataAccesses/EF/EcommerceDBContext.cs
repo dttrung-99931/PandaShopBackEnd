@@ -295,6 +295,8 @@ namespace PandaShoppingAPI.DataAccesses.EF
             {
                 entity.Property(e => e.isRequired).HasDefaultValueSql("((1))");
 
+                entity.Property(e => e.orderIndex).HasDefaultValueSql("((0))");
+
                 entity.HasOne(d => d.property)
                     .WithMany(p => p.PropertyTemplate)
                     .HasForeignKey(d => d.propertyId)

@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Principal;
+using System.Runtime.Serialization;
 
 namespace PandaShoppingAPI.Utils
 {
@@ -112,5 +113,6 @@ namespace PandaShoppingAPI.Utils
         {
             Debug.WriteLine(msg);
         }
+
     }
 }

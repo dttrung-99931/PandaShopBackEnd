@@ -3,6 +3,11 @@ using PandaShoppingAPI.Controllers.Base;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.Models;
 using PandaShoppingAPI.Services;
+using PandaShoppingAPI.Utils;
+using PandaShoppingAPI.Utils.Exceptions;
+using System;
+using System.Collections.Generic;
+using System.Net;
 
 namespace PandaShoppingAPI.Controllers
 {
@@ -13,5 +18,34 @@ namespace PandaShoppingAPI.Controllers
         public CategoriesController(ICategoryService service) : base(service)
         {
         }
+
+        [HttpPost("{id}/Template")]
+        public ActionResult<ResponseWrapper> InsertTemplate(
+            int id,
+            [FromBody] TemplateModel model)
+        {
+            if (!ModelState.IsValid)
+                return error(HttpStatusCode.BadRequest, GetModelStateErrMsg());
+
+            try
+            {
+                _service.InsertTemplateForCategory(id, model);
+            }
+            catch (KeyNotFoundException)
+            {
+                return notFound();
+            }
+            catch (ConflictException)
+            {
+                return Conflict();
+            }
+            catch (Exception e)
+            {
+                return error(e.Message);
+            }
+
+            return ok_create("Successfully");
+        }
+
     }
 }

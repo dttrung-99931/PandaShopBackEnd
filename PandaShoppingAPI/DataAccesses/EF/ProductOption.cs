@@ -19,7 +19,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public int id { get; set; }
         [Column(TypeName = "money")]
         public decimal price { get; set; }
-        [Required]
         [StringLength(50)]
         public string name { get; set; }
         public int productId { get; set; }
