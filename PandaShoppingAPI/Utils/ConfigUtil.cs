@@ -76,7 +76,7 @@ namespace PandaShoppingAPI.Utils
         internal void ConfigStaticCategoryImages(IApplicationBuilder app)
         {
             ConfigStaticImages(
-                _config["Path:CategoryImgDir"],
+                Path.Combine(Directory.GetCurrentDirectory(), _config["Path:CategoryImgDir"]),
                 _config["Path:CategoryImgRequestPath"],
                 app
             );
@@ -90,7 +90,7 @@ namespace PandaShoppingAPI.Utils
         internal void ConfigStaticProductImages(IApplicationBuilder app)
         {
             ConfigStaticImages(
-                _config["Path:ProductImgDir"],
+                Path.Combine(Directory.GetCurrentDirectory(), _config["Path:ProductImgDir"]),
                 _config["Path:ProductImgRequestPath"],
                 app
             );
