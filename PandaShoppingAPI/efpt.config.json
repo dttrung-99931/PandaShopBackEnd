@@ -2,11 +2,13 @@
    "ContextClassName": "EcommerceDBContext",
    "ContextNamespace": null,
    "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
    "IncludeConnectionString": true,
    "ModelNamespace": null,
    "OutputContextPath": null,
    "OutputPath": "DataAccesses\\EF",
    "ProjectRootNamespace": "PandaShoppingAPI",
+   "Schemas": null,
    "SelectedHandlebarsLanguage": 0,
    "SelectedToBeGenerated": 0,
    "Tables": [
