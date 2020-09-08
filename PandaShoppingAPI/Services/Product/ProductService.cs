@@ -101,6 +101,25 @@ namespace PandaShoppingAPI.Services
         {
             var filledProducts = base.Fill(filter);
 
+            if (filter.categoryIdLV3 != null)
+            {
+                filledProducts = filledProducts
+                    .Where(product => product.categoryId == filter.categoryIdLV3);
+            }
+
+            if (filter.categoryIdLV2 != null)
+            {
+                filledProducts = filledProducts
+                    .Where(product => product.category.parentId == filter.categoryIdLV2);
+            }
+
+            if (filter.categoryIdLV1 != null)
+            {
+                filledProducts = filledProducts
+                    .Where(product => product.category.parentId != null
+                            && product.category.parent.parentId == filter.categoryIdLV1);
+            }
+
             if (!string.IsNullOrEmpty(filter.q))
             {
                 var unescapedQ = Uri.UnescapeDataString(filter.q);
