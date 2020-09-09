@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Models
 {
-    public class ProductResponse : BaseModel<Product, ProductResponse>
+    public class ProductDetailResponse : BaseModel<Product, ProductDetailResponse>
     {
         public string name { get; set; }
         public double starNum { get; set; }
@@ -28,7 +28,7 @@ namespace PandaShoppingAPI.Models
         [JsonProperty("options")]
         public List<ProductOptionResponse> ProductOption { get; set; }
 
-        protected override void CustomMapping(IMappingExpression<Product, ProductResponse> mappingExpression, IConfiguration config)
+        protected override void CustomMapping(IMappingExpression<Product, ProductDetailResponse> mappingExpression, IConfiguration config)
         {
             mappingExpression.ForMember
             (
@@ -42,6 +42,7 @@ namespace PandaShoppingAPI.Models
                 )
             );
         }
+
     }
 
 

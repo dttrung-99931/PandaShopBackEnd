@@ -14,7 +14,7 @@ namespace PandaShoppingAPI.Controllers
 {
     [Route("v1/[controller]")]
     public class ProductsController : CrudApiController<Product, ProductModel,
-            ProductResponse, IProductService, ProductFilter>
+            ThumbProductResponse, IProductService, ProductFilter>
     {
         public ProductsController(IProductService service) : base(service)
         {
@@ -88,5 +88,19 @@ namespace PandaShoppingAPI.Controllers
             return exceptionResponse == null ? ok_update() : exceptionResponse;
         }
 
+        public override ActionResult<ResponseWrapper> Get(int id)
+        {
+            ProductDetailResponse response = null;
+
+            var exceptionResponse = HandleExceptions(() =>
+            {
+                response = Mapper.Map<ProductDetailResponse>
+                (
+                    _service.GetById(id)
+                );
+            });
+
+            return exceptionResponse == null ? ok_get(response) : notFound();
+        }
     }
 }

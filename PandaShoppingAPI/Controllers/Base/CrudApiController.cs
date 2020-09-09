@@ -25,7 +25,7 @@ namespace PandaShoppingAPI.Controllers.Base
         }
 
         [HttpGet]
-        public ActionResult<ResponseWrapper> Get([FromQuery]TFilter filter)
+        virtual public ActionResult<ResponseWrapper> Get([FromQuery]TFilter filter)
         {
             Meta meta;
 
@@ -39,7 +39,7 @@ namespace PandaShoppingAPI.Controllers.Base
         }
 
         [HttpGet("{id}")]
-        public ActionResult<ResponseWrapper> Get(int id)
+        virtual public ActionResult<ResponseWrapper> Get(int id)
         {
             TResponseModel responseModel;
             try
@@ -60,7 +60,7 @@ namespace PandaShoppingAPI.Controllers.Base
         }
 
         [HttpPost]
-        public ActionResult<ResponseWrapper> Post([FromBody]TRequestModel requestModel)
+        virtual public ActionResult<ResponseWrapper> Post([FromBody]TRequestModel requestModel)
         {
             if (!ModelState.IsValid)
                 return error(HttpStatusCode.BadRequest, GetModelStateErrMsg());
@@ -82,7 +82,7 @@ namespace PandaShoppingAPI.Controllers.Base
         }
 
         [HttpPut("{id}")]
-        public ActionResult<ResponseWrapper> Put(int id, [FromBody] TRequestModel requestModel)
+        virtual public ActionResult<ResponseWrapper> Put(int id, [FromBody] TRequestModel requestModel)
         {
             if (id != requestModel.id)
                 return error(HttpStatusCode.BadRequest, "Id in url and body must be the same!");
@@ -104,7 +104,7 @@ namespace PandaShoppingAPI.Controllers.Base
 
 
         [HttpDelete("{id}")]
-        public ActionResult<ResponseWrapper> Delete(int id)
+        virtual public ActionResult<ResponseWrapper> Delete(int id)
         {
             if (!_service.Exist(id)) return notFound();
 
