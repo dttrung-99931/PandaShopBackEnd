@@ -3,6 +3,7 @@ using PandaShoppingAPI.DataAccesses.Repos;
 using PandaShoppingAPI.Models;
 using PandaShoppingAPI.Utils;
 using PandaShoppingAPI.Utils.Exceptions;
+using PandaShoppingAPI.Utils.Extentions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -127,6 +128,13 @@ namespace PandaShoppingAPI.Services
             }
 
             return _templateService.GetRequiredPropertyIDs((int)category.templateId);
+        }
+
+        public List<Category> GetCategorySuggesstions(string q, int suggestionNum)
+        {
+            return _repo.Where(category => category.name.Contains(q.Unescaped()))
+                .Take(suggestionNum)
+                .ToList();
         }
     }
 }

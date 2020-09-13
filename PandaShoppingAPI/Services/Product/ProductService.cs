@@ -1,7 +1,9 @@
-﻿using PandaShoppingAPI.DataAccesses.EF;
+﻿using AutoMapper;
+using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
 using PandaShoppingAPI.Models;
 using PandaShoppingAPI.Utils.Exceptions;
+using PandaShoppingAPI.Utils.Extentions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -138,6 +140,39 @@ namespace PandaShoppingAPI.Services
         public void UpdateImages(int productId, List<ProductImageRequest> images)
         {
             _imageService.UpdateProductImages(productId, images);
+        }
+
+        /***
+         * Get search @param suggestionNum suggestions based on @param q
+         * 
+         * First, Find category suggestions. If the found suggestions 
+         * number = @param suggestionNum then @return only suggestions with the categories.
+         * Otherwise find product suggestions to satisfy @param suggestionNum suggestions
+         */
+        public SearchSuggestion GetSearchSuggestions(string q, int suggestionNum)
+        {
+            var suggestion = new SearchSuggestion();
+
+            suggestion.categories = Mapper.Map<List<CategoryModel>>(
+                _categoryService.GetCategorySuggesstions(q, suggestionNum)
+            );
+
+            if (suggestion.categories.Count < suggestionNum)
+            {
+                suggestion.products = Mapper.Map<List<ThumbProductResponse>>(
+                    GetProductSuggesstions(q, suggestionNum - suggestion.categories.Count)
+                );
+            }
+
+            return suggestion;
+        }
+
+        private List<Product> GetProductSuggesstions(string q, int suggestionNum)
+        {
+            return _repo.Where(
+                    product => product.name.Contains(q.Unescaped()))
+                .Take(suggestionNum)
+                .ToList();
         }
     }
 }

@@ -11,5 +11,6 @@ namespace PandaShoppingAPI.Services
         void DeletePropertyValues(int id, List<int> propertyValueIDs);
         List<ProductImage> InsertImages(int productId, List<ProductImageRequest> images);
         void UpdateImages(int productId, List<ProductImageRequest> images);
+        SearchSuggestion GetSearchSuggestions(string q, int suggestionNum);
     }
 }
