@@ -13,7 +13,7 @@ namespace PandaShoppingAPI.Controllers
 {
     [Route("v1/[controller]")]
     public class CategoriesController : CrudApiController<Category, CategoryModel,
-            CategoryResponseModel, ICategoryService, CategoryFilter>
+            CategoryResponse, ICategoryService, CategoryFilter>
     {
         public CategoriesController(ICategoryService service) : base(service)
         {

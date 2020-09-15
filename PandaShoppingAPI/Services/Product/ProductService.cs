@@ -129,6 +129,7 @@ namespace PandaShoppingAPI.Services
                     product => product.name.Contains(unescapedQ)
                     || product.category.name.Contains(unescapedQ));
             }
+
             return filledProducts;
         }
 
@@ -149,29 +150,57 @@ namespace PandaShoppingAPI.Services
          * number = @param suggestionNum then @return only suggestions with the categories.
          * Otherwise find product suggestions to satisfy @param suggestionNum suggestions
          */
-        public SearchSuggestion GetSearchSuggestions(string q, int suggestionNum)
+        public SearchSuggestion GetSearchSuggestions(SearchSuggestionRequest requesModel)
         {
             var suggestion = new SearchSuggestion();
 
-            suggestion.categories = Mapper.Map<List<CategoryModel>>(
-                _categoryService.GetCategorySuggesstions(q, suggestionNum)
-            );
+            if (requesModel.categoryId == null)
+            {
+                suggestion.categories = Mapper.Map<List<CategoryResponse>>(
+                    _categoryService.GetCategorySuggesstions(
+                        requesModel.q,
+                        requesModel.suggestionNum)
+                );
+            }
 
-            if (suggestion.categories.Count < suggestionNum)
+            if (suggestion.categories.Count < requesModel.suggestionNum)
             {
                 suggestion.products = Mapper.Map<List<ThumbProductResponse>>(
-                    GetProductSuggesstions(q, suggestionNum - suggestion.categories.Count)
+                    GetProductSuggesstions(
+                        requesModel.q, 
+                        requesModel.suggestionNum - suggestion.categories.Count,
+                        requesModel.categoryId)
                 );
             }
 
             return suggestion;
         }
 
-        private List<Product> GetProductSuggesstions(string q, int suggestionNum)
+        private List<Product> GetProductSuggesstions(
+            string q,
+            int suggesstionNum = 10, 
+            int? categoryId = null)
         {
-            return _repo.Where(
+            var products = _repo.GetIQueryable();
+
+            if (categoryId != null)
+            {
+                products = products
+                    .Where(product => product.categoryId == categoryId
+                           ||
+                           product.category.parentId != null &&
+                            (
+                                    product.category.parentId == categoryId
+                                    ||
+                                    (product.category.parent.parentId != null &&
+                                     product.category.parent.parentId == categoryId)
+                            )
+                    );
+            }
+
+            return products.Where(
                     product => product.name.Contains(q.Unescaped()))
-                .Take(suggestionNum)
+                .Take(suggesstionNum)
                 .ToList();
         }
     }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Models
 {
-    public class CategoryResponseModel : BaseModel<Category, CategoryResponseModel>
+    public class CategoryResponse : BaseModel<Category, CategoryResponse>
     {
         public string name { get; set; }
         public string imgLink { get; set; }
@@ -18,7 +18,7 @@ namespace PandaShoppingAPI.Models
         //public int level { get; set; }
 
         protected override void CustomMapping(
-            IMappingExpression<Category, CategoryResponseModel> mappingExpression, 
+            IMappingExpression<Category, CategoryResponse> mappingExpression, 
             IConfiguration config)
         {
             mappingExpression.ForMember

@@ -103,16 +103,15 @@ namespace PandaShoppingAPI.Controllers
             return exceptionResponse == null ? ok_get(response) : notFound();
         }
 
-        [HttpGet("/SearchSuggestions")]
+        [HttpGet("SearchSuggestions")]
         public ActionResult<ResponseWrapper> GetSearchSuggestions(
-            [FromQuery] string q,
-            [FromQuery] int suggestionNum = 10)
+            [FromQuery] SearchSuggestionRequest requesModel)
         { 
             SearchSuggestion suggestions = null;
 
             var exceptionResponse = HandleExceptions(() =>
             {
-                suggestions = _service.GetSearchSuggestions(q, suggestionNum);
+                suggestions = _service.GetSearchSuggestions(requesModel);
             });
 
             return exceptionResponse == null ? ok_get(suggestions) : exceptionResponse;

@@ -10,12 +10,12 @@ namespace PandaShoppingAPI.Models
 {
     public class SearchSuggestion
     {
-        public List<CategoryModel> categories { get; set; }
+        public List<CategoryResponse> categories { get; set; }
         public List<ThumbProductResponse> products { get; set; }
 
         public SearchSuggestion()
         {
-            this.categories = new List<CategoryModel>();
+            this.categories = new List<CategoryResponse>();
             this.products = new List<ThumbProductResponse>();
         }
     }
