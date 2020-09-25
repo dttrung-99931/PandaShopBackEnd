@@ -103,25 +103,12 @@ namespace PandaShoppingAPI.Services
         {
             var filledProducts = base.Fill(filter);
 
-            if (filter.categoryIdLV3 != null)
-            {
-                filledProducts = filledProducts
-                    .Where(product => product.categoryId == filter.categoryIdLV3);
-            }
-
-            if (filter.categoryIdLV2 != null)
-            {
-                filledProducts = filledProducts
-                    .Where(product => product.category.parentId == filter.categoryIdLV2);
-            }
-
-            if (filter.categoryIdLV1 != null)
-            {
-                filledProducts = filledProducts
-                    .Where(product => product.category.parentId != null
-                            && product.category.parent.parentId == filter.categoryIdLV1);
-            }
-
+            filledProducts = FillByCategory(filledProducts, filter);
+            
+            filledProducts = FillByPrice(filledProducts, filter);
+            
+            filledProducts = OrderBy(filledProducts, filter);
+            
             if (!string.IsNullOrEmpty(filter.q))
             {
                 var unescapedQ = Uri.UnescapeDataString(filter.q);
@@ -131,6 +118,79 @@ namespace PandaShoppingAPI.Services
             }
 
             return filledProducts;
+        }
+
+       private IQueryable<Product> OrderBy(
+            IQueryable<Product> products,
+            ProductFilter filter)
+        {
+            if (!string.IsNullOrEmpty(filter.orderBy))
+            {
+                if (filter.orderBy.Equals(ProductFilter.ASC))
+                {
+                    products = products.OrderBy(
+                        product => product.ProductOption.First().price
+                    );
+                }
+                else if (filter.orderBy.Equals(ProductFilter.DESC))
+                {
+                    products = products.OrderByDescending(
+                        product => product.ProductOption.First().price
+                    );
+                }
+                else throw new BadRequestException("Invalid 'orderBy' param");
+            }
+            
+            return products;
+        }
+
+        private IQueryable<Product> FillByPrice(
+            IQueryable<Product> products, 
+            ProductFilter filter)
+        {
+            if (filter.fromPrice != null)
+            {
+                products = products
+                    .Where(product =>
+                        product.ProductOption.Count > 0
+                        && product.ProductOption.First().price >= filter.fromPrice);
+            }
+
+            if (filter.toPrice != null)
+            {
+                products = products
+                    .Where(product =>
+                        product.ProductOption.Count > 0
+                        && product.ProductOption.First().price <= filter.toPrice);
+            }
+
+            return products;
+        }
+
+        private IQueryable<Product> FillByCategory(
+            IQueryable<Product> products, 
+            ProductFilter filter)
+        {
+            if (filter.categoryIdLV3 != null)
+            {
+                products = products
+                    .Where(product => product.categoryId == filter.categoryIdLV3);
+            }
+
+            if (filter.categoryIdLV2 != null)
+            {
+                products = products
+                    .Where(product => product.category.parentId == filter.categoryIdLV2);
+            }
+
+            if (filter.categoryIdLV1 != null)
+            {
+                products = products
+                    .Where(product => product.category.parentId != null
+                            && product.category.parent.parentId == filter.categoryIdLV1);
+            }
+
+            return products;
         }
 
         public List<ProductImage> InsertImages(int productId, List<ProductImageRequest> images)

@@ -27,9 +27,16 @@ namespace PandaShoppingAPI.Controllers.Base
         [HttpGet]
         virtual public ActionResult<ResponseWrapper> Get([FromQuery]TFilter filter)
         {
-            Meta meta;
+            Meta meta = null;
 
-            var filledEntities = _service.Fill(filter, out meta);
+            List<TEntity> filledEntities = null;  
+
+            var exceptionResponse = HandleExceptions(() =>
+            {
+                filledEntities = _service.Fill(filter, out meta);
+            });
+
+            if (exceptionResponse != null) return exceptionResponse;
 
             var responseModels = Mapper.Map<List<TResponseModel>>(
                 filledEntities

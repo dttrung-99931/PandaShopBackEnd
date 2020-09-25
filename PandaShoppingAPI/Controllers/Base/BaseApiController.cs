@@ -181,6 +181,10 @@ namespace PandaShoppingAPI.Controllers
             {
                 action.Invoke();
             }
+            catch (BadRequestException e)
+            {
+                return badRequest(e.Message);
+            }
             catch (KeyNotFoundException e)
             {
                 return notFound(e.Message);
