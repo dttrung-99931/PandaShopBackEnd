@@ -51,8 +51,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder
-                    .UseLazyLoadingProxies()
+                optionsBuilder.UseLazyLoadingProxies()
                     .UseSqlServer("Data Source=PandaShopDB.mssql.somee.com;Initial Catalog=PandaShopDB;Persist Security Info=True;User ID=pandahacker_SQLLogin_1;Password=dmlfn75iaj");
             }
         }

@@ -30,6 +30,12 @@ namespace PandaShoppingAPI.DataAccesses.EF
         [Required]
         [StringLength(50)]
         public string communeOrWard { get; set; }
+        [Required]
+        [StringLength(50)]
+        public string streetName { get; set; }
+        [Required]
+        [StringLength(50)]
+        public string houseNumber { get; set; }
 
         [InverseProperty("address")]
         public virtual ICollection<Order_> Order_ { get; set; }
