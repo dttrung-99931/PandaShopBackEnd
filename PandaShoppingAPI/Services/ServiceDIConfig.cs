@@ -16,6 +16,7 @@ namespace PandaShoppingAPI.Services
             services.AddScoped<IPropertyService, PropertyService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAddressService, AddressService>();
         }
     }
 }

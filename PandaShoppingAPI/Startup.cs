@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -120,6 +121,9 @@ namespace PandaShoppingAPI
             configUtil.ConfigStaticCategoryImages(app);
             configUtil.ConfigStaticProductImages(app);
 
+            // Config file access for App_Data folder
+            string baseDir = env.ContentRootPath;
+            AppDomain.CurrentDomain.SetData("DataDirectory", Path.Combine(baseDir, "App_Data"));
         }
     }
 }
