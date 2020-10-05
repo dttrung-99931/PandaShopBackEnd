@@ -14,5 +14,6 @@ namespace PandaShoppingAPI.Services
         public string orderBy { get; set; }
         public decimal? fromPrice { get; set; }
         public decimal? toPrice { get; set; }
+        public string provinceOrCityCode { get; set; }
     }
 }

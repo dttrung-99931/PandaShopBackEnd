@@ -210,6 +210,11 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<Product>(entity =>
             {
+                entity.HasOne(d => d.address)
+                    .WithMany(p => p.Product)
+                    .HasForeignKey(d => d.addressId)
+                    .HasConstraintName("FK_Product_Address");
+
                 entity.HasOne(d => d.category)
                     .WithMany(p => p.Product)
                     .HasForeignKey(d => d.categoryId)

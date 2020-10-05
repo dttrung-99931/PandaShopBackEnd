@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Configuration.Conventions;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using PandaShoppingAPI.DataAccesses.EF;
@@ -21,6 +22,7 @@ namespace PandaShoppingAPI.Models
         
         /*The price of the first product option*/
         public decimal firstPrice { get; set; }
+        public string sentFrom { get; set; }
 
         protected override void CustomMapping(IMappingExpression<Product, ThumbProductResponse> mappingExpression, IConfiguration config)
         {
@@ -34,13 +36,21 @@ namespace PandaShoppingAPI.Models
                                     product.ProductImage.First().image.fileName)
                                 : null
                 )
-            ).ForMember
+            )
+            .ForMember
             (
                 thumbProduct => thumbProduct.firstPrice,
                 option => option.MapFrom(
                         product => product.ProductOption.Count != 0
                             ? product.ProductOption.First().price
                             : -69
+                )
+            )
+            .ForMember
+            (
+                thumbProduct => thumbProduct.sentFrom,
+                option => option.MapFrom(
+                        product => product.address.provinceOrCity
                 )
             );
         }

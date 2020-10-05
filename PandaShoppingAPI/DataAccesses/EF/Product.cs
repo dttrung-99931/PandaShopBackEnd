@@ -29,7 +29,11 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public int remainingNum { get; set; }
         public int categoryId { get; set; }
         public int shopId { get; set; }
+        public int addressId { get; set; }
 
+        [ForeignKey(nameof(addressId))]
+        [InverseProperty(nameof(Address.Product))]
+        public virtual Address address { get; set; }
         [ForeignKey(nameof(categoryId))]
         [InverseProperty(nameof(Category.Product))]
         public virtual Category category { get; set; }

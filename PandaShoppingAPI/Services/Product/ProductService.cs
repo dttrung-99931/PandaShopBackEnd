@@ -107,20 +107,44 @@ namespace PandaShoppingAPI.Services
             
             filledProducts = FillByPrice(filledProducts, filter);
             
+            filledProducts = FillByProvinceOrCityCode(filledProducts, filter);
+            
+            filledProducts = FillByQ(filledProducts, filter);
+            
             filledProducts = OrderBy(filledProducts, filter);
             
-            if (!string.IsNullOrEmpty(filter.q))
-            {
-                var unescapedQ = Uri.UnescapeDataString(filter.q);
-                filledProducts = filledProducts.Where(
-                    product => product.name.Contains(unescapedQ)
-                    || product.category.name.Contains(unescapedQ));
-            }
-
             return filledProducts;
         }
 
-       private IQueryable<Product> OrderBy(
+        private IQueryable<Product> FillByQ(
+            IQueryable<Product> filledProducts, 
+            ProductFilter filter)
+        {
+            if (!string.IsNullOrEmpty(filter.q))
+            {
+                var unescapedQ = filter.UnescapeQ();
+                
+                return filledProducts.Where(
+                    product => product.name.Contains(unescapedQ)
+                    || product.category.name.Contains(unescapedQ));
+            }
+            return filledProducts;
+        }
+
+        private IQueryable<Product> FillByProvinceOrCityCode(
+            IQueryable<Product> filledProducts, 
+            ProductFilter filter)
+        {
+            if (!string.IsNullOrEmpty(filter.provinceOrCityCode))
+            {
+                return filledProducts
+                    .Where(product => product.address.provinceOrCityCode == 
+                                      filter.provinceOrCityCode);
+            }
+            return filledProducts;
+        }
+
+        private IQueryable<Product> OrderBy(
             IQueryable<Product> products,
             ProductFilter filter)
         {

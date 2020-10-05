@@ -11,6 +11,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public Address()
         {
             Order_ = new HashSet<Order_>();
+            Product = new HashSet<Product>();
         }
 
         [Key]
@@ -32,12 +33,11 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public string communeOrWard { get; set; }
         [Required]
         [StringLength(50)]
-        public string streetName { get; set; }
-        [Required]
-        [StringLength(50)]
-        public string houseNumber { get; set; }
+        public string streetAndHouseNum { get; set; }
 
         [InverseProperty("address")]
         public virtual ICollection<Order_> Order_ { get; set; }
+        [InverseProperty("address")]
+        public virtual ICollection<Product> Product { get; set; }
     }
 }
