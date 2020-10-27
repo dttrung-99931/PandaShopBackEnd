@@ -18,7 +18,6 @@ namespace PandaShoppingAPI.Models
         public string description { get; set; }
         public int sellingNum { get; set; }
         public int remainingNum { get; set; }
-        public string thumbImgLink { get; set; }
         public int categoryId { get; set; }
         public int shopId { get; set; }
 
@@ -27,6 +26,9 @@ namespace PandaShoppingAPI.Models
 
         [JsonProperty("options")]
         public List<ProductOptionResponse> ProductOption { get; set; }
+
+        [JsonProperty("images")]
+        public List<ProductImageResponse> ProductImage { get; set; }
 
         protected override void CustomMapping(IMappingExpression<Product, ProductDetailResponse> mappingExpression, IConfiguration config)
         {
