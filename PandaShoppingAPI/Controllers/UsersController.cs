@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PandaShoppingAPI.Controllers.Base;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.Models;
@@ -15,7 +16,6 @@ namespace PandaShoppingAPI.Controllers
     public class UsersController : CrudApiController<User_, UserModel,
             UserResponseModel, IUserService, UserFilter>
     {
-
         public UsersController(IUserService service) : base(service)
         {
         }
@@ -44,6 +44,30 @@ namespace PandaShoppingAPI.Controllers
             }
 
             return ok_create("Successfully");
+        }
+
+        [HttpPost("login")]
+        public ActionResult<ResponseWrapper> Login([FromBody] LoginModel loginModel)
+        {
+            if (!ModelState.IsValid)
+                return error(HttpStatusCode.BadRequest, GetModelStateErrMsg());
+
+            try
+            {
+                return ok_get(_service.Login(loginModel));   
+            }
+            catch (ConflictException)
+            {
+                return Conflict();
+            }
+            catch (KeyNotFoundException)
+            {
+                return notFound();
+            }
+            catch (Exception e)
+            {
+                return error(e.Message);
+            }
         }
 
     }

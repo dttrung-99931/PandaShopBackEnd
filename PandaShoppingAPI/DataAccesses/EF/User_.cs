@@ -8,6 +8,8 @@ namespace PandaShoppingAPI.DataAccesses.EF
 {
     public partial class User_
     {
+        internal object role_;
+
         public User_()
         {
             Feedback = new HashSet<Feedback>();

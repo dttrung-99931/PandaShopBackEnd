@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using GarageSystem.Config;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -37,6 +38,8 @@ namespace PandaShoppingAPI
             ServiceDIConfig.Config(services);
             
             RepoDIConfig.Config(services);
+
+            AuthConfig.Config(services, Configuration);
 
             services.AddSingleton<ConfigUtil>();
 
@@ -109,6 +112,10 @@ namespace PandaShoppingAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            // This must be put above app.UseAuthorization();
+            // Otherwise 401 always returned 
+            app.UseAuthentication();
 
             app.UseAuthorization();
             

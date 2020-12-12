@@ -30,20 +30,6 @@ namespace PandaShoppingAPI.Models
         [JsonProperty("images")]
         public List<ProductImageResponse> ProductImage { get; set; }
 
-        protected override void CustomMapping(IMappingExpression<Product, ProductDetailResponse> mappingExpression, IConfiguration config)
-        {
-            mappingExpression.ForMember
-            (
-                productRes => productRes.thumbImgLink,
-                option => option.MapFrom(
-                        product => product.ProductImage.Count != 0
-                                ? Path.Combine(
-                                    config["Path:ProductImgEndPoint"],
-                                    product.ProductImage.First().image.fileName)
-                                : null
-                )
-            );
-        }
 
     }
 
