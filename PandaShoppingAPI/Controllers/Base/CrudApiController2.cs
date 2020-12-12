@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PandaShoppingAPI.Models.Base;
 using PandaShoppingAPI.Services;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Controllers.Base
 {
-    public class CrudApiController<TEntity, TRequestModel, TResponseModel, TService, TFilter>:
+    public class CrudApiController2<TEntity, TRequestModel, TResponseModel, TService, TFilter>:
         BaseApiController<TService> 
 
         where TEntity : class
@@ -20,11 +21,13 @@ namespace PandaShoppingAPI.Controllers.Base
         where TFilter: Filter
         where TService: IBaseService<TEntity, TRequestModel, TFilter>        
     {
-        public CrudApiController(TService service) : base(service)
+        public CrudApiController2(TService service, IHttpContextAccessor httpContextAccessor) 
+            : base(service)
         {
-            if (UserCallAPIWithToken())
+            var user = httpContextAccessor.HttpContext.User;
+            if (UserCallAPIWithToken(user))
             {
-                service.SetUserIdentifier(GetUserIdentifier());
+                service.SetUserIdentifier(GetUserIdentifier(user));
             }
         }
 

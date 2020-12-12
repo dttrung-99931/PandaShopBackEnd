@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using PandaShoppingAPI.DataAccesses.Repos;
+using PandaShoppingAPI.Models;
 using PandaShoppingAPI.Utils;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,8 @@ namespace PandaShoppingAPI.Services
         where TRepo: IBaseRepo<TEntity>
     {
         protected TRepo _repo;
+        protected UserIdentifier User;
+
         public BaseService(TRepo repo)
         {
             _repo = repo;
@@ -61,6 +64,11 @@ namespace PandaShoppingAPI.Services
         virtual public void Update(TRequestModel requestModel, object id)
         {
             _repo.Update(Mapper.Map<TEntity>(requestModel), id);
-        }       
+        }
+
+        public void SetUserIdentifier(UserIdentifier userIdentifier)
+        {
+            User = userIdentifier;
+        }
     }
 }

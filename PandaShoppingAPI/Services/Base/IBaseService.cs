@@ -1,4 +1,5 @@
-﻿using PandaShoppingAPI.Utils;
+﻿using PandaShoppingAPI.Models;
+using PandaShoppingAPI.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,5 +25,7 @@ namespace PandaShoppingAPI.Services
         void Update(TRequestModel requestModel, object id);
 
         bool Exist(object id);
+
+        void SetUserIdentifier(UserIdentifier userIdentifier);
     }
 }

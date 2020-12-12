@@ -12,18 +12,12 @@ namespace PandaShoppingAPI.Models
     public class UserIdentifier
     {
         public int UserId { get; set; }
-        public string RoleName { get; set; }
-        public string Username { get; set; }
-        public int AccountId { get; set; }
+        public List<string> RoleNames { get; set; }
 
-        public UserIdentifier(int userId, string roleName, 
-            string username, int accountId)
+        public UserIdentifier(int userId, List<string> roleNames)
         {
-            this.UserId = userId;
-            this.RoleName = roleName;
-            this.Username = username;
-            this.AccountId = accountId;
+            UserId = userId;
+            RoleNames = roleNames;
         }
-
     }
 }

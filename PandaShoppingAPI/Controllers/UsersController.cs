@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PandaShoppingAPI.Controllers.Base;
 using PandaShoppingAPI.DataAccesses.EF;
@@ -12,12 +13,20 @@ using System.Net;
 
 namespace PandaShoppingAPI.Controllers
 {
+    [Authorize]
     [Route("v1/[controller]")]
-    public class UsersController : CrudApiController<User_, UserModel,
+    public class UsersController : CrudApiController2<User_, UserModel,
             UserResponseModel, IUserService, UserFilter>
     {
-        public UsersController(IUserService service) : base(service)
+        public UsersController(IUserService service, IHttpContextAccessor httpContextAccessor) 
+            : base(service, httpContextAccessor)
         {
+        }
+
+        [Authorize(Roles = "shop")]
+        public override ActionResult<ResponseWrapper> Get([FromQuery] UserFilter filter)
+        {
+            return base.Get(filter);
         }
 
         [HttpPost("{id}/Shop")]

@@ -93,6 +93,8 @@ namespace PandaShoppingAPI
                 }
             );
 
+            services.AddHttpContextAccessor();
+
             //services.AddAuthentication().AddOAuth();
         }
 

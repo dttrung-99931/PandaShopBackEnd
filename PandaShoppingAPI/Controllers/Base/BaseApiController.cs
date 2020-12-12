@@ -17,7 +17,7 @@ namespace PandaShoppingAPI.Controllers
 {
     //[EnableCors("PolicyAll")]
     [ApiController]
-    public class BaseApiController<TService> : ControllerBase
+    public class BaseApiController<TService> : ControllerBase 
     {
         protected readonly TService _service;
         
@@ -91,28 +91,37 @@ namespace PandaShoppingAPI.Controllers
             return stringBuilder.ToString();
         }
 
-        protected bool IsAdmin()
+        protected bool HasAdminRole()
         {
-            return GetRoleNameFromToken() == "admin";
+            return GetRoleNamesFromToken().Contains("admin");
         }
 
-        protected string GetRoleNameFromToken()
+        private List<string> GetRoleNamesFromToken()
         {
-            return User?.FindFirst(ClaimTypes.Role)?.Value;
+            return GetRoleNamesFromToken(User);
         }
         
-        protected string GetUsernameFromToken()
+        protected List<string> GetRoleNamesFromToken(ClaimsPrincipal user)
         {
-            return User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var roleEnumerator = user?.FindAll(ClaimTypes.Role).GetEnumerator();
+            var roleNames = new List<string>();
+            while (roleEnumerator.MoveNext())
+            {
+                roleNames.Add(roleEnumerator.Current.Value);
+            }
+            return roleNames;
         }
-
+        
         protected UserIdentifier GetUserIdentifier()
         {
+            return GetUserIdentifier(User);
+        }
+
+        protected UserIdentifier GetUserIdentifier(ClaimsPrincipal user)
+        {
             return new UserIdentifier(
-                GetUserIdFromToken(), 
-                GetRoleNameFromToken(),
-                GetUsernameFromToken(),
-                GetAccountIdFromToken()
+                GetUserIdFromToken(user), 
+                GetRoleNamesFromToken(user)
             );
         }
 
@@ -138,12 +147,17 @@ namespace PandaShoppingAPI.Controllers
             return GetUserIdFromToken() == userId;
         }
 
-        protected int GetUserIdFromToken()
+        private int GetUserIdFromToken()
+        {
+            return GetUserIdFromToken(User);
+        }
+
+        protected int GetUserIdFromToken(ClaimsPrincipal user)
         {
             try
             {
                 return int.Parse(
-                    User?.FindFirst(Constants.CLAIM_USER_ID)?.Value
+                    user?.FindFirst(Constants.CLAIM_USER_ID)?.Value
                 );
             }
             catch (Exception e)
@@ -165,9 +179,14 @@ namespace PandaShoppingAPI.Controllers
                 "Make sure that you have valid access token");
         }
 
-        protected bool IsInvalidUser()
+        protected bool UserCallAPIWithToken()
         {
-            return GetUserIdFromToken() == -1;
+            return GetUserIdFromToken() != -1;
+        }
+
+        protected bool UserCallAPIWithToken(ClaimsPrincipal user)
+        {
+            return GetUserIdFromToken(user) != -1;
         }
 
         protected ActionResult<ResponseWrapper> HandleExceptions(Action action)
@@ -209,5 +228,7 @@ namespace PandaShoppingAPI.Controllers
         {
             return new ResponseWrapper(HttpStatusCode.Forbidden, message);
         }
+
+
     }
 }
