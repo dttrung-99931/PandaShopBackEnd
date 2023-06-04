@@ -160,7 +160,7 @@ namespace PandaShoppingAPI.Services
                 {
                     products = products.OrderByDescending(
                         product => product.ProductOption.First().price
-                    );
+                    );  
                 }
                 else throw new BadRequestException("Invalid 'orderBy' param");
             }

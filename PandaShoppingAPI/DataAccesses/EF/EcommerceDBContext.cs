@@ -46,17 +46,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public virtual DbSet<UserRole> UserRole { get; set; }
         public virtual DbSet<User_> User_ { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseLazyLoadingProxies()
-                    .UseSqlServer("Data Source=DESKTOP-JDUSF14\\SQLEXPRESS14;Initial Catalog=PandaShopDB;Integrated Security=True");
-                    //.UseSqlServer("Data Source=PandaShopDB.mssql.somee.com;Initial Catalog=PandaShopDB;Persist Security Info=True;User ID=pandahacker_SQLLogin_1;Password=dmlfn75iaj");
-            }
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Address>(entity =>
