@@ -7,5 +7,6 @@ namespace PandaShoppingAPI.Services
     {
         void InsertShop(int userId, ShopModel shopModel);
         LoginResponse Login(LoginModel loginModel);
+        int GetCartIdOfUser(int userId);
     }
 }

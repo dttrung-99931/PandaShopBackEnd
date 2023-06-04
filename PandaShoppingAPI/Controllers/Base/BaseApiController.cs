@@ -43,6 +43,12 @@ namespace PandaShoppingAPI.Controllers
             return new ResponseWrapper(HttpStatusCode.OK, data, meta);
         }
 
+        protected ResponseWrapper ok_get()
+        {
+            Response.StatusCode = (int)HttpStatusCode.OK;
+            return new ResponseWrapper(HttpStatusCode.OK, "Successfully", null);
+        }
+
         protected ResponseWrapper ok_create(object data)
         {
             Response.StatusCode = (int)HttpStatusCode.Created;

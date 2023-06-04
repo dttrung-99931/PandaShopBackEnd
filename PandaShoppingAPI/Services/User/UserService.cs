@@ -66,6 +66,7 @@ namespace PandaShoppingAPI.Services
             var claims = new List<Claim>()
             {
                 new Claim(Constants.CLAIM_USER_ID, user.id.ToString()),
+                new Claim(Constants.CLAIM_CART_ID, user.cartId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, user.phone)
             };
 
@@ -77,7 +78,7 @@ namespace PandaShoppingAPI.Services
 
             var token = GenerateToken(claims.ToArray(), expires);
 
-            return new LoginResponse(user.id, token, expires);
+            return new LoginResponse(user.id, token, expires, user.cartId);
         }
 
         private DateTime ComputeExpiredDateByRoles(List<UserRole> userRoles)
@@ -125,5 +126,11 @@ namespace PandaShoppingAPI.Services
             );
             return roleClaims;
         }
+
+        public int GetCartIdOfUser(int userId)
+        {
+            return GetById(userId).cartId;
+        }
+
     }
 }

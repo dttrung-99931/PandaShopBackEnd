@@ -12,17 +12,19 @@ namespace PandaShoppingAPI.Models
     {
         public int userID { get; set; }
         public string token { get; set; }
+        public int cartId { get; set; }
         public DateTime expires { get; set; }
 
         public LoginResponse()
         {
         }
 
-        public LoginResponse(int userID, string token, DateTime expires)
+        public LoginResponse(int userID, string token, DateTime expires, int cartId)
         {
             this.userID = userID;
             this.token = token;
             this.expires = expires;
+            this.cartId = cartId;
         }
     }
 }

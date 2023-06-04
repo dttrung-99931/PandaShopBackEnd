@@ -13,7 +13,6 @@ using System.Net;
 
 namespace PandaShoppingAPI.Controllers
 {
-    [Authorize]
     [Route("v1/[controller]")]
     public class UsersController : CrudApiController2<User_, UserModel,
             UserResponseModel, IUserService, UserFilter>
