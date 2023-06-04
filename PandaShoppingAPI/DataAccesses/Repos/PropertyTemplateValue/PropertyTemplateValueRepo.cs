@@ -6,6 +6,10 @@ namespace PandaShoppingAPI.DataAccesses.Repos
 {
     public class PropertyTemplateValueRepo : BaseRepo<PropertyTemplateValue>, IPropertyTemplateValueRepo
     {
+        public PropertyTemplateValueRepo(EcommerceDBContext dbContext) : base(dbContext)
+        {
+        }
+
         public void InsertRange(int propertyTemplateId, List<string> values)
         {
             InsertRange(CreatePropertyTemplateValues(propertyTemplateId, values));

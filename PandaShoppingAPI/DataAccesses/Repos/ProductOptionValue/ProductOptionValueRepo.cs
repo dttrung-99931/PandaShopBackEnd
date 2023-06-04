@@ -9,6 +9,10 @@ namespace PandaShoppingAPI.DataAccesses.Repos
 {
     public class ProductOptionValueRepo : BaseRepo<ProductOptionValue>, IProductOptionValueRepo
     {
+        public ProductOptionValueRepo(EcommerceDBContext dbContext) : base(dbContext)
+        {
+        }
+
         public void InsertRange(int productOptId, List<PropertyValueRequest> properties)
         {
             InsertRange(CreatePropertyValues(productOptId, properties));

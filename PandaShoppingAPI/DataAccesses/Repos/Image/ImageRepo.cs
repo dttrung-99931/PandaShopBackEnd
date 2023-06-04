@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.DataAccesses.Repos
 {
-    public class ImageRepo: BaseRepo<Image>, IImageRepo
+    public class ImageRepo : BaseRepo<Image>, IImageRepo
     {
+        public ImageRepo(EcommerceDBContext dbContext) : base(dbContext)
+        {
+        }
     }
 }

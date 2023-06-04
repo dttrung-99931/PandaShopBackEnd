@@ -1,4 +1,5 @@
-﻿using PandaShoppingAPI.DataAccesses.EF;
+﻿using Microsoft.EntityFrameworkCore;
+using PandaShoppingAPI.DataAccesses.EF;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace PandaShoppingAPI.DataAccesses.Repos
     {
         private readonly ICartRepo _cartRepo;
 
-        public UserRepo(ICartRepo cartRepo)
+        public UserRepo(ICartRepo cartRepo, EcommerceDBContext dbContext): base(dbContext)
         {
             _cartRepo = cartRepo;
         }

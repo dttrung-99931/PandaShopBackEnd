@@ -13,9 +13,9 @@ namespace PandaShoppingAPI.DataAccesses.Repos
         protected EcommerceDBContext _dbContext;
         protected DbSet<T> _dbSet;
 
-        public BaseRepo()
+        public BaseRepo(EcommerceDBContext dbContext)
         {
-            _dbContext = new EcommerceDBContext();
+            _dbContext = dbContext;
             _dbSet = _dbContext.Set<T>();
         }
 

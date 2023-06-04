@@ -11,7 +11,7 @@ namespace PandaShoppingAPI.DataAccesses.Repos
     {
         private readonly IProductOptionValueRepo _productOptionValueRepo;
 
-        public ProductOptionRepo(IProductOptionValueRepo productOptionValueRepo)
+        public ProductOptionRepo(IProductOptionValueRepo productOptionValueRepo, EcommerceDBContext dbContext) : base(dbContext)
         {
             _productOptionValueRepo = productOptionValueRepo;
         }
