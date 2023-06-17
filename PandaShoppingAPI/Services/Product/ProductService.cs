@@ -101,6 +101,14 @@ namespace PandaShoppingAPI.Services
                 valueReq => UpdatePropertyValue(productId, valueReq));
         }
 
+        public IDsResponseModel InsertPropertyValues(int productId, List<PropertyValueRequest> propertyValueReqs)
+        {
+            List<ProductPropertyValue> propertyValues = Mapper.Map<List<ProductPropertyValue>>(propertyValueReqs);
+            propertyValues.ForEach(propVal => propVal.productId = productId);
+            _productPropertyValueRepo.InsertRange(propertyValues);
+            return new IDsResponseModel(propertyValues.Select(p => p.id).ToList());
+        }
+
         public override IQueryable<Product> Fill(ProductFilter filter)
         {
             var filledProducts = base.Fill(filter);
@@ -297,10 +305,10 @@ namespace PandaShoppingAPI.Services
 
         }
 
-        public IdResponseModel CreateProductOption(int productId, ProductOptionRequest option)
+        public IDResponseModel CreateProductOption(int productId, ProductOptionRequest option)
         {
             ProductOption entity = _productOptionRepo.Insert(productId, option);
-            return Mapper.Map<IdResponseModel>(entity);
+            return Mapper.Map<IDResponseModel>(entity);
         }
 
         public void DeleteProductOptions(int productId, List<int> productOptionIDs)
@@ -308,6 +316,17 @@ namespace PandaShoppingAPI.Services
             _productOptionRepo.DeleteIf(
                 option => option.productId == productId && productOptionIDs.Contains(option.id)
             );
+        }
+
+        public void UpdateProduct(int productId, UpdateProductModel updateModel)
+        {
+            _repo.Update(productId, (product) =>
+            {
+                product.name = updateModel.name;
+                product.description = updateModel.description;
+                product.categoryId = updateModel.categoryId;
+                product.shopId = updateModel.shopId;
+            });
         }
     }
 }
