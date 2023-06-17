@@ -16,22 +16,22 @@ namespace PandaShoppingAPI.DataAccesses.Repos
             _productOptionValueRepo = productOptionValueRepo;
         }
 
-        public void InsertRange(int productId, List<ProductOptionModel> productOptionModels)
+        public void InsertRange(int productId, List<ProductOptionRequest> productOptionModels)
         {
             productOptionModels.ForEach(
                 model => Insert(productId, model));
         }
 
-        private ProductOption Insert(int productId, ProductOptionModel model)
+        public ProductOption Insert(int productId, ProductOptionRequest request)
         {
             var productOpt = Insert(new ProductOption()
                 {
                     productId = productId,
-                    name = model.name,
-                    price = model.price
+                    name = request.name,
+                    price = request.price
                 }
             );
-            _productOptionValueRepo.InsertRange(productOpt.id, model.properties);
+            _productOptionValueRepo.InsertRange(productOpt.id, request.properties);
             
             return productOpt;
         }

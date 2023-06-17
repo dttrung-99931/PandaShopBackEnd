@@ -11,6 +11,6 @@ namespace PandaShoppingAPI.Models
         public decimal price { get; set; }
 
         [JsonProperty("propertyValues")]
-        public List<OptionPropertyResponse> ProductOptionValue{ get; set; }
+        public List<OptionPropertyResponse> ProductOptionValue { get; set; }
     }
 }

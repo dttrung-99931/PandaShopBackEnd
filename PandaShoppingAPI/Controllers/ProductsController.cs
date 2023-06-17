@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PandaShoppingAPI.Controllers.Base;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.Models;
+using PandaShoppingAPI.Models.Base;
 using PandaShoppingAPI.Services;
 using PandaShoppingAPI.Utils;
 using PandaShoppingAPI.Utils.Exceptions;
@@ -87,6 +88,30 @@ namespace PandaShoppingAPI.Controllers
 
             return exceptionResponse == null ? ok_update() : exceptionResponse;
         }
+
+        [HttpPost("{id}/Options")]
+        public ActionResult<ResponseWrapper> UpdateOption(
+           int id, [FromBody] ProductOptionRequest option)
+        {
+            IdResponseModel response = null;
+            var exceptionResponse = HandleExceptions(
+                    () => response = _service.CreateProductOption(id, option)
+                );
+
+            return exceptionResponse == null ? ok_create(response) : exceptionResponse;
+        }
+
+        [HttpDelete("{id}/Options")]
+        public ActionResult<ResponseWrapper> DeleteProductOptions(
+            int id, [FromBody] List<int> productOptionIDs)
+        {
+            var exceptionResponse = HandleExceptions(
+                    () => _service.DeleteProductOptions(id, productOptionIDs)
+                );
+
+            return exceptionResponse == null ? ok_delete() : exceptionResponse;
+        }
+
 
         public override ActionResult<ResponseWrapper> Get(int id)
         {

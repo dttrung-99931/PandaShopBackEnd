@@ -112,19 +112,14 @@ namespace PandaShoppingAPI.Services
             _repo.Update(category, category.id);
         }
 
-        public List<int> GetRequiredPropertyIDs(int categoryId)
+        public List<int> GetRequiredPropertyIDsOfCategory(int categoryId)
         {
             var category = GetById(categoryId);
 
-            if (category == null)
+            // Category has no property template => Has no required proerpties
+            if (category?.templateId == null)
             {
-                throw new NotFoundException("Category", categoryId);
-            }
-
-            if (category.templateId == null)
-            {
-                throw new NotFoundException(
-                    "Not found template of category id " + categoryId);
+                return new List<int>();
             }
 
             return _templateService.GetRequiredPropertyIDs((int)category.templateId);
