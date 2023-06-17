@@ -32,6 +32,18 @@ namespace PandaShoppingAPI.Controllers
             return exceptionResponse == null ? ok_update() : exceptionResponse;
         }
 
+        [HttpPost("{id}/PropertyValues")]
+        public ActionResult<ResponseWrapper> InsertPropertyValues(
+            int id, [FromBody] List<PropertyValueRequest> propertyValueReqs)
+        {
+            IDsResponseModel propertyValueIDs = null;
+            var exceptionResponse = HandleExceptions(
+                    () => propertyValueIDs  = _service.InsertPropertyValues(id, propertyValueReqs)
+                );
+        
+            return exceptionResponse == null ? ok_create(propertyValueIDs) : exceptionResponse;
+        }
+
         [HttpDelete("{id}/PropertyValues")]
         public ActionResult<ResponseWrapper> DeletePropertyValues(
             int id, [FromBody] List<int> propertyValueIDs)
@@ -93,7 +105,7 @@ namespace PandaShoppingAPI.Controllers
         public ActionResult<ResponseWrapper> UpdateOption(
            int id, [FromBody] ProductOptionRequest option)
         {
-            IdResponseModel response = null;
+            IDResponseModel response = null;
             var exceptionResponse = HandleExceptions(
                     () => response = _service.CreateProductOption(id, option)
                 );
@@ -140,6 +152,23 @@ namespace PandaShoppingAPI.Controllers
             });
 
             return exceptionResponse == null ? ok_get(suggestions) : exceptionResponse;
+        }
+
+        [ApiExplorerSettings(IgnoreApi = true)] // Hide API in swagger
+        public override ActionResult<ResponseWrapper> Put(int id, [FromBody] ProductModel requestModel)
+        {
+            // return forbidden error if api is accessed
+            return forbidden(); 
+        }
+
+        [HttpPut("{id}", Order = -1)] // order = -1 to override API route of [Put] in supper
+        public ActionResult<ResponseWrapper> UpdateProduct(int id, [FromBody] UpdateProductModel updateModel)
+        {
+            var exceptionResponse = HandleExceptions(
+                () => _service.UpdateProduct(id, updateModel)
+            );
+
+            return exceptionResponse == null ? ok_update() : exceptionResponse;
         }
     }
 }

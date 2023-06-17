@@ -1,6 +1,6 @@
 ﻿namespace PandaShoppingAPI.Models.Base
 {
-    public class IdResponseModel 
+    public class IDResponseModel 
     {
         public int id { get; set; }
     }

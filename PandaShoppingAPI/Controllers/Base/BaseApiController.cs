@@ -179,6 +179,11 @@ namespace PandaShoppingAPI.Controllers
                 "Make sure that your access token containing this operation execution right ");
         }
 
+        protected ActionResult<ResponseWrapper> forbidden()
+        {
+            return error(HttpStatusCode.Forbidden, "API forbidden");
+        }
+
         protected ActionResult<ResponseWrapper> error_invalid_user()
         {
             return error(HttpStatusCode.Forbidden, "Invalid user. " +
