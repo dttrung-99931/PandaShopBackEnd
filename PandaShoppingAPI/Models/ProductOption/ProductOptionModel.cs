@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Models
 {
-    public class ProductOptionModel: BaseModel<ProductOption, ProductOptionModel>
+    public class ProductOptionRequest: BaseModel<ProductOption, ProductOptionRequest>
     {
         public string name { get; set; }
         public decimal price { get; set; }

@@ -16,7 +16,7 @@ namespace PandaShoppingAPI.Models
         public int categoryId { get; set; }
         public int shopId { get; set; }
         public int addressId { get; set; }
-        public List<ProductOptionModel> productOptions { get; set; }
+        public List<ProductOptionRequest> productOptions { get; set; }
         public List<PropertyValueRequest> properties { get; set; }
     }
 }

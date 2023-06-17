@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Castle.DynamicProxy;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
 using PandaShoppingAPI.Models;
+using PandaShoppingAPI.Models.Base;
 using PandaShoppingAPI.Utils.Exceptions;
 using PandaShoppingAPI.Utils.Extentions;
 using System;
@@ -41,7 +43,7 @@ namespace PandaShoppingAPI.Services
             }
 
             var requiredPropertyIDs =
-                _categoryService.GetRequiredPropertyIDs(product.categoryId);
+                _categoryService.GetRequiredPropertyIDsOfCategory(product.categoryId);
 
             var acceptedDeletedPropertyValueIds = new List<object>();
 
@@ -286,6 +288,26 @@ namespace PandaShoppingAPI.Services
                     product => product.name.Contains(q.Unescaped()))
                 .Take(suggesstionNum)
                 .ToList();
+        }
+
+        public void UpdateProductOptions(int id, List<ProductOptionRequest> options)
+        {
+            //_productOptionRepo.UpdateRange
+            //_imageService.UpdateProductImages(id, images);
+
+        }
+
+        public IdResponseModel CreateProductOption(int productId, ProductOptionRequest option)
+        {
+            ProductOption entity = _productOptionRepo.Insert(productId, option);
+            return Mapper.Map<IdResponseModel>(entity);
+        }
+
+        public void DeleteProductOptions(int productId, List<int> productOptionIDs)
+        {
+            _productOptionRepo.DeleteIf(
+                option => option.productId == productId && productOptionIDs.Contains(option.id)
+            );
         }
     }
 }

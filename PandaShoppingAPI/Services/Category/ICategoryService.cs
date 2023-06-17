@@ -7,7 +7,7 @@ namespace PandaShoppingAPI.Services
     public interface ICategoryService : IBaseService<Category, CategoryModel, CategoryFilter>
     {
         void InsertTemplateForCategory(int categoryId, TemplateModel model);
-        List<int> GetRequiredPropertyIDs(int categoryId);
+        List<int> GetRequiredPropertyIDsOfCategory(int categoryId);
         List<Category> GetCategorySuggesstions(string q, int suggestionNum);
     }
 }
