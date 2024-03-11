@@ -31,6 +31,14 @@ namespace PandaShoppingAPI.Services
             _config = config;
         }
 
+        protected override void ValidateInsert(UserModel requestModel)
+        {
+            if (_repo.Any((user) => user.phone == requestModel.phone))
+            {
+                throw new ConflictException(ErrorCode.userExisted);
+            }
+        }
+
         public void InsertShop(int userId, ShopModel shopModel)
         {
             var user = GetById(userId);
@@ -40,7 +48,7 @@ namespace PandaShoppingAPI.Services
             }
             if (user.shopId != null)
             {
-                throw new ConflictException();
+                throw new ConflictException(ErrorCode.shopExisted);
             }
             
             var shopId = _shopRepo.Insert(Mapper.Map<Shop>(shopModel)).id;

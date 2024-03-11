@@ -21,7 +21,7 @@ namespace PandaShoppingAPI.Controllers
             }
             catch (Exception)
             {
-                return error("Server error");
+                return unknownError("Server error");
             }
         }
 
