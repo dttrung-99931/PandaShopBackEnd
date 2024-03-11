@@ -12,6 +12,7 @@ namespace PandaShoppingAPI.DataAccesses.Repos
         IQueryable<T> GetIQueryable();
         
         IQueryable<T> Where(Expression<Func<T, bool>> condition);
+        bool Any(Expression<Func<T, bool>> condition);
 
         T GetById(object id);
 

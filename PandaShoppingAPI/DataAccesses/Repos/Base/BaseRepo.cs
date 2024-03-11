@@ -198,5 +198,10 @@ namespace PandaShoppingAPI.DataAccesses.Repos
 
             Update(entity, id);
         }
+
+        public bool Any(Expression<Func<T, bool>> condition)
+        {
+            return _dbSet.Any(condition);
+        }
     }
 }

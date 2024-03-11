@@ -41,7 +41,7 @@ namespace PandaShoppingAPI.Controllers
             }
             catch (Exception e)
             {
-                return error(e.Message);
+                return unknownError(e.Message);
             }
 
             return ok_create("Successfully");
