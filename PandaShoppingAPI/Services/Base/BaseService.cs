@@ -59,7 +59,12 @@ namespace PandaShoppingAPI.Services
         public virtual TEntity Insert(TRequestModel requestModel)
         {
             ValidateInsert(requestModel);
-            return _repo.Insert(Mapper.Map<TEntity>(requestModel));
+            return _repo.Insert(MapInsertEntity(requestModel));
+        }
+
+        protected virtual TEntity MapInsertEntity(TRequestModel requestModel)
+        {
+            return Mapper.Map<TEntity>(requestModel);
         }
 
         virtual protected void ValidateInsert(TRequestModel requestModel) { }
