@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using PandaShoppingAPI.Models.Base;
 using PandaShoppingAPI.Services;
 using PandaShoppingAPI.Utils;
+using PandaShoppingAPI.Utils.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,23 +77,14 @@ namespace PandaShoppingAPI.Controllers.Base
         [HttpPost]
         virtual public ActionResult<ResponseWrapper> Post([FromBody]TRequestModel requestModel)
         {
-            if (!ModelState.IsValid)
-                return error(HttpStatusCode.BadRequest, GetModelStateErrMsg());
-
-            TResponseModel responseModel;
-            
-            try
+            return Handle(() =>
             {
+                TResponseModel responseModel = null;
                 responseModel = Mapper.Map<TResponseModel>(
                     _service.Insert(requestModel)
                 );
-            }
-            catch (Exception e)
-            {
-                return error(e.Message);
-            }
-
-            return ok_create(responseModel);
+                return ok_create(responseModel);
+            });
         }
 
         [HttpPut("{id}")]
@@ -111,7 +103,7 @@ namespace PandaShoppingAPI.Controllers.Base
             }
             catch (Exception e)
             {
-                return error(e.Message);
+                return unknownError(e.Message);
             }
             return ok_update();
         }
@@ -128,7 +120,7 @@ namespace PandaShoppingAPI.Controllers.Base
             }
             catch (Exception e)
             {
-                return error(e.Message);
+                return unknownError(e.Message);
             }
             return ok_delete();
         }

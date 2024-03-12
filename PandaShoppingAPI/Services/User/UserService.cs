@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using PandaShoppingAPI.DataAccesses.EF;
@@ -20,16 +21,37 @@ namespace PandaShoppingAPI.Services
         IUserService
     {
         private readonly IShopRepo _shopRepo;
+        private readonly IRoleRepo _roleRepo;
         private readonly IConfiguration _config;
 
         public UserService(
             IUserRepo repo,
             IShopRepo shopRepo,
+            IRoleRepo roleRepo,
             IConfiguration config) : base(repo)
         {
             _shopRepo = shopRepo;
+            _roleRepo = roleRepo;
             _config = config;
         }
+
+        protected override void ValidateInsert(UserModel requestModel)
+        {
+            if (_repo.Any((user) => user.phone == requestModel.phone))
+            {
+                throw new ConflictException(ErrorCode.userExisted);
+            }
+        }
+
+        protected override User_ MapInsertEntity(UserModel requestModel)
+        {
+            User_ insertUsr = base.MapInsertEntity(requestModel);
+            // Currently all created users will be user 
+            // TODO: created user with role param
+            insertUsr.UserRole.Add(new UserRole { roleId = (int)Roles.user });
+            return insertUsr;
+        }
+
 
         public void InsertShop(int userId, ShopModel shopModel)
         {
@@ -40,7 +62,7 @@ namespace PandaShoppingAPI.Services
             }
             if (user.shopId != null)
             {
-                throw new ConflictException();
+                throw new ConflictException(ErrorCode.shopExisted);
             }
             
             var shopId = _shopRepo.Insert(Mapper.Map<Shop>(shopModel)).id;
@@ -52,16 +74,19 @@ namespace PandaShoppingAPI.Services
         public LoginResponse Login(LoginModel loginModel)
         {
             var user = _repo.Where(u => u.phone == loginModel.phone)
+                .Include(u => u.UserRole)
+                .ThenInclude(ur => ur.role)
                 .FirstOrDefault();
 
             if (user != null && user.password == loginModel.password)
             {
-                return CreateLoginResponse(user);
+                return CreateSuccessLoginResponse(user);
             }
-            else return null;
+
+            return null;
         }
 
-        private LoginResponse CreateLoginResponse(User_ user)
+        private LoginResponse CreateSuccessLoginResponse(User_ user)
         {
             var claims = new List<Claim>()
             {
@@ -70,11 +95,12 @@ namespace PandaShoppingAPI.Services
                 new Claim(JwtRegisteredClaimNames.Sub, user.phone)
             };
 
-            var roleClaims = GetRoleClaims(user.UserRole.ToList());
+            List<UserRole> userRoles = user.UserRole.ToList();
+            var roleClaims = GetRoleClaims(userRoles);
 
             claims.AddRange(roleClaims);
 
-            var expires = ComputeExpiredDateByRoles(user.UserRole.ToList());
+            var expires = ComputeExpiredDateByRoles(userRoles);
 
             var token = GenerateToken(claims.ToArray(), expires);
 
@@ -87,18 +113,17 @@ namespace PandaShoppingAPI.Services
 
             foreach (var userRole in userRoles)
             {
-                var roleName = userRole.role.name;
-                if (roleName == "admin")
+                if (userRole.id == (int) Roles.admin)
                     return expires.AddDays(5);
 
-                if (roleName == "shop")
+                if (userRole.id == (int) Roles.shop)
                     return expires.AddDays(10);
 
-                if (roleName == "user")
+                if (userRole.id == (int) Roles.user)
                     return expires.AddDays(10);
             }
 
-            throw new Exception("Undefined role: " + userRoles);
+            throw new Exception("Undefined role: " + userRoles.ToString());
         }
 
         private string GenerateToken(Claim[] claims, DateTime expires)

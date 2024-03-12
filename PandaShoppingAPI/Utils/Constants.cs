@@ -16,4 +16,12 @@ namespace PandaShoppingAPI.Utils
         public const string ID_MODEL_MAINTENANCE = "model";
         public const string ID_OIL_MAINTENACE = "oil";
     }
+
+    // TODO: Create init sql to create init role with specific id like defined in the enums
+    public enum Roles
+    {
+        user = 1,
+        shop = 2,
+        admin = 3
+    }
 }

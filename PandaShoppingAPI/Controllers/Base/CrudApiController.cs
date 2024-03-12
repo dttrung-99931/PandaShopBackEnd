@@ -86,7 +86,7 @@ namespace PandaShoppingAPI.Controllers.Base
             }
             catch (Exception e)
             {
-                return error(e.Message);
+                return unknownError(e.Message);
             }
 
             return ok_create(responseModel);
@@ -108,7 +108,7 @@ namespace PandaShoppingAPI.Controllers.Base
             }
             catch (Exception e)
             {
-                return error(e.Message);
+                return unknownError(e.Message);
             }
             return ok_update();
         }
@@ -125,7 +125,7 @@ namespace PandaShoppingAPI.Controllers.Base
             }
             catch (Exception e)
             {
-                return error(e.Message);
+                return unknownError(e.Message);
             }
             return ok_delete();
         }
