@@ -6,31 +6,15 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Utils.Exceptions
 {
-    public class ConflictException : Exception
+    public class ConflictException : BaseException
     {
-        public ConflictException()
+        public ConflictException(ErrorCode errorCode = ErrorCode.conflict, string message = "") : base(errorCode, message)
         {
-        }
-
-        public ConflictException(string message) : base(message)
-        {
-        }
-
-        public static ConflictException Forbidden(string action, string objectName, int id)
-        {
-            return new ConflictException
-            (
-                string.Format("{0} is forbidden on {1} id {2}", action, objectName, id)
-            );
         }
 
         public ConflictException(string action, string objectName, int id) : 
          
-            this(string.Format("{0} is conflicted on {1} id {2}", action, objectName, id))
-        {
-        }
-
-        protected ConflictException(SerializationInfo info, StreamingContext context) : base(info, context)
+            this(ErrorCode.conflict, string.Format("{0} is conflicted on {1} id {2}", action, objectName, id))
         {
         }
     }

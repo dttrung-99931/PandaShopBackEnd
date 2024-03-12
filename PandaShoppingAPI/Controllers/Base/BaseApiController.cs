@@ -32,9 +32,15 @@ namespace PandaShoppingAPI.Controllers
             return new ResponseWrapper(code, msg);
         }
 
-        protected ResponseWrapper error(string msg)
+        protected ResponseWrapper unknownError(string msg)
         {
             return error(HttpStatusCode.InternalServerError, msg);
+        }
+
+        protected ResponseWrapper conflict(String msg, ErrorCode errorCode)
+        {
+            Response.StatusCode = (int)HttpStatusCode.Conflict;
+            return new ResponseWrapper(HttpStatusCode.Conflict, errorCode.ToString(), msg);
         }
 
         protected ResponseWrapper ok_get(object data, Meta meta = null)
@@ -200,6 +206,25 @@ namespace PandaShoppingAPI.Controllers
             return GetUserIdFromToken(user) != -1;
         }
 
+        /// <summary>
+        /// Utils function to centerlize api error handle 
+        /// </summary>
+        /// <param name="handler"></param>
+        /// <returns>
+        ///     success ActionResult<ResponseWrapper> if ok 
+        ///     error ActionResult<ResponseWrapper>  otherwise
+        /// </returns>
+        protected ActionResult<ResponseWrapper> Handle(Func<ActionResult<ResponseWrapper>> handler)
+        {
+            ActionResult<ResponseWrapper> result = null; 
+            ActionResult<ResponseWrapper> errorResult = null;
+            errorResult = HandleExceptions(() =>
+            {
+                result = handler();
+            });
+            return result ?? errorResult;
+        }
+
         protected ActionResult<ResponseWrapper> HandleExceptions(Action action)
         {
             if (!ModelState.IsValid)
@@ -221,7 +246,7 @@ namespace PandaShoppingAPI.Controllers
             }
             catch (ConflictException e)
             {
-                return Conflict(e.Message);
+                return conflict(e.Message, e.errorCode);
             }
             catch (ForbiddenException e)
             {
@@ -229,7 +254,7 @@ namespace PandaShoppingAPI.Controllers
             }
             catch (Exception e)
             {
-                return error(e.Message);
+                return unknownError(e.Message);
             }
             
             return null;

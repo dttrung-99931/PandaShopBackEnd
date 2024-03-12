@@ -29,7 +29,7 @@ namespace PandaShoppingAPI.Utils
         public string errorCode { get; set; }
 
         public ResponseWrapper(HttpStatusCode statusCode, object data = null,
-            Meta meta = null, string errorMessage = null)
+            Meta meta = null, string errorMessage = null, string errorCode = null)
         {
             this.statusCode = (int)statusCode;
             this.success = this.statusCode == 200 ||
@@ -38,10 +38,16 @@ namespace PandaShoppingAPI.Utils
             this.data = data;
             this.meta = meta;
             this.errorMsg = errorMessage;
+            this.errorCode = errorCode;
         }
 
         public ResponseWrapper(HttpStatusCode statusCode, string errMsg) :
            this(statusCode, null, null, errMsg)
+        {
+        }
+
+        public ResponseWrapper(HttpStatusCode statusCode, string errorCode, string errMsg) :
+           this(statusCode, null, null, errMsg, errorCode)
         {
         }
 

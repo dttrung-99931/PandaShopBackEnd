@@ -6,9 +6,6 @@ using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.Models;
 using PandaShoppingAPI.Services;
 using PandaShoppingAPI.Utils;
-using PandaShoppingAPI.Utils.Exceptions;
-using System;
-using System.Collections.Generic;
 using System.Net;
 
 namespace PandaShoppingAPI.Controllers
@@ -31,51 +28,21 @@ namespace PandaShoppingAPI.Controllers
         [HttpPost("{id}/Shop")]
         public ActionResult<ResponseWrapper> InsertShop(int id, [FromBody] ShopModel shopModel)
         {
-            if (!ModelState.IsValid)
-                return error(HttpStatusCode.BadRequest, GetModelStateErrMsg());
-
-            try
+            return Handle(() =>
             {
                 _service.InsertShop(id, shopModel);
-            }
-            catch (ConflictException)
-            {
-                return Conflict();
-            }
-            catch (KeyNotFoundException)
-            {
-                return notFound();
-            }
-            catch (Exception e)
-            {
-                return error(e.Message);
-            }
-
-            return ok_create("Successfully");
+                return ok_create("Successfully");
+            });
         }
 
         [HttpPost("login")]
         public ActionResult<ResponseWrapper> Login([FromBody] LoginModel loginModel)
         {
-            if (!ModelState.IsValid)
-                return error(HttpStatusCode.BadRequest, GetModelStateErrMsg());
-
-            try
+            return Handle(() =>
             {
-                return ok_get(_service.Login(loginModel));   
-            }
-            catch (ConflictException)
-            {
-                return Conflict();
-            }
-            catch (KeyNotFoundException)
-            {
-                return notFound();
-            }
-            catch (Exception e)
-            {
-                return error(e.Message);
-            }
+                LoginResponse result = _service.Login(loginModel);
+                return result != null ? ok_get(result) : error(HttpStatusCode.Unauthorized, "Login failed");
+            });
         }
 
     }
