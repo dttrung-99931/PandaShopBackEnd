@@ -28,4 +28,49 @@
   </ItemGroup>
 
 
+  <ItemGroup>
+    <None Remove="Server\pandashop-db.sql" />
+    <None Remove="Server\PandaShopAPI\Images\Products\057f8f8c-6334-480c-a126-53c92b1d4895.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Products\3686ef1c-ba0b-4cab-b91e-907c041810da.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Products\060fb3f3-d247-43ff-8eb5-75a9ebc8a702.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Products\b1612f41-287b-4eac-b878-28752c5676fb.png" />
+    <None Remove="Server\PandaShopAPI\Images\Products\c82d6982-a116-412b-bf27-f0922d62b65b.png" />
+    <None Remove="Server\PandaShopAPI\Images\Products\f17caa80-cbab-4146-8343-2400a4961cf8.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Products\b167e903-e418-4e20-a8ac-6641700c725c.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Products\d1aa61a7-0c2b-4501-bf90-a43872dd10b8.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Products\55b3d79b-47e3-43b4-9f05-bf5efbd1513e.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Products\1766ca6a-572a-490f-9fee-b2a45307bcb3.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Products\5cba8dd7-8e4f-42fe-8162-02827916b6d1.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Products\27a327e3-afa1-442b-a877-3c6361d533fc.png" />
+    <None Remove="Server\PandaShopAPI\Images\Products\7cdf416e-d3b0-433e-ac3c-1a9ad93c4603.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Products\fd047561-986e-4fe9-91e8-7dbaedaa477f.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Products\158b7d0a-420e-4bf6-a870-62c5f07c91a3.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Products\f2ad1e5e-8ea0-4079-830c-d5af11f92f67.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Products\9501ad7d-fe4f-405e-9121-3988303ebacf.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Products\73e8c6d8-0dbe-4892-840d-ddd96a8260b0.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Products\74b49992-de7a-400b-922e-58052284d294.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Products\2064285a-32fa-4b9b-b172-9329d2342f52.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Products\3557515c-8263-42c1-80a6-a7924d1f3828.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Products\79de2185-ca12-4ac1-ba3a-61eeb7476258.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Products\37f4ea01-4fec-4e7d-a4fc-0eb90501ec7d.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Products\9e697748-1bcb-4a63-8719-7fd41295f99a.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Products\cfed44b4-8337-4e6f-a176-be2bd937ea44.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Products\1dffe229-e037-4245-918d-f1f81d470963.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Categories\671af3b1-31a7-43cd-b37f-e0de94a49f44.png" />
+    <None Remove="Server\PandaShopAPI\Images\Categories\3b075693-03d9-4d5d-98cd-d3e3adc59b44.png" />
+    <None Remove="Server\PandaShopAPI\Images\Categories\b56c401c-f590-4107-a418-3a696b423ec7.png" />
+    <None Remove="Server\PandaShopAPI\Images\Categories\4c9c3141-e27e-4758-b80a-ef3ee1eb3287.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Categories\44a7fb51-07cd-48c9-bd73-7e36666e9ac6.png" />
+    <None Remove="Server\PandaShopAPI\Images\Categories\c9bcbd82-2764-48de-b373-73d1386c74f0.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Categories\08dcfdd3-5687-4458-95ba-1235869b3c42.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Categories\abf73b14-2205-48ea-886a-858292e64f6c.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Categories\3916f275-4ea3-4805-b0f3-1a4aba7469ed.png" />
+    <None Remove="Server\PandaShopAPI\Images\Categories\85b9a5ff-f144-4249-b3c6-9ddab1d35b32.png" />
+    <None Remove="Server\PandaShopAPI\Images\Categories\6ab8c903-fbe2-4d1e-9dfd-a2dbae47e081.png" />
+    <None Remove="Server\PandaShopAPI\Images\Categories\c805713a-02b8-4ef0-8f6c-c06240a1bc6d.png" />
+    <None Remove="Server\PandaShopAPI\Images\Categories\7d30139e-b27e-4f13-b800-8766a6ec1274.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Categories\fac58171-42d9-48d6-8915-5c2e6513f45d.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Categories\49e93330-cca6-49a8-ad84-e38dc616dd9a.jpeg" />
+    <None Remove="Server\PandaShopAPI\Images\Categories\58b326a4-23ca-4b92-b83f-1ffae14f2f22.jpeg" />
+  </ItemGroup>
 </Project>
