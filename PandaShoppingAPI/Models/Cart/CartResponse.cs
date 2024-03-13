@@ -13,7 +13,7 @@ namespace PandaShoppingAPI.Models
 {
     public class CartResponse : BaseModel<Cart, CartResponse>
     {
-        [JsonProperty("cardDetails")]
+        [JsonProperty("items")]
         public List<CartDetailResponse> CartDetail { get; set; }
     }
 }
