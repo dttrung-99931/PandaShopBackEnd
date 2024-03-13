@@ -14,14 +14,14 @@ namespace PandaShoppingAPI.Models
     {
         public int productNum { get; set; }
         public int productOptionId { get; set; }
-        public ThumbProductResponse product { get; set; }
+        public ShortProductResponse shortProduct { get; set; }
 
         protected override void CustomMapping(IMappingExpression<CartDetail, CartDetailResponse> mappingExpression, IConfiguration config)
         {
             mappingExpression.ForMember(
-                response => response.product,
+                response => response.shortProduct,
                 action => action.MapFrom(
-                    entity => Mapper.Map<ThumbProductResponse>(entity.productOption.product))
+                    entity => Mapper.Map<ShortProductResponse>(entity.productOption.product))
                 );
         }
 

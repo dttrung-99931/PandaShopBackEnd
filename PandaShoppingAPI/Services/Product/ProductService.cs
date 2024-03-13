@@ -259,7 +259,7 @@ namespace PandaShoppingAPI.Services
 
             if (suggestion.categories.Count < requesModel.suggestionNum)
             {
-                suggestion.products = Mapper.Map<List<ThumbProductResponse>>(
+                suggestion.products = Mapper.Map<List<ShortProductResponse>>(
                     GetProductSuggesstions(
                         requesModel.q, 
                         requesModel.suggestionNum - suggestion.categories.Count,
