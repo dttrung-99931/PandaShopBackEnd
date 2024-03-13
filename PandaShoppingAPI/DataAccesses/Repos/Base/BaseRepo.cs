@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PandaShoppingAPI.DataAccesses.EF;
+using PandaShoppingAPI.Utils.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -85,6 +86,10 @@ namespace PandaShoppingAPI.DataAccesses.Repos
 
         public virtual void Update(T entityToUpdate, object id)
         {
+            if (id != (entityToUpdate as dynamic).id)
+            {
+                throw new BadRequestException("id in path and body must be the same");
+            }
             var originEntity = GetById(id);
 
             _dbContext.Entry(originEntity).State = EntityState.Detached;

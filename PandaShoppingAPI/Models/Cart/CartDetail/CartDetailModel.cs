@@ -11,6 +11,6 @@ namespace PandaShoppingAPI.Models
     public class CartDetailModel : BaseModel<CartDetail, CartDetailModel>
     {
         public int productNum { get; set; }
-        public int productId { get; set; }
+        public int productOptionId { get; set; }
     }
 }
