@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Models
 {
-    public class ThumbProductResponse : BaseModel<Product, ThumbProductResponse>
+    public class ShortProductResponse : BaseModel<Product, ShortProductResponse>
     {
         public string name { get; set; }
         public double starNum { get; set; }
@@ -24,7 +24,7 @@ namespace PandaShoppingAPI.Models
         public decimal firstPrice { get; set; }
         public string sentFrom { get; set; }
 
-        protected override void CustomMapping(IMappingExpression<Product, ThumbProductResponse> mappingExpression, IConfiguration config)
+        protected override void CustomMapping(IMappingExpression<Product, ShortProductResponse> mappingExpression, IConfiguration config)
         {
             mappingExpression.ForMember
             (

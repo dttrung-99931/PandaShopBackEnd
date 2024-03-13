@@ -15,7 +15,7 @@ namespace PandaShoppingAPI.Controllers
 {
     [Route("v1/[controller]")]
     public class ProductsController : CrudApiController<Product, ProductModel,
-            ThumbProductResponse, IProductService, ProductFilter>
+            ShortProductResponse, IProductService, ProductFilter>
     {
         public ProductsController(IProductService service) : base(service)
         {
