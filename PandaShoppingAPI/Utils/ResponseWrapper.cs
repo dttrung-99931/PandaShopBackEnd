@@ -23,13 +23,13 @@ namespace PandaShoppingAPI.Utils
         public object data { get; set; }
 
         [DataMember(EmitDefaultValue = false)]
-        public string errorMsg { get; set; }
+        public string message { get; set; }
 
         [DataMember(EmitDefaultValue = false)]
         public string errorCode { get; set; }
 
         public ResponseWrapper(HttpStatusCode statusCode, object data = null,
-            Meta meta = null, string errorMessage = null, string errorCode = null)
+            Meta meta = null, string message = null, string errorCode = null)
         {
             this.statusCode = (int)statusCode;
             this.success = this.statusCode == 200 ||
@@ -37,17 +37,17 @@ namespace PandaShoppingAPI.Utils
                            this.statusCode == 204;
             this.data = data;
             this.meta = meta;
-            this.errorMsg = errorMessage;
+            this.message = message;
             this.errorCode = errorCode;
         }
 
-        public ResponseWrapper(HttpStatusCode statusCode, string errMsg) :
-           this(statusCode, null, null, errMsg)
+        public ResponseWrapper(HttpStatusCode statusCode, string message) :
+           this(statusCode, null, null, message)
         {
         }
 
-        public ResponseWrapper(HttpStatusCode statusCode, string errorCode, string errMsg) :
-           this(statusCode, null, null, errMsg, errorCode)
+        public ResponseWrapper(HttpStatusCode statusCode, string message, string errorCode) :
+           this(statusCode, null, null, message, errorCode)
         {
         }
 
