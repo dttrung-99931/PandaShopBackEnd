@@ -19,14 +19,22 @@ namespace PandaShoppingAPI.Controllers
         {
         }
 
-        [HttpPost("AddToCart")]
-        public ActionResult<ResponseWrapper> AddToCart([FromBody] CartDetailModel request)
+        /// <summary>
+        /// Upsert cart
+        /// - not existing => insert 
+        /// - existing => update
+        /// - productNum == 0 => delete
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPut("UpsertCart")]
+        public ActionResult<ResponseWrapper> UpsertCart([FromBody] CartDetailModel request)
         {
             CartDetailModel cartDetail = null;
             var exceptionResponse = HandleExceptions(() =>
             {
                 cartDetail = Mapper.Map<CartDetailModel>(
-                 _service.AddToCart(request)
+                 _service.UpsertCart(request)
                 );
             });
 
@@ -42,6 +50,19 @@ namespace PandaShoppingAPI.Controllers
             var exceptionResponse = HandleExceptions(() =>
             {
                 _service.UpdateCartDetail(cartDetailId, cartDetail);
+            });
+
+            if (exceptionResponse != null) return exceptionResponse;
+
+            return ok_get();
+        }
+
+        [HttpDelete("DeleteMany")]
+        public ActionResult<ResponseWrapper> DeleteMany([FromBody] DeleteCartItemsModel model)
+        {
+            var exceptionResponse = HandleExceptions(() =>
+            {
+                _service.DeleteCartItems(model);
             });
 
             if (exceptionResponse != null) return exceptionResponse;

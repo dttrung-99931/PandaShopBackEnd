@@ -23,10 +23,10 @@ namespace PandaShoppingAPI.Services
             _userService = userService;
         }
 
-        public CartDetail AddToCart(CartDetailModel request)
+        public CartDetail UpsertCart(CartDetailModel request)
         {
             var cartId = _userService.GetCartIdOfUser(User.UserId);
-            return _cartDetailService.Insert(cartId, request);
+            return _cartDetailService.Upsert(cartId, request);
         }
 
         public void UpdateCartDetail(int cartDetailId, CartDetailModel cartDetail)
@@ -38,6 +38,12 @@ namespace PandaShoppingAPI.Services
             {
                 _cartDetailService.Delete(cartDetailId);
             }
+        }
+
+        public void DeleteCartItems(DeleteCartItemsModel model)
+        {
+            var cartId = _userService.GetCartIdOfUser(User.UserId);
+            _cartDetailService.DeleteMany(cartId, model);
         }
     }
 }
