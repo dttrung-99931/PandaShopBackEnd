@@ -5,7 +5,8 @@ namespace PandaShoppingAPI.Services
 {
     public interface ICartService : IBaseService<Cart, CartModel, CartFilter>
     {
-        CartDetail AddToCart(CartDetailModel request);
+        CartDetail UpsertCart(CartDetailModel request);
         void UpdateCartDetail(int cartDetailId, CartDetailModel cartDetail);
+        void DeleteCartItems(DeleteCartItemsModel model);
     }
 }
