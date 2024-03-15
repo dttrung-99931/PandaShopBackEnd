@@ -1,20 +1,18 @@
 ﻿using AutoMapper;
+using AutoMapper.Configuration.Conventions;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.Models.Base;
+using PandaShoppingAPI.Utils;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Models
 {
-    public class TemplateResponseModel : BaseModel<Template, TemplateResponseModel>
+    public class BannerResponse
     {
-        [JsonProperty("properties")]
-        public List<BannerResponse> PropertyTemplate { get; set; }
-
+        public string imageLink { get; set; }
     }
 }

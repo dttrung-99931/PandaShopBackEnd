@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
 using PandaShoppingAPI.Models;
 using PandaShoppingAPI.Services;
 using PandaShoppingAPI.Utils;
+using PandaShoppingAPI.Utils.ServiceUtils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,12 +18,18 @@ namespace PandaShoppingAPI.Services
     {
         private readonly ConfigUtil _configUtil;
         private readonly IProductImageRepo _productImageRepo;
+        private readonly IConfiguration _config;
         
-        public ImageService(IImageRepo repo, ConfigUtil configUtil,
-            IProductImageRepo productImageRepo) : base(repo)
+        public ImageService(
+            IImageRepo repo, 
+            ConfigUtil configUtil,
+            IProductImageRepo productImageRepo,
+            IConfiguration config
+            ) : base(repo)
         {
             _configUtil = configUtil;
             _productImageRepo = productImageRepo;
+            _config = config;
         }
 
         public Image InsertCategoryImg(string based64Img)
@@ -154,6 +162,11 @@ namespace PandaShoppingAPI.Services
 
                     }
                 });
+        }
+
+        public string BuildProductImageLink(ProductImage productImage)
+        {
+            return ImageUtils.BuildProductImageLink(_config, productImage);
         }
 
         //public void UpdateRange(List<ImageModel> updatedImgs)
