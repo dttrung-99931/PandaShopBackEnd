@@ -20,6 +20,24 @@ namespace PandaShoppingAPI.Controllers
         }
 
         /// <summary>
+        /// Get user cart 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpGet("Cart")]
+        public ActionResult<ResponseWrapper> GetCart()
+        {
+            return Handle(() => {
+                int cartId = GetCartIdFromToken(User);
+                if (cartId < 1)
+                {
+                    return notFound();
+                }
+                return Get(cartId);
+            });
+        }        
+
+        /// <summary>
         /// Upsert cart
         /// - not existing => insert 
         /// - existing => update
