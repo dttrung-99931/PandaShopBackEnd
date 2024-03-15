@@ -13,5 +13,6 @@ namespace PandaShoppingAPI.Services
         List<ProductImage> InsertProductImages(int prodcutId, List<ProductImageRequest> images);
         void UpdateProductImages(int productId, List<ProductImageRequest> images);
         //void UpdateRange(List<ImageModel> updatedImgs);
+        string BuildProductImageLink(ProductImage image);
     }
 }

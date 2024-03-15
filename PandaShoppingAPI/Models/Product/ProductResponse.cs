@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.Models.Base;
+using PandaShoppingAPI.Utils.ServiceUtils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,7 +20,7 @@ namespace PandaShoppingAPI.Models
         public int sellingNum { get; set; }
         public int remainingNum { get; set; }
         public string thumbImgLink { get; set; }
-        
+
         /*The price of the first product option*/
         public decimal firstPrice { get; set; }
         public string sentFrom { get; set; }
@@ -31,9 +32,7 @@ namespace PandaShoppingAPI.Models
                 thumbProduct => thumbProduct.thumbImgLink,
                 option => option.MapFrom(
                         product => product.ProductImage.Count != 0
-                                ? Path.Combine(
-                                    config["Path:ProductImgEndPoint"],
-                                    product.ProductImage.First().image.fileName)
+                                ? ImageUtils.BuildProductImageLink(config, product.ProductImage.First())
                                 : null
                 )
             )
