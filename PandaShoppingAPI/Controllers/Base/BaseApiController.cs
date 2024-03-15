@@ -179,6 +179,21 @@ namespace PandaShoppingAPI.Controllers
             }
         }
 
+        protected int GetCartIdFromToken(ClaimsPrincipal user)
+        {
+            try
+            {
+                return int.Parse(
+                    user?.FindFirst(Constants.CLAIM_CART_ID)?.Value
+                );
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("GetCartIdFromToken " + e.Message);
+                return -1;
+            }
+        }
+
         protected ActionResult<ResponseWrapper> error_operation_forbidden()
         {
             return error(HttpStatusCode.Forbidden, "Operation forbidden. " +
