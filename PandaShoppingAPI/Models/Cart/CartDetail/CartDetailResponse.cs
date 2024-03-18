@@ -13,7 +13,7 @@ namespace PandaShoppingAPI.Models
     public class CartDetailResponse : BaseModel<CartDetail, CartDetailResponse>
     {
         public int productNum { get; set; }
-        public int productOptionId { get; set; }
+        public ProductOptionResponse productOption { get; set; }
         public ShortProductResponse shortProduct { get; set; }
 
         protected override void CustomMapping(IMappingExpression<CartDetail, CartDetailResponse> mappingExpression, IConfiguration config)
