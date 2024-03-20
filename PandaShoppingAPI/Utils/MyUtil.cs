@@ -67,7 +67,7 @@ namespace PandaShoppingAPI.Utils
         internal static string GetAppDataFilePath(string fileName)
         {
             return AppDomain.CurrentDomain.GetData("DataDirectory").ToString()
-                            + "\\" + fileName;
+                            + Constants.fileSep + fileName;
         }
 
         internal static bool Contains(string str, string fill_str)
