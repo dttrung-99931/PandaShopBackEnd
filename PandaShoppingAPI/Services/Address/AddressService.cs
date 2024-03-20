@@ -36,8 +36,8 @@ namespace PandaShoppingAPI.Services
         private JArray GetAddressJArray(string directoryName, string fileId = "")
         {
             string relativePath = directoryName;
-            
-            if (fileId != "") relativePath += "\\" + fileId + ".json";
+
+            if (fileId != "") relativePath += Constants.fileSep + fileId + ".json";
             else relativePath += ".json";
 
             string specifiedPath = MyUtil.GetAppDataFilePath(relativePath);

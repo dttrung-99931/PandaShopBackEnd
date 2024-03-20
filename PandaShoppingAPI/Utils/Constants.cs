@@ -15,6 +15,8 @@ namespace PandaShoppingAPI.Utils
         public const string POLICY_UPLOAD_FILE = "PolicyUpdateFile";
         public const string ID_MODEL_MAINTENANCE = "model";
         public const string ID_OIL_MAINTENACE = "oil";
+
+        public static string fileSep = OperatingSystem.IsWindows() ? "\\" : "/";
     }
 
     // TODO: Create init sql to create init role with specific id like defined in the enums
