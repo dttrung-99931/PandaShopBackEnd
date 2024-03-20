@@ -18,7 +18,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public string districtCode { get; set; }
         public string communeOrWard { get; set; }
         public string streetAndHouseNum { get; set; }
+        public int? userId { get; set; }
+        public string name { get; set; }
 
+        public virtual User_ user { get; set; }
         public virtual ICollection<Order_> Order_ { get; set; }
         public virtual ICollection<Product> Product { get; set; }
     }
