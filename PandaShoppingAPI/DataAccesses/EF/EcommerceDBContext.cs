@@ -63,6 +63,8 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasMaxLength(5)
                     .IsUnicode(false);
 
+                entity.Property(e => e.name).HasMaxLength(50);
+
                 entity.Property(e => e.provinceOrCity)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -75,6 +77,11 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.Property(e => e.streetAndHouseNum)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.HasOne(d => d.user)
+                    .WithMany(p => p.Address)
+                    .HasForeignKey(d => d.userId)
+                    .HasConstraintName("FK_Address_User");
             });
 
             modelBuilder.Entity<CartDetail>(entity =>

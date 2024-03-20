@@ -1,14 +1,21 @@
 ﻿using System;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PandaShoppingAPI.Controllers.Base;
+using PandaShoppingAPI.DataAccesses.EF;
+using PandaShoppingAPI.Models;
 using PandaShoppingAPI.Services;
 using PandaShoppingAPI.Utils;
 
 namespace PandaShoppingAPI.Controllers
 {
-    public class AddressesController : BaseApiController<IAddressService>
+    [Route("v1/[controller]")]
+    [Authorize]
+    public class AddressesController : CrudApiController2<Address, AddressModel, AddressModel, IAddressService, Filter>
     {
-        public AddressesController(IAddressService service) : base(service)
+        public AddressesController(IAddressService service, IHttpContextAccessor httpContextAccessor) : base(service, httpContextAccessor)
         {
         }
 
