@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Services
 {
-    public class UserService : BaseService<IUserRepo, User_, UserModel, UserFilter>, 
+    public class UserService : BaseService<IUserRepo, User_, UserModel, UserFilter>,
         IUserService
     {
         private readonly IShopRepo _shopRepo;
@@ -64,10 +64,10 @@ namespace PandaShoppingAPI.Services
             {
                 throw new ConflictException(ErrorCode.shopExisted);
             }
-            
+
             var shopId = _shopRepo.Insert(Mapper.Map<Shop>(shopModel)).id;
             user.shopId = shopId;
-            
+
             _repo.Update(user, user.id);
         }
 
@@ -104,7 +104,12 @@ namespace PandaShoppingAPI.Services
 
             var token = GenerateToken(claims.ToArray(), expires);
 
-            return new LoginResponse(user.id, token, expires, user.cartId);
+            return new LoginResponse(
+                user.id,
+                token,
+                expires,
+                user.cartId,
+                Mapper.Map<ShopResponseModel>(user.shop));
         }
 
         private DateTime ComputeExpiredDateByRoles(List<UserRole> userRoles)
@@ -113,13 +118,13 @@ namespace PandaShoppingAPI.Services
 
             foreach (var userRole in userRoles)
             {
-                if (userRole.id == (int) Roles.admin)
+                if (userRole.id == (int)Roles.admin)
                     return expires.AddDays(5);
 
-                if (userRole.id == (int) Roles.shop)
+                if (userRole.id == (int)Roles.shop)
                     return expires.AddDays(10);
 
-                if (userRole.id == (int) Roles.user)
+                if (userRole.id == (int)Roles.user)
                     return expires.AddDays(10);
             }
 
@@ -157,5 +162,10 @@ namespace PandaShoppingAPI.Services
             return GetById(userId).cartId;
         }
 
+        public override IQueryable<User_> Fill(UserFilter filter)
+        {
+            // TODO: prevent get other shop
+            return base.Fill(filter);
+        }
     }
 }

@@ -17,7 +17,6 @@ namespace PandaShoppingAPI.Models
         public string email { get; set; }
         public string password { get; set; }
         public int cartId { get; set; }
-        public int? shopId { get; set; }
-
+        public ShopResponseModel shop { get; set; }
     }
 }

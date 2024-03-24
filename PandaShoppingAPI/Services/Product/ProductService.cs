@@ -118,7 +118,9 @@ namespace PandaShoppingAPI.Services
             filledProducts = FillByPrice(filledProducts, filter);
             
             filledProducts = FillByProvinceOrCityCode(filledProducts, filter);
-            
+
+            filledProducts = FillByShopId(filledProducts, filter);
+
             filledProducts = FillByQ(filledProducts, filter);
             
             filledProducts = OrderBy(filledProducts, filter);
@@ -153,6 +155,19 @@ namespace PandaShoppingAPI.Services
             }
             return filledProducts;
         }
+
+        private IQueryable<Product> FillByShopId(
+            IQueryable<Product> filledProducts,
+            ProductFilter filter)
+        {
+            if (filter.shopId != null)
+            {
+                return filledProducts
+                    .Where(product => product.shopId == filter.shopId);
+            }
+            return filledProducts;
+        }
+
 
         private IQueryable<Product> OrderBy(
             IQueryable<Product> products,

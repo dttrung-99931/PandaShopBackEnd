@@ -11,6 +11,7 @@ using System.Net;
 namespace PandaShoppingAPI.Controllers
 {
     [Route("v1/[controller]")]
+    [Authorize]
     public class UsersController : CrudApiController2<User_, UserModel,
             UserResponseModel, IUserService, UserFilter>
     {
@@ -35,6 +36,7 @@ namespace PandaShoppingAPI.Controllers
             });
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public ActionResult<ResponseWrapper> Login([FromBody] LoginModel loginModel)
         {
@@ -42,6 +44,17 @@ namespace PandaShoppingAPI.Controllers
             {
                 LoginResponse result = _service.Login(loginModel);
                 return result != null ? ok_get(result) : error(HttpStatusCode.Unauthorized, "Login failed");
+            });
+        }
+
+
+        [HttpGet("me")]
+        public ActionResult<ResponseWrapper> GetMe()
+        {
+            return Handle(() =>
+            {
+                int userId = GetUserIdFromToken();
+                return Get(userId);
             });
         }
 
