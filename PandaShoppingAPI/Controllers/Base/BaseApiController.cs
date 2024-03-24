@@ -159,7 +159,7 @@ namespace PandaShoppingAPI.Controllers
             return GetUserIdFromToken() == userId;
         }
 
-        private int GetUserIdFromToken()
+        protected int GetUserIdFromToken()
         {
             return GetUserIdFromToken(User);
         }
