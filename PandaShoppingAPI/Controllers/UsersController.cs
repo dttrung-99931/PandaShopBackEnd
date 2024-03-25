@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PandaShoppingAPI.Controllers.Base;
@@ -6,6 +7,7 @@ using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.Models;
 using PandaShoppingAPI.Services;
 using PandaShoppingAPI.Utils;
+using PandaShoppingAPI.Utils.Exceptions;
 using System.Net;
 
 namespace PandaShoppingAPI.Controllers
@@ -58,5 +60,24 @@ namespace PandaShoppingAPI.Controllers
             });
         }
 
+        public override ActionResult<ResponseWrapper> Get(int id)
+        {
+            return Handle(() =>
+            {
+                User_ user = _service.GetById(id);
+                if (user == null)
+                {
+                    throw new NotFoundException("User", id);
+                }
+                UserResponseModel userRes = Mapper.Map<UserResponseModel>(user);
+                // Remove default null shop by AutoMapper
+                // TODO: fix AutoMapper mapping field even it's null
+                if (user.shopId == null)
+                {
+                    userRes.shop = null;
+                }
+                return ok_get(userRes);
+            });
+        }
     }
 }
