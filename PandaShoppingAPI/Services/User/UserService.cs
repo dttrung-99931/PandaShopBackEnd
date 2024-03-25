@@ -109,7 +109,7 @@ namespace PandaShoppingAPI.Services
                 token,
                 expires,
                 user.cartId,
-                Mapper.Map<ShopResponseModel>(user.shop));
+                user.shopId != null ? Mapper.Map<ShopResponseModel>(user.shop) : null);
         }
 
         private DateTime ComputeExpiredDateByRoles(List<UserRole> userRoles)
