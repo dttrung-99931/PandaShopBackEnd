@@ -9,5 +9,6 @@ namespace PandaShoppingAPI.Services
         void InsertTemplateForCategory(int categoryId, TemplateModel model);
         List<int> GetRequiredPropertyIDsOfCategory(int categoryId);
         List<Category> GetCategorySuggesstions(string q, int suggestionNum);
+        TemplateResponseModel GetTemplateOfCate(int categoryId);
     }
 }
