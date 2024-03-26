@@ -47,5 +47,14 @@ namespace PandaShoppingAPI.Controllers
             return ok_create("Successfully");
         }
 
+        [HttpGet("{id}/Template")]
+        public ActionResult<ResponseWrapper> GetTemplate(int id)
+        {
+            return Handle(() =>
+            {
+                return ok_get(_service.GetTemplateOfCate(id));
+            });
+        }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using PandaShoppingAPI.DataAccesses.EF;
+﻿using AutoMapper;
+using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
 using PandaShoppingAPI.Models;
 using PandaShoppingAPI.Utils;
@@ -130,6 +131,27 @@ namespace PandaShoppingAPI.Services
             return _repo.Where(category => category.name.Contains(q.Unescaped()))
                 .Take(suggestionNum)
                 .ToList();
+        }
+
+        /// Return template of category or first cate parent's template
+        /// Return null if the category and its parents don't have a template
+        /// TODO: Merge template of parents
+        public TemplateResponseModel GetTemplateOfCate(int categoryId)
+        {
+            Category category = GetById(categoryId);
+            Template template = category?.template;
+            while (template == null && category?.parentId != null)
+            {
+                category = category.parent;
+                template = category.template;
+            }
+            if (template != null)
+            {
+                return Mapper.Map<TemplateResponseModel>(template);
+            } else
+            {
+                return null;
+            }
         }
     }
 }
