@@ -14,7 +14,7 @@ namespace PandaShoppingAPI.Models
     public class TemplateResponseModel : BaseModel<Template, TemplateResponseModel>
     {
         [JsonProperty("properties")]
-        public List<BannerResponse> PropertyTemplate { get; set; }
+        public List<TemplatePropertyResponse> PropertyTemplate { get; set; }
 
     }
 }
