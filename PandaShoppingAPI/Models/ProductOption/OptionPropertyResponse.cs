@@ -17,6 +17,7 @@ namespace PandaShoppingAPI.Models
     {
         public string name { get; set; }
         public string value { get; set; }
+        public int propertyId { get; set; }
 
         protected override void CustomMapping(IMappingExpression<ProductOptionValue, OptionPropertyResponse> mappingExpression, IConfiguration config)
         {
