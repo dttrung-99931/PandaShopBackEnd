@@ -15,6 +15,7 @@ namespace PandaShoppingAPI.Models
     {
         [MapTo("property.name")]
         public string propertyName { get; set; }
+        public int propertyId { get; set; }
         public bool? isRequired { get; set; }
         public List<string> values { get; set; }
 
