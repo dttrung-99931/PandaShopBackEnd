@@ -19,6 +19,7 @@ namespace PandaShoppingAPI.Models
         public int sellingNum { get; set; }
         public int remainingNum { get; set; }
         public int categoryId { get; set; }
+        public CategoryResponse category { get; set; }
         public int shopId { get; set; }
 
         [JsonProperty("propertyValues")]
