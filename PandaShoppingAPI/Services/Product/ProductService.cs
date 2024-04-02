@@ -83,6 +83,22 @@ namespace PandaShoppingAPI.Services
             return product;
         }
 
+        public override void Update(ProductModel requestModel, object id)
+        {
+            _repo.Update(id, (product) =>
+            {
+                product.name = requestModel.name;
+                product.description = requestModel.description;
+                product.sellingNum = requestModel.sellingNum;
+                product.categoryId = requestModel.categoryId;
+                product.shopId = requestModel.shopId;
+                product.addressId = requestModel.shopId;
+                product.ProductPropertyValue = Mapper.Map<List<ProductPropertyValue>>(requestModel.properties);
+            });
+            _productOptionRepo.UpsertRange((int)id, requestModel.productOptions);
+            // TODO: update what else?
+        }
+
         public void UpdatePropertyValue(int productId, PropertyValueRequest propertyValueReq)
         {
             if (GetById(productId) == null)
