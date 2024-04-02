@@ -154,21 +154,21 @@ namespace PandaShoppingAPI.Controllers
             return exceptionResponse == null ? ok_get(suggestions) : exceptionResponse;
         }
 
-        [ApiExplorerSettings(IgnoreApi = true)] // Hide API in swagger
-        public override ActionResult<ResponseWrapper> Put(int id, [FromBody] ProductModel requestModel)
-        {
-            // return forbidden error if api is accessed
-            return forbidden(); 
-        }
+        //[ApiExplorerSettings(IgnoreApi = true)] // Hide API in swagger
+        //public override ActionResult<ResponseWrapper> Put(int id, [FromBody] ProductModel requestModel)
+        //{
+        //    // return forbidden error if api is accessed
+        //    return forbidden(); 
+        //}
 
-        [HttpPut("{id}", Order = -1)] // order = -1 to override API route of [Put] in supper
-        public ActionResult<ResponseWrapper> UpdateProduct(int id, [FromBody] UpdateProductModel updateModel)
-        {
-            var exceptionResponse = HandleExceptions(
-                () => _service.UpdateProduct(id, updateModel)
-            );
+        //[HttpPut("{id}", Order = -1)] // order = -1 to override API route of [Put] in supper
+        //public ActionResult<ResponseWrapper> UpdateProduct(int id, [FromBody] UpdateProductModel updateModel)
+        //{
+        //    var exceptionResponse = HandleExceptions(
+        //        () => _service.UpdateProduct(id, updateModel)
+        //    );
 
-            return exceptionResponse == null ? ok_update() : exceptionResponse;
-        }
+        //    return exceptionResponse == null ? ok_update() : exceptionResponse;
+        //}
     }
 }

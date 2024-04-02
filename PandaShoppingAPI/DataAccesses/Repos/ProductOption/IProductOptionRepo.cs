@@ -10,6 +10,8 @@ namespace PandaShoppingAPI.DataAccesses.Repos
     public interface IProductOptionRepo : IBaseRepo<ProductOption>
     {
         void InsertRange(int productId, List<ProductOptionRequest> productOptions);
+        void UpsertRange(int productId, List<ProductOptionRequest> productOptions);
+        void UpdateRange(int productId, List<ProductOptionRequest> productOptions);
         ProductOption Insert(int productId, ProductOptionRequest option);
     }
 }
