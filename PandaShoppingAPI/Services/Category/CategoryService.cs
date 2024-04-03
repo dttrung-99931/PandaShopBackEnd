@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Castle.Core.Resource;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
 using PandaShoppingAPI.Models;
@@ -80,6 +81,12 @@ namespace PandaShoppingAPI.Services
             {
                 filledCategories = filledCategories
                     .Where(category => category.level == filter.level);
+            }
+            
+            if (filter.shopId != null)
+            {
+                filledCategories = filledCategories
+                    .Where(category => category.Product.Any((prod) => prod.shopId == filter.shopId));
             }
             
             if (filter.q != null)
