@@ -20,6 +20,8 @@ namespace PandaShoppingAPI.DataAccesses.Repos
 
         void DeleteRange(List<object> ids);
 
+        void DeleteRange(IEnumerable<T> entities);
+
         T Insert(T entity);
 
         List<T> InsertRange(List<T> entites);

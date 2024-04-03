@@ -86,7 +86,8 @@ namespace PandaShoppingAPI.DataAccesses.Repos
 
         public virtual void Update(T entityToUpdate, object id)
         {
-            if (id != (entityToUpdate as dynamic).id)
+            // Need ToString() then compare otherwise comapare error occured
+            if (id.ToString() != (entityToUpdate as dynamic).id.ToString())
             {
                 throw new BadRequestException("id in path and body must be the same");
             }
@@ -207,6 +208,11 @@ namespace PandaShoppingAPI.DataAccesses.Repos
         public bool Any(Expression<Func<T, bool>> condition)
         {
             return _dbSet.Any(condition);
+        }
+
+        public void DeleteRange(IEnumerable<T> entities)
+        {
+            _dbSet.RemoveRange(entities);
         }
     }
 }
