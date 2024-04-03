@@ -51,7 +51,7 @@ namespace PandaShoppingAPI.DataAccesses.Repos
                 {
                     updated.Add(optionReq);
                 } 
-                else if (optionReq.id > 0) 
+                else if (optionReq.id < 0) 
                 {
                     inserted.Add(optionReq);
                 } 
