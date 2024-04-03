@@ -68,8 +68,7 @@ namespace PandaShoppingAPI.Controllers
 
         protected ResponseWrapper ok_delete()
         {
-            Response.StatusCode = (int)HttpStatusCode.NoContent;
-            return null;
+            return ok_get();
         }
 
         protected ResponseWrapper notFound()
