@@ -86,7 +86,13 @@ namespace PandaShoppingAPI.DataAccesses.Repos
             updated.ForEach((option) =>
             {
                 ProductOptionRequest optionReq = optionReqsMap[option.id];
-                option.ProductOptionValue = Mapper.Map<List<ProductOptionValue>>(optionReq.properties);
+                _productOptionValueRepo.DeleteRange(option.ProductOptionValue);
+                option.ProductOptionValue = optionReq.properties.Select((prop) => new ProductOptionValue()
+                    {
+                        propertyId = prop.propertyId,
+                        value = prop.value
+                    })
+                    .ToList();
                 option.price = optionReq.price;
                 option.name = optionReq.name;
             });
