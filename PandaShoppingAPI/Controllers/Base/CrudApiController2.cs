@@ -49,7 +49,7 @@ namespace PandaShoppingAPI.Controllers.Base
             var responseModels = Mapper.Map<List<TResponseModel>>(
                 filledEntities
             );
-
+            responseModels.ForEach(HandleResponseModel);
             return ok_get(responseModels, meta);
         }
 
@@ -62,6 +62,7 @@ namespace PandaShoppingAPI.Controllers.Base
                 responseModel = Mapper.Map<TResponseModel>(
                     _service.GetById(id)
                 );
+                HandleResponseModel(responseModel);
             }
             catch (Exception e)
             {
@@ -74,6 +75,12 @@ namespace PandaShoppingAPI.Controllers.Base
             return notFound();
         }
 
+        // Handle response data after Map from entity 
+        // Used when cannot process in CustomMapping of ResponseModel
+        virtual public void HandleResponseModel(TResponseModel response)
+        {
+        }
+
         [HttpPost]
         virtual public ActionResult<ResponseWrapper> Post([FromBody]TRequestModel requestModel)
         {
@@ -83,6 +90,7 @@ namespace PandaShoppingAPI.Controllers.Base
                 responseModel = Mapper.Map<TResponseModel>(
                     _service.Insert(requestModel)
                 );
+                HandleResponseModel(responseModel);
                 return ok_create(responseModel);
             });
         }

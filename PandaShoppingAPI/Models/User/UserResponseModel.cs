@@ -22,13 +22,20 @@ namespace PandaShoppingAPI.Models
 
         // TODO: Disable mapping shop when it's null
         // Below not working
-        //protected override void CustomMapping(IMappingExpression<User_, UserResponseModel> mappingExpression, IConfiguration config)
-        //{
-        //    mappingExpression
-        //        .ForAllMembers(
-        //        (opts) => opts.Condition((src, dest, srcMember) => srcMember != null)  
-        //        );
-        //}
+        protected override void CustomMapping(IMappingExpression<User_, UserResponseModel> mappingExpression, IConfiguration config)
+        {
+            mappingExpression.ForMember(
+                (userRes) => userRes.shop,
+                (options) => options.MapFrom(
+                    (userEntity) => userEntity.shopId != null && userEntity.shop.id > 0 
+                        ? Mapper.Map<ShopResponseModel>(userEntity.shop) 
+                        : null
+                )
+            );
+                //.ForAllMembers(
+                //    (opts) => opts.Condition((src, dest, srcMember) => srcMember != null)
+                //);
+        }
 
     }
 }
