@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using PandaShoppingAPI.Controllers.Base;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.Models;
@@ -49,6 +50,20 @@ namespace PandaShoppingAPI.Controllers
             });
         }
 
+
+        [AllowAnonymous]
+        public override ActionResult<ResponseWrapper> Post([FromBody] UserModel requestModel)
+        {
+            return base.Post(requestModel);
+        }
+
+        public override void HandleResponseModel(UserResponseModel response)
+        {
+            if (response.shop.id <= 0)
+            {
+                response.shop = null;
+            }
+        }
 
         [HttpGet("me")]
         public ActionResult<ResponseWrapper> GetMe()

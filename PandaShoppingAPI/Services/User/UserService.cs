@@ -118,13 +118,13 @@ namespace PandaShoppingAPI.Services
 
             foreach (var userRole in userRoles)
             {
-                if (userRole.id == (int)Roles.admin)
+                if (userRole.roleId == (int)Roles.admin)
                     return expires.AddDays(5);
 
-                if (userRole.id == (int)Roles.shop)
+                if (userRole.roleId == (int)Roles.shop)
                     return expires.AddDays(10);
 
-                if (userRole.id == (int)Roles.user)
+                if (userRole.roleId == (int)Roles.user)
                     return expires.AddDays(10);
             }
 
