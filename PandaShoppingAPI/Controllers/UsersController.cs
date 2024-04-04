@@ -57,7 +57,7 @@ namespace PandaShoppingAPI.Controllers
             return base.Post(requestModel);
         }
 
-        public override void HandleResponseModel(UserResponseModel response)
+        protected override void HandleResponseModel(UserResponseModel response)
         {
             if (response.shop.id <= 0)
             {
