@@ -77,7 +77,7 @@ namespace PandaShoppingAPI.Controllers.Base
 
         // Handle response data after Map from entity 
         // Used when cannot process in CustomMapping of ResponseModel
-        virtual public void HandleResponseModel(TResponseModel response)
+        virtual protected void HandleResponseModel(TResponseModel response)
         {
         }
 
