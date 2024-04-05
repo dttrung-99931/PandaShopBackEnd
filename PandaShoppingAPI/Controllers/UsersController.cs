@@ -23,7 +23,7 @@ namespace PandaShoppingAPI.Controllers
         {
         }
 
-        [Authorize(Roles = "shop")]
+        [Authorize(Roles = "admin")]
         public override ActionResult<ResponseWrapper> Get([FromQuery] UserFilter filter)
         {
             return base.Get(filter);

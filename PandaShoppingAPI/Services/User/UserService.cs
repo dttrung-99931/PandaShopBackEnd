@@ -67,7 +67,12 @@ namespace PandaShoppingAPI.Services
 
             var shopId = _shopRepo.Insert(Mapper.Map<Shop>(shopModel)).id;
             user.shopId = shopId;
-
+            user.UserRole.Add(
+                new UserRole()
+                {
+                    roleId = (int) Roles.shop
+                }
+            );
             _repo.Update(user, user.id);
         }
 
@@ -152,7 +157,7 @@ namespace PandaShoppingAPI.Services
         {
             var roleClaims = new List<Claim>();
             userRoles.ForEach(
-                ur => roleClaims.Add(new Claim(ClaimTypes.Role, ur.role.name))
+                ur => roleClaims.Add(new Claim(ClaimTypes.Role, ur.role.name.Trim()))
             );
             return roleClaims;
         }
