@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Controllers.Base
 {
+    // = CrudApiController +  Auto set User to service + Util methods
     public class CrudApiController2<TEntity, TRequestModel, TResponseModel, TService, TFilter>:
         BaseApiController<TService> 
 

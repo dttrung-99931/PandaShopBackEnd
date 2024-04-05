@@ -8,5 +8,6 @@
         // User
         userExisted,
         shopExisted,
+        unregisterdShop,
     }
 }
