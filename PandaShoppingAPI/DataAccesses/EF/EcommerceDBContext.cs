@@ -298,7 +298,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
             {
                 entity.Property(e => e.description)
                     .IsRequired()
-                    .HasMaxLength(4000);
+                    .HasMaxLength(500);
 
                 entity.Property(e => e.name).HasMaxLength(50);
 
@@ -333,7 +333,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasConstraintName("FK_ProductBatch_ProductOption");
 
                 entity.HasOne(d => d.warehouseInput)
-                    .WithMany(p => p.InversewarehouseInput)
+                    .WithMany(p => p.ProductBatch)
                     .HasForeignKey(d => d.warehouseInputId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ProductBatch_WarehouseInput");
@@ -413,10 +413,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<Property>(entity =>
             {
-                entity.HasIndex(e => e.secondaryId, "UQ__Property__2D08ACCF1B484926")
+                entity.HasIndex(e => e.secondaryId, "UQ__Property__2D08ACCF5EA3BA00")
                     .IsUnique();
 
-                entity.HasIndex(e => e.secondaryId, "UQ__Property__2D08ACCFB0D82A98")
+                entity.HasIndex(e => e.secondaryId, "UQ__Property__2D08ACCF6D2F21AB")
                     .IsUnique();
 
                 entity.Property(e => e.name).HasMaxLength(50);
@@ -491,9 +491,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<User_>(entity =>
             {
-                entity.HasIndex(e => e.phone, "Unique_User_Phone")
-                    .IsUnique();
-
                 entity.Property(e => e.createdAt)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");

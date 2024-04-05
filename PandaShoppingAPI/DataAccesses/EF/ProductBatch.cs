@@ -7,7 +7,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
     {
         public ProductBatch()
         {
-            InversewarehouseInput = new HashSet<ProductBatch>();
             WarehouseOutputDetail = new HashSet<WarehouseOutputDetail>();
         }
 
@@ -20,8 +19,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public DateTime? arriveDate { get; set; }
 
         public virtual ProductOption productOption { get; set; }
-        public virtual ProductBatch warehouseInput { get; set; }
-        public virtual ICollection<ProductBatch> InversewarehouseInput { get; set; }
+        public virtual WarehouseInput warehouseInput { get; set; }
         public virtual ICollection<WarehouseOutputDetail> WarehouseOutputDetail { get; set; }
     }
 }
