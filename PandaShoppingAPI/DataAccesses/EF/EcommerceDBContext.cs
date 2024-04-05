@@ -32,7 +32,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public virtual DbSet<Permission> Permission { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<ProductBatch> ProductBatch { get; set; }
-        public virtual DbSet<ProductBatchDetail> ProductBatchDetail { get; set; }
         public virtual DbSet<ProductImage> ProductImage { get; set; }
         public virtual DbSet<ProductOption> ProductOption { get; set; }
         public virtual DbSet<ProductOptionImage> ProductOptionImage { get; set; }
@@ -299,7 +298,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
             {
                 entity.Property(e => e.description)
                     .IsRequired()
-                    .HasMaxLength(500);
+                    .HasMaxLength(4000);
 
                 entity.Property(e => e.name).HasMaxLength(50);
 
@@ -321,28 +320,23 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<ProductBatch>(entity =>
             {
-                entity.Property(e => e.date).HasColumnType("datetime");
+                entity.Property(e => e.arriveDate).HasColumnType("datetime");
 
-                entity.Property(e => e.name).HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<ProductBatchDetail>(entity =>
-            {
                 entity.Property(e => e.expireDate).HasColumnType("datetime");
 
                 entity.Property(e => e.manufactureDate).HasColumnType("datetime");
 
-                entity.HasOne(d => d.productBatch)
-                    .WithMany(p => p.ProductBatchDetail)
-                    .HasForeignKey(d => d.productBatchId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ProductBatchDetail_ProductBatch");
-
                 entity.HasOne(d => d.productOption)
-                    .WithMany(p => p.ProductBatchDetail)
+                    .WithMany(p => p.ProductBatch)
                     .HasForeignKey(d => d.productOptionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ProductBatchDetail_ProductOption");
+                    .HasConstraintName("FK_ProductBatch_ProductOption");
+
+                entity.HasOne(d => d.warehouseInput)
+                    .WithMany(p => p.InversewarehouseInput)
+                    .HasForeignKey(d => d.warehouseInputId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProductBatch_WarehouseInput");
             });
 
             modelBuilder.Entity<ProductImage>(entity =>
@@ -419,10 +413,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<Property>(entity =>
             {
-                entity.HasIndex(e => e.secondaryId, "UQ__Property__2D08ACCF5EA3BA00")
+                entity.HasIndex(e => e.secondaryId, "UQ__Property__2D08ACCF1B484926")
                     .IsUnique();
 
-                entity.HasIndex(e => e.secondaryId, "UQ__Property__2D08ACCF6D2F21AB")
+                entity.HasIndex(e => e.secondaryId, "UQ__Property__2D08ACCFB0D82A98")
                     .IsUnique();
 
                 entity.Property(e => e.name).HasMaxLength(50);
@@ -497,6 +491,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<User_>(entity =>
             {
+                entity.HasIndex(e => e.phone, "Unique_User_Phone")
+                    .IsUnique();
+
                 entity.Property(e => e.createdAt)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
@@ -556,12 +553,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
             {
                 entity.Property(e => e.date).HasColumnType("datetime");
 
-                entity.HasOne(d => d.productBatch)
-                    .WithMany(p => p.WarehouseInput)
-                    .HasForeignKey(d => d.productBatchId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_WarehouseInput_ProductBatch");
-
                 entity.HasOne(d => d.warehouse)
                     .WithMany(p => p.WarehouseInput)
                     .HasForeignKey(d => d.warehouseId)
@@ -576,11 +567,11 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<WarehouseOutputDetail>(entity =>
             {
-                entity.HasOne(d => d.productBatchDetail)
+                entity.HasOne(d => d.productBatch)
                     .WithMany(p => p.WarehouseOutputDetail)
-                    .HasForeignKey(d => d.productBatchDetailId)
+                    .HasForeignKey(d => d.productBatchId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_WarehouseOutputDetail_ProductBatchDetail");
+                    .HasConstraintName("FK_WarehouseOutputDetail_ProductBatch");
 
                 entity.HasOne(d => d.warehouseOutput)
                     .WithMany(p => p.WarehouseOutputDetail)
