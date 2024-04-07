@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using PandaShoppingAPI.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,9 +30,10 @@ namespace PandaShoppingAPI.DataAccesses.Repos
             services.AddScoped<IAddressRepo, AddressRepo>();
             services.AddScoped<IWarehouseRepo, WarehouseRepo>();
             services.AddScoped<IWarehouseInputRepo, WarehouseInputRepo>();
-            services.AddScoped<IWarehouseOutputRepo, WarehouseOutputRepo>();
+            services.AddScoped<IWarehouseInputRepo, WarehouseInputRepo>();
             services.AddScoped<IWarehouseOutputDetailRepo, WarehouseOutputDetailRepo>();
             services.AddScoped<IProductBatchRepo, ProductBatchRepo>();
+            services.AddScoped<IWarehouseInputService, WarehouseInputService>();
         }
     }
 }
