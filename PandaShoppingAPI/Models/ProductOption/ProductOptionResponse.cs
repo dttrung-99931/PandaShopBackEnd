@@ -1,7 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using PandaShoppingAPI.Configs;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.Models.Base;
+using PandaShoppingAPI.Utils.ServiceUtils;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PandaShoppingAPI.Models
 {
@@ -12,5 +17,18 @@ namespace PandaShoppingAPI.Models
 
         [JsonProperty("propertyValues")]
         public List<OptionPropertyResponse> ProductOptionValue { get; set; }
+        public int remainingNum { get; set; }
+
+        protected override void CustomMapping(IMappingExpression<ProductOption, ProductOptionResponse> mappingExpression, IConfiguration config)
+        {
+            mappingExpression.ForMember
+              (
+                  optionResponse => optionResponse.remainingNum,
+                  option => option.MapFrom(
+                  productOption => productOption.ProductBatch.Sum((ProductBatch batch) => batch.ProductBatchInventory.FirstOrDefault().remainingNumber)
+                  )
+              );
+        }
     }
+        
 }
