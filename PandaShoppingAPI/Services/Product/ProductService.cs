@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Castle.Core.Internal;
 using Castle.DynamicProxy;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
@@ -81,6 +82,15 @@ namespace PandaShoppingAPI.Services
             _productOptionRepo.InsertRange(product.id, requestModel.productOptions);
 
             return product;
+        }
+
+        protected override void ValidateInsert(ProductModel requestModel)
+        {
+            base.ValidateInsert(requestModel);
+            if (requestModel.productOptions.IsNullOrEmpty())
+            {
+                throw new BadRequestException("Required at least 1 product option to present product number");
+            }
         }
 
         public override void Update(ProductModel requestModel, object id)

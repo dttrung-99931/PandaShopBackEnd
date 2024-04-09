@@ -32,7 +32,6 @@
 
 
   <ItemGroup>
-    <None Remove="Server\pandashop-db.sql" />
     <None Remove="Server\PandaShopAPI\Images\Products\057f8f8c-6334-480c-a126-53c92b1d4895.jpeg" />
     <None Remove="Server\PandaShopAPI\Images\Products\3686ef1c-ba0b-4cab-b91e-907c041810da.jpeg" />
     <None Remove="Server\PandaShopAPI\Images\Products\060fb3f3-d247-43ff-8eb5-75a9ebc8a702.jpeg" />

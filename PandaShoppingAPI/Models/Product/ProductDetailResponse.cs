@@ -17,7 +17,6 @@ namespace PandaShoppingAPI.Models
         public double starNum { get; set; }
         public string description { get; set; }
         public int sellingNum { get; set; }
-        public int remainingNum { get; set; }
         public int categoryId { get; set; }
         public CategoryResponse category { get; set; }
         public int shopId { get; set; }
