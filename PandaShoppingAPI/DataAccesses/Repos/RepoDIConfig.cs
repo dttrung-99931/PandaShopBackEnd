@@ -34,6 +34,7 @@ namespace PandaShoppingAPI.DataAccesses.Repos
             services.AddScoped<IWarehouseOutputDetailRepo, WarehouseOutputDetailRepo>();
             services.AddScoped<IProductBatchRepo, ProductBatchRepo>();
             services.AddScoped<IWarehouseInputService, WarehouseInputService>();
+            services.AddScoped<IProductBatchInventoryRepo, ProductBatchInventoryRepo>();
         }
     }
 }

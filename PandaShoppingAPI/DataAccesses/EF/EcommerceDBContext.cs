@@ -32,6 +32,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public virtual DbSet<Permission> Permission { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<ProductBatch> ProductBatch { get; set; }
+        public virtual DbSet<ProductBatchInventory> ProductBatchInventory { get; set; }
         public virtual DbSet<ProductImage> ProductImage { get; set; }
         public virtual DbSet<ProductOption> ProductOption { get; set; }
         public virtual DbSet<ProductOptionImage> ProductOptionImage { get; set; }
@@ -337,6 +338,15 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasForeignKey(d => d.warehouseInputId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ProductBatch_WarehouseInput");
+            });
+
+            modelBuilder.Entity<ProductBatchInventory>(entity =>
+            {
+                entity.HasOne(d => d.productBatch)
+                    .WithMany(p => p.ProductBatchInventory)
+                    .HasForeignKey(d => d.productBatchId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProductBatchInventory_ProductBatch");
             });
 
             modelBuilder.Entity<ProductImage>(entity =>
