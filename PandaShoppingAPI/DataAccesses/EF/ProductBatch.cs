@@ -7,6 +7,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
     {
         public ProductBatch()
         {
+            ProductBatchInventory = new HashSet<ProductBatchInventory>();
             WarehouseOutputDetail = new HashSet<WarehouseOutputDetail>();
         }
 
@@ -20,6 +21,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
         public virtual ProductOption productOption { get; set; }
         public virtual WarehouseInput warehouseInput { get; set; }
+        public virtual ICollection<ProductBatchInventory> ProductBatchInventory { get; set; }
         public virtual ICollection<WarehouseOutputDetail> WarehouseOutputDetail { get; set; }
     }
 }

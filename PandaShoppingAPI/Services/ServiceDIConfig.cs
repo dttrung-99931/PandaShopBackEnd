@@ -23,6 +23,7 @@ namespace PandaShoppingAPI.Services
             services.AddScoped<IWarehouseService, WarehouseService>();
             services.AddScoped<IWarehouseInputService, WarehouseInputService>();
             services.AddScoped<IProductBatchService, ProductBatchService>();
+            services.AddScoped<IProductInventoryService, ProductInventoryService>();
         }
     }
 }

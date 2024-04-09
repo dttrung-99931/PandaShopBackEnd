@@ -1,30 +1,28 @@
-﻿using AutoMapper;
-using Castle.Core.Internal;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using PandaShoppingAPI.DataAccesses.EF;
+﻿using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
 using PandaShoppingAPI.Models;
-using PandaShoppingAPI.Utils;
-using PandaShoppingAPI.Utils.Exceptions;
-using PandaShoppingAPI.Utils.ServiceUtils;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Services
 {
     public class ProductBatchService: BaseService<IProductBatchRepo, ProductBatch, ProductBatchModel, Filter>, IProductBatchService
     {
-        private readonly IUserRepo _userRepo;
-        public ProductBatchService(IProductBatchRepo repo, IUserRepo userRepo) : base(repo)
+        private readonly IProductBatchInventoryRepo _batchInventoryRepo;
+        public ProductBatchService(IProductBatchRepo repo, IProductBatchInventoryRepo batchInventoryRepo) : base(repo)
         {
-            _userRepo = userRepo;
+            _batchInventoryRepo = batchInventoryRepo;
         }
+
+        public override ProductBatch Insert(ProductBatchModel requestModel)
+        {
+            ProductBatch batch = base.Insert(requestModel);
+            ProductBatchInventory bathInventory = new ProductBatchInventory()
+            {
+                productBatchId = batch.id,
+                remainingNumber = batch.number,
+            };
+            _batchInventoryRepo.Insert(bathInventory);
+            return batch;
+        }
+
     }
 }

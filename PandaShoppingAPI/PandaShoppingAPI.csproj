@@ -6,6 +6,9 @@
 	 <GenerateRuntimeConfigurationFiles>True</GenerateRuntimeConfigurationFiles>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.3" />
@@ -72,5 +75,25 @@
     <None Remove="Server\PandaShopAPI\Images\Categories\fac58171-42d9-48d6-8915-5c2e6513f45d.jpeg" />
     <None Remove="Server\PandaShopAPI\Images\Categories\49e93330-cca6-49a8-ad84-e38dc616dd9a.jpeg" />
     <None Remove="Server\PandaShopAPI\Images\Categories\58b326a4-23ca-4b92-b83f-1ffae14f2f22.jpeg" />
+    <None Remove="Controllers\Warehouse\" />
+    <None Remove="Models\Warehouse\WarehouseInput\" />
+    <None Remove="Models\Warehouse\ProductBatch\" />
+    <None Remove="Services\Warehouse\WarehouseInput\" />
+    <None Remove="Services\Warehouse\ProductBatch\" />
+    <None Remove="DataAccesses\Repos\Warehouse\ProductBatch\" />
+    <None Remove="DataAccesses\Repos\Warehouse\ProductBatchInventory\" />
+    <None Remove="Services\Warehouse\ProductInventory\" />
+    <None Remove="Models\Warehouse\ProductInventory\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controllers\Warehouse\" />
+    <Folder Include="Models\Warehouse\WarehouseInput\" />
+    <Folder Include="Models\Warehouse\ProductBatch\" />
+    <Folder Include="Services\Warehouse\WarehouseInput\" />
+    <Folder Include="Services\Warehouse\ProductBatch\" />
+    <Folder Include="DataAccesses\Repos\Warehouse\ProductBatch\" />
+    <Folder Include="DataAccesses\Repos\Warehouse\ProductBatchInventory\" />
+    <Folder Include="Services\Warehouse\ProductInventory\" />
+    <Folder Include="Models\Warehouse\ProductInventory\" />
   </ItemGroup>
 </Project>

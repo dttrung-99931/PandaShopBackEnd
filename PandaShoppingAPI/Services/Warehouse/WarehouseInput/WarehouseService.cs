@@ -21,10 +21,10 @@ namespace PandaShoppingAPI.Services
 {
     public class WarehouseInputService: BaseService<IWarehouseInputRepo, WarehouseInput, WarehouseInputModel, Filter>, IWarehouseInputService
     {
-        private readonly IUserRepo _userRepo;
-        public WarehouseInputService(IWarehouseInputRepo repo, IUserRepo userRepo) : base(repo)
+        private readonly IProductBatchInventoryRepo _batchInventoryRepo;
+        public WarehouseInputService(IWarehouseInputRepo repo, IProductBatchInventoryRepo batchInventoryRepo) : base(repo)
         {
-            _userRepo = userRepo;
+            _batchInventoryRepo = batchInventoryRepo;
         }
     }
 }
