@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PandaShoppingAPI.Controllers.Base;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.Models;
+using PandaShoppingAPI.Models.Base;
 using PandaShoppingAPI.Services;
 using PandaShoppingAPI.Utils;
 using PandaShoppingAPI.Utils.Exceptions;
@@ -23,6 +25,17 @@ namespace PandaShoppingAPI.Controllers
                 {
                 }
 
+
+
+        [HttpPost("Many")]
+        virtual public ActionResult<ResponseWrapper> Post([FromBody] List<ProductBatchModel> requestModel)
+        {
+            return Handle(() =>
+            {
+                _service.CreateMany(requestModel);
+                return ok_create(Constants.SUCCESSFUL_MSG);
+            });
+        }
 
     }
 }
