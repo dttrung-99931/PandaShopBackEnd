@@ -83,6 +83,20 @@
     <None Remove="DataAccesses\Repos\Warehouse\ProductBatchInventory\" />
     <None Remove="Services\Warehouse\ProductInventory\" />
     <None Remove="Models\Warehouse\ProductInventory\" />
+    <None Remove="Models\Order\" />
+    <None Remove="Services\Order\" />
+    <None Remove="DataAccesses\Repos\Order\" />
+    <None Remove="Controllers\Order\" />
+    <None Remove="DataAccesses\Repos\Payment\" />
+    <None Remove="DataAccesses\Repos\Payment\PaymentMethod\" />
+    <None Remove="DataAccesses\Repos\Delivery\" />
+    <None Remove="Services\Payment\" />
+    <None Remove="Services\Payment\PaymentMethod\" />
+    <None Remove="Models\Delivery\" />
+    <None Remove="Models\Payment\" />
+    <None Remove="Services\Delivery\" />
+    <None Remove="Services\Delivery\DeliveryMethod\" />
+    <None Remove="DataAccesses\Repos\Delivery\DeliveryMethod\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\Warehouse\" />
@@ -94,5 +108,19 @@
     <Folder Include="DataAccesses\Repos\Warehouse\ProductBatchInventory\" />
     <Folder Include="Services\Warehouse\ProductInventory\" />
     <Folder Include="Models\Warehouse\ProductInventory\" />
+    <Folder Include="Models\Order\" />
+    <Folder Include="Services\Order\" />
+    <Folder Include="DataAccesses\Repos\Order\" />
+    <Folder Include="Controllers\Order\" />
+    <Folder Include="DataAccesses\Repos\Payment\" />
+    <Folder Include="DataAccesses\Repos\Payment\PaymentMethod\" />
+    <Folder Include="DataAccesses\Repos\Delivery\" />
+    <Folder Include="Services\Payment\" />
+    <Folder Include="Services\Payment\PaymentMethod\" />
+    <Folder Include="Models\Delivery\" />
+    <Folder Include="Models\Payment\" />
+    <Folder Include="Services\Delivery\" />
+    <Folder Include="Services\Delivery\DeliveryMethod\" />
+    <Folder Include="DataAccesses\Repos\Delivery\DeliveryMethod\" />
   </ItemGroup>
 </Project>
