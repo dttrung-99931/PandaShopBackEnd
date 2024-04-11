@@ -17,6 +17,9 @@ namespace PandaShoppingAPI.Utils
         public const string ID_OIL_MAINTENACE = "oil";
 
         public static string fileSep = OperatingSystem.IsWindows() ? "\\" : "/";
+
+        public const string SUCCESSFUL_MSG = "Successful";
+
     }
 
     // TODO: Create init sql to create init role with specific id like defined in the enums
