@@ -29,4 +29,12 @@ namespace PandaShoppingAPI.Utils
         shop = 2,
         admin = 3
     }
+
+    public class RoleNames
+    {
+        public const string user = "user";
+        public const string admin = "admin";
+        public const string shop = "shop";
+    }
+
 }

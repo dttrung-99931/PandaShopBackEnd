@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Configuration.Conventions;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using PandaShoppingAPI.DataAccesses.EF;
@@ -31,6 +32,19 @@ namespace PandaShoppingAPI.Models
         [JsonProperty("images")]
         public List<ProductImageResponse> ProductImage { get; set; }
 
+        public List<DeliveryMethodResponse> deliveryMethods { get; set; }
+
+        protected override void CustomMapping(IMappingExpression<Product, ProductDetailResponse> mappingExpression, IConfiguration config)
+        {
+            mappingExpression.ForMember(
+                response => response.deliveryMethods,
+                action => action.MapFrom(
+                    product => product.ProductDeliveryMethod
+                    .Select((prodMethod) => Mapper.Map<DeliveryMethodResponse>(prodMethod.deliveryMethod))
+                    .ToList()
+                    )
+                );
+        }
 
     }
 

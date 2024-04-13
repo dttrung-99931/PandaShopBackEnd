@@ -39,6 +39,7 @@ namespace PandaShoppingAPI.DataAccesses.Repos
             services.AddScoped<IDeliveryRepo, DeliveryRepo>();
             services.AddScoped<IPaymentMethodRepo, PaymentMethodRepo>();
             services.AddScoped<IDeliveryMethodRepo, DeliveryMethodRepo>();
+            services.AddScoped<IProductDeliveryMethodRepo, ProductDeliveryMethodRepo>();
         }
     }
 }

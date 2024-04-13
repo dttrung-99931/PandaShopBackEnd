@@ -8,6 +8,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public Product()
         {
             Feedback = new HashSet<Feedback>();
+            ProductDeliveryMethod = new HashSet<ProductDeliveryMethod>();
             ProductImage = new HashSet<ProductImage>();
             ProductOption = new HashSet<ProductOption>();
             ProductPropertyValue = new HashSet<ProductPropertyValue>();
@@ -27,6 +28,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public virtual Category category { get; set; }
         public virtual Shop shop { get; set; }
         public virtual ICollection<Feedback> Feedback { get; set; }
+        public virtual ICollection<ProductDeliveryMethod> ProductDeliveryMethod { get; set; }
         public virtual ICollection<ProductImage> ProductImage { get; set; }
         public virtual ICollection<ProductOption> ProductOption { get; set; }
         public virtual ICollection<ProductPropertyValue> ProductPropertyValue { get; set; }

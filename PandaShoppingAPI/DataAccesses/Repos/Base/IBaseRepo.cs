@@ -10,7 +10,9 @@ namespace PandaShoppingAPI.DataAccesses.Repos
     public interface IBaseRepo<T> where T : class
     {
         IQueryable<T> GetIQueryable();
-        
+
+        List<T> GetAll();
+
         IQueryable<T> Where(Expression<Func<T, bool>> condition);
         bool Any(Expression<Func<T, bool>> condition);
 

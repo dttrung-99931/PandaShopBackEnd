@@ -33,6 +33,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<ProductBatch> ProductBatch { get; set; }
         public virtual DbSet<ProductBatchInventory> ProductBatchInventory { get; set; }
+        public virtual DbSet<ProductDeliveryMethod> ProductDeliveryMethod { get; set; }
         public virtual DbSet<ProductImage> ProductImage { get; set; }
         public virtual DbSet<ProductOption> ProductOption { get; set; }
         public virtual DbSet<ProductOptionImage> ProductOptionImage { get; set; }
@@ -149,13 +150,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.Property(e => e.name)
                     .IsRequired()
                     .HasMaxLength(50);
-
-                entity.Property(e => e.pricePerKm).HasColumnType("money");
-
-                entity.HasOne(d => d.deliveryPartner)
-                    .WithMany(p => p.DeliveryMethod)
-                    .HasForeignKey(d => d.deliveryPartnerId)
-                    .HasConstraintName("FK_DeliveryMethod_DeliveryPartner");
             });
 
             modelBuilder.Entity<DeliveryPartner>(entity =>
@@ -347,6 +341,21 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasForeignKey(d => d.productBatchId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ProductBatchInventory_ProductBatch");
+            });
+
+            modelBuilder.Entity<ProductDeliveryMethod>(entity =>
+            {
+                entity.HasOne(d => d.deliveryMethod)
+                    .WithMany(p => p.ProductDeliveryMethod)
+                    .HasForeignKey(d => d.deliveryMethodId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProductDeliveryMethod_DeliveryMethod");
+
+                entity.HasOne(d => d.product)
+                    .WithMany(p => p.ProductDeliveryMethod)
+                    .HasForeignKey(d => d.productId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProductDeliveryMethod_Product");
             });
 
             modelBuilder.Entity<ProductImage>(entity =>

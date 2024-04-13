@@ -21,18 +21,25 @@ namespace PandaShoppingAPI.Services
         private readonly IProductPropertyValueRepo _productPropertyValueRepo;
         private readonly ICategoryService _categoryService;
         private readonly IImageService _imageService;
+        private readonly IProductDeliveryMethodRepo _prodDeliveryMethodRepo;
+        private readonly IDeliveryMethodRepo _deliveryMethodRepo;
 
         public ProductService(
             IProductRepo repo,
             IProductOptionRepo productOptionRepo,
             IProductPropertyValueRepo productPropertyValueRepo,
             IImageService imageService, 
-            ICategoryService categoryService) : base(repo)
+            ICategoryService categoryService,
+            IProductDeliveryMethodRepo prodDeliveryMethodRepo,
+            IDeliveryMethodRepo deliveryMethodRepo
+            ) : base(repo)
         {
             _productOptionRepo = productOptionRepo;
             _productPropertyValueRepo = productPropertyValueRepo;
             _categoryService = categoryService;
             _imageService = imageService;
+            _prodDeliveryMethodRepo = prodDeliveryMethodRepo;
+            _deliveryMethodRepo = deliveryMethodRepo;
         }
 
         public void DeletePropertyValues(int id, List<int> propertyValueIDs)
@@ -80,6 +87,15 @@ namespace PandaShoppingAPI.Services
             _productPropertyValueRepo.InsertRange(product.id, requestModel.properties);
 
             _productOptionRepo.InsertRange(product.id, requestModel.productOptions);
+
+            // Temporarily, Default set all delivery methods to a new created product
+            List<DeliveryMethod> allMethods = _deliveryMethodRepo.GetAll();
+            _prodDeliveryMethodRepo.InsertRange(
+                allMethods.Select((method) => new ProductDeliveryMethod()
+            {
+                productId = product.id,
+                deliveryMethodId = method.id
+            }).ToList());
 
             return product;
         }
