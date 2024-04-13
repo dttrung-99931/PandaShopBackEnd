@@ -42,6 +42,12 @@ namespace PandaShoppingAPI.DataAccesses.Repos
             return _dbSet;
         }
 
+        public List<T> GetAll()
+        {
+            return _dbSet.ToList();
+        }
+
+
         public virtual T Insert(T entity)
         {
             entity = _dbSet.Add(entity).Entity;
@@ -214,5 +220,6 @@ namespace PandaShoppingAPI.DataAccesses.Repos
         {
             _dbSet.RemoveRange(entities);
         }
+
     }
 }
