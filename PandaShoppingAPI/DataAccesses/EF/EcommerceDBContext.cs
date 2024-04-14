@@ -26,7 +26,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public virtual DbSet<Feedback> Feedback { get; set; }
         public virtual DbSet<Image> Image { get; set; }
         public virtual DbSet<Invoice> Invoice { get; set; }
-        public virtual DbSet<OrderDetail> OrderDetail { get; set; }
         public virtual DbSet<Order_> Order_ { get; set; }
         public virtual DbSet<PaymentMethod> PaymentMethod { get; set; }
         public virtual DbSet<Permission> Permission { get; set; }
@@ -45,6 +44,8 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public virtual DbSet<Resource> Resource { get; set; }
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<Shop> Shop { get; set; }
+        public virtual DbSet<SubOrder> SubOrder { get; set; }
+        public virtual DbSet<SubOrderDetail> SubOrderDetail { get; set; }
         public virtual DbSet<Template> Template { get; set; }
         public virtual DbSet<UserRole> UserRole { get; set; }
         public virtual DbSet<User_> User_ { get; set; }
@@ -139,6 +140,12 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
+                entity.HasOne(d => d.address)
+                    .WithMany(p => p.Delivery)
+                    .HasForeignKey(d => d.addressId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Delivery_Address");
+
                 entity.HasOne(d => d.deliveryMethod)
                     .WithMany(p => p.Delivery)
                     .HasForeignKey(d => d.deliveryMethodId)
@@ -213,28 +220,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasConstraintName("FK_Invoice_Order");
             });
 
-            modelBuilder.Entity<OrderDetail>(entity =>
-            {
-                entity.Property(e => e.createdAt)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.discountPercent).HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.price).HasColumnType("money");
-
-                entity.HasOne(d => d.order)
-                    .WithMany(p => p.OrderDetail)
-                    .HasForeignKey(d => d.orderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OrderDetail_Order");
-
-                entity.HasOne(d => d.productOption)
-                    .WithMany(p => p.OrderDetail)
-                    .HasForeignKey(d => d.productOptionId)
-                    .HasConstraintName("FK_OrderDetail_ProductOption");
-            });
-
             modelBuilder.Entity<Order_>(entity =>
             {
                 entity.Property(e => e.createdAt)
@@ -244,16 +229,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.Property(e => e.note).HasMaxLength(200);
 
                 entity.Property(e => e.updatedAt).HasColumnType("datetime");
-
-                entity.HasOne(d => d.address)
-                    .WithMany(p => p.Order_)
-                    .HasForeignKey(d => d.addressId)
-                    .HasConstraintName("FK_Order_Address");
-
-                entity.HasOne(d => d.delivery)
-                    .WithMany(p => p.Order_)
-                    .HasForeignKey(d => d.deliveryId)
-                    .HasConstraintName("FK_Order_Delivery");
 
                 entity.HasOne(d => d.paymentMethod)
                     .WithMany(p => p.Order_)
@@ -493,6 +468,43 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.Property(e => e.name)
                     .IsRequired()
                     .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<SubOrder>(entity =>
+            {
+                entity.HasOne(d => d.delivery)
+                    .WithMany(p => p.SubOrder)
+                    .HasForeignKey(d => d.deliveryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SubOrder_Delivery");
+
+                entity.HasOne(d => d.order)
+                    .WithMany(p => p.SubOrder)
+                    .HasForeignKey(d => d.orderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SubOrder_Order");
+            });
+
+            modelBuilder.Entity<SubOrderDetail>(entity =>
+            {
+                entity.Property(e => e.createdAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.discountPercent).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.price).HasColumnType("money");
+
+                entity.HasOne(d => d.productOption)
+                    .WithMany(p => p.SubOrderDetail)
+                    .HasForeignKey(d => d.productOptionId)
+                    .HasConstraintName("FK_OrderDetail_ProductOption");
+
+                entity.HasOne(d => d.subOrder)
+                    .WithMany(p => p.SubOrderDetail)
+                    .HasForeignKey(d => d.subOrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SubOrderDetail_SubOrder");
             });
 
             modelBuilder.Entity<UserRole>(entity =>

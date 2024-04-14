@@ -7,7 +7,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
     {
         public Address()
         {
-            Order_ = new HashSet<Order_>();
+            Delivery = new HashSet<Delivery>();
             Product = new HashSet<Product>();
             Warehouse = new HashSet<Warehouse>();
         }
@@ -23,7 +23,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public string name { get; set; }
 
         public virtual User_ user { get; set; }
-        public virtual ICollection<Order_> Order_ { get; set; }
+        public virtual ICollection<Delivery> Delivery { get; set; }
         public virtual ICollection<Product> Product { get; set; }
         public virtual ICollection<Warehouse> Warehouse { get; set; }
     }
