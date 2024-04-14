@@ -39,6 +39,7 @@ namespace PandaShoppingAPI.Services
                     {
                         addressId = subOrder.addressId,
                         deliveryMethodId = subOrder.deliveryMethodId,
+                        state = "created", // TODO: create enum
                     }
                 }
             ).ToList();
