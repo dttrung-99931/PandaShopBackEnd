@@ -7,7 +7,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
     {
         public Delivery()
         {
-            Order_ = new HashSet<Order_>();
+            SubOrder = new HashSet<SubOrder>();
         }
 
         public int id { get; set; }
@@ -15,8 +15,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public DateTime? finishedAt { get; set; }
         public string state { get; set; }
         public int deliveryMethodId { get; set; }
+        public int addressId { get; set; }
 
+        public virtual Address address { get; set; }
         public virtual DeliveryMethod deliveryMethod { get; set; }
-        public virtual ICollection<Order_> Order_ { get; set; }
+        public virtual ICollection<SubOrder> SubOrder { get; set; }
     }
 }

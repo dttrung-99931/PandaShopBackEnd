@@ -98,6 +98,8 @@
     <None Remove="Services\Delivery\DeliveryMethod\" />
     <None Remove="DataAccesses\Repos\Delivery\DeliveryMethod\" />
     <None Remove="DataAccesses\Repos\Delivery\ProductDeliveryMethod\" />
+    <None Remove="DataAccesses\Repos\Order\SubOrder\" />
+    <None Remove="DataAccesses\Repos\Order\SubOrderDetail\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\Warehouse\" />
@@ -124,5 +126,7 @@
     <Folder Include="Services\Delivery\DeliveryMethod\" />
     <Folder Include="DataAccesses\Repos\Delivery\DeliveryMethod\" />
     <Folder Include="DataAccesses\Repos\Delivery\ProductDeliveryMethod\" />
+    <Folder Include="DataAccesses\Repos\Order\SubOrder\" />
+    <Folder Include="DataAccesses\Repos\Order\SubOrderDetail\" />
   </ItemGroup>
 </Project>
