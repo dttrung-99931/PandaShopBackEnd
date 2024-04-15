@@ -9,5 +9,6 @@
         userExisted,
         shopExisted,
         unregisterdShop,
+        notEnoughAvaialableProducts,
     }
 }
