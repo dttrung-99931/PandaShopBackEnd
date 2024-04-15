@@ -40,7 +40,7 @@ namespace PandaShoppingAPI.Controllers
         protected ResponseWrapper conflict(String msg, ErrorCode errorCode)
         {
             Response.StatusCode = (int)HttpStatusCode.Conflict;
-            return new ResponseWrapper(HttpStatusCode.Conflict, errorCode.ToString(), msg);
+            return new ResponseWrapper(HttpStatusCode.Conflict, msg, errorCode.ToString());
         }
 
         protected ResponseWrapper ok_get(object data, Meta meta = null)
