@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PandaShoppingAPI.DataAccesses.Repos;
 
 namespace PandaShoppingAPI.DataAccesses.EF
 {
@@ -23,6 +24,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public int categoryId { get; set; }
         public int shopId { get; set; }
         public int addressId { get; set; }
+        public override bool isDeleted { get; set; }
 
         public virtual Address address { get; set; }
         public virtual Category category { get; set; }

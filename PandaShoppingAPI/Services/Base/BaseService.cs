@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
 using PandaShoppingAPI.Models;
 using PandaShoppingAPI.Utils;
@@ -9,7 +10,7 @@ namespace PandaShoppingAPI.Services
 {
     public abstract class BaseService<TRepo, TEntity, TRequestModel, TFilter> : 
         IBaseService<TEntity, TRequestModel, TFilter> 
-        where TEntity: class
+        where TEntity: BaseEntity
         where TRequestModel : class
         where TFilter: Filter
         where TRepo: IBaseRepo<TEntity>
@@ -33,7 +34,8 @@ namespace PandaShoppingAPI.Services
 
         public virtual IQueryable<TEntity> Fill(TFilter filter)
         {
-            return _repo.GetIQueryable();
+            return _repo.GetIQueryable()
+                .Where((entity) => !entity.isDeleted);
         }
 
         public virtual void Delete(object id)

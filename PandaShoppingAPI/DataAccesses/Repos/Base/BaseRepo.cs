@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.DataAccesses.Repos
 {
-    public class BaseRepo<T> : IBaseRepo<T> where T : class
+    public class BaseRepo<T> : IBaseRepo<T> where T : BaseEntity
     {
         protected EcommerceDBContext _dbContext;
         protected DbSet<T> _dbSet;
@@ -25,26 +25,36 @@ namespace PandaShoppingAPI.DataAccesses.Repos
             T entity = GetById(id);
             if (entity != null)
             {
-                _dbSet.Remove(entity);
+                entity.isDeleted = true;
+                Update(entity, id);
                 Save();
             }
             else throw new KeyNotFoundException("Not found entity with id " + id);
         }
 
 
-        public virtual T GetById(object id)
+        public virtual T GetById(object id, bool includeDeleted = false)
         {
-            return _dbSet.Find(id);
+            T entity = _dbSet.Find(id);
+            if (includeDeleted || !entity.isDeleted)
+            {
+                return entity;
+            }
+            throw new KeyNotFoundException("Not found entity with id " + id);
         }
 
-        public IQueryable<T> GetIQueryable()
+        public IQueryable<T> GetIQueryable(bool includeDeleted = false)
         {
-            return _dbSet;
+            if (includeDeleted)
+            {
+                return _dbSet;
+            }
+            return _dbSet.Where((entity) =>  !entity.isDeleted);
         }
 
-        public List<T> GetAll()
+        public List<T> GetAll(bool includeDeleted = false)
         {
-            return _dbSet.ToList();
+            return GetIQueryable(includeDeleted).ToList();
         }
 
 
@@ -97,7 +107,7 @@ namespace PandaShoppingAPI.DataAccesses.Repos
             {
                 throw new BadRequestException("id in path and body must be the same");
             }
-            var originEntity = GetById(id);
+            var originEntity = GetById(id, true);
 
             _dbContext.Entry(originEntity).State = EntityState.Detached;
 
@@ -124,7 +134,7 @@ namespace PandaShoppingAPI.DataAccesses.Repos
             Save();
         }
 
-        public void DeleteRange(List<object> ids)
+        public void DeleteRange(IEnumerable<object> ids)
         {
             List<T> deletedEntities = new List<T>();
             foreach (int id in ids)
@@ -136,16 +146,16 @@ namespace PandaShoppingAPI.DataAccesses.Repos
             Save();
         }
 
-        public List<T> InsertRange(List<T> entites)
+        public List<T> InsertRange(IEnumerable<T> entites)
         {
             _dbSet.AddRange(entites);
             Save();
-            return entites;
+            return entites.ToList();
         }
 
-        public void DeleteIf(Expression<Func<T, bool>> e)
+        public void DeleteIf(Expression<Func<T, bool>> e, bool includeDeleted = false)
         {
-            List<T> deletedEntities = _dbSet.Where(e).ToList();
+            List<T> deletedEntities = Where(e, includeDeleted).ToList();
             _dbSet.RemoveRange(deletedEntities);
             Save();
         }
@@ -155,15 +165,15 @@ namespace PandaShoppingAPI.DataAccesses.Repos
             _dbContext.Entry(entity).Reference(exp).Load();
         }
 
-        public void UpdateRange(List<T> entities)
+        public void UpdateRange(IEnumerable<T> entities)
         {
             _dbSet.UpdateRange(entities);
             Save();
         }
 
-        public void UpdateIf(Expression<Func<T, bool>> condition, IBaseRepo<T>.Change change)
+        public void UpdateIf(Expression<Func<T, bool>> condition, IBaseRepo<T>.Change change, bool includeDeleted = false)
         {
-            var entities = _dbSet.Where(condition).ToList();
+            var entities = Where(condition, includeDeleted).ToList();
             foreach (var entity in entities)
             {
                 change.Invoke(entity);
@@ -175,7 +185,7 @@ namespace PandaShoppingAPI.DataAccesses.Repos
         // For example: ignore update for some fields like created_at, ...
         public void Update(T entity, object id, IBaseRepo<T>.ChangeUpdate changeUpdate)
         {
-            var originEntity = GetById(id);
+            var originEntity = GetById(id, true);
 
             _dbContext.Entry(originEntity).State = EntityState.Detached;
 
@@ -192,14 +202,19 @@ namespace PandaShoppingAPI.DataAccesses.Repos
             _dbContext.Entry(entity).Collection(exp).Load();
         }
 
-        public IQueryable<T> Where(Expression<Func<T, bool>> condition)
+        public IQueryable<T> Where(Expression<Func<T, bool>> condition, bool includeDeleted = false)
         {
+            IQueryable<T> result = _dbSet;
+            if (includeDeleted == false)
+            {
+                result = result.Where((entity) => !entity.isDeleted);
+            }
             return _dbSet.Where(condition);
         }
 
         public void Update(object id, IBaseRepo<T>.Updater updater)
         {
-            var entity = GetById(id);
+            var entity = GetById(id, true);
 
             if (entity == null)
             {
@@ -211,14 +226,17 @@ namespace PandaShoppingAPI.DataAccesses.Repos
             Update(entity, id);
         }
 
-        public bool Any(Expression<Func<T, bool>> condition)
+        public bool Any(Expression<Func<T, bool>> condition, bool includeDeleted = false)
         {
-            return _dbSet.Any(condition);
+            return GetIQueryable(includeDeleted).Any(condition);
         }
 
         public void DeleteRange(IEnumerable<T> entities)
         {
-            _dbSet.RemoveRange(entities);
+            foreach(T entity in entities){
+                entity.isDeleted = true;
+            }
+            UpdateRange(entities);
         }
 
     }

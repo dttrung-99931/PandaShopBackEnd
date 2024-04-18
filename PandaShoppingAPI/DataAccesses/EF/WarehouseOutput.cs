@@ -12,6 +12,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
         public int id { get; set; }
         public DateTime date { get; set; }
+        public override bool isDeleted { get; set; }
 
         public virtual ICollection<WarehouseOutputDetail> WarehouseOutputDetail { get; set; }
     }

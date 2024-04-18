@@ -12,6 +12,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         }
 
         public int id { get; set; }
+        public override bool isDeleted { get; set; }
 
         public virtual ICollection<Category> Category { get; set; }
         public virtual ICollection<PropertyTemplate> PropertyTemplate { get; set; }

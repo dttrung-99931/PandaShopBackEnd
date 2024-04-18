@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.Models.Base;
 using PandaShoppingAPI.Services;
 using PandaShoppingAPI.Utils;
@@ -14,7 +15,7 @@ namespace PandaShoppingAPI.Controllers.Base
     public class CrudApiController<TEntity, TRequestModel, TResponseModel, TService, TFilter>:
         BaseApiController<TService> 
 
-        where TEntity : class
+        where TEntity : BaseEntity
         where TRequestModel: BaseModel<TEntity, TRequestModel>
         where TResponseModel: BaseModel<TEntity, TResponseModel>
         where TFilter: Filter

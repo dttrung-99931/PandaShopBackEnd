@@ -9,6 +9,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public DateTime? createdAt { get; set; }
         public string note { get; set; }
         public int orderId { get; set; }
+        public override bool isDeleted { get; set; }
 
         public virtual Order_ order { get; set; }
     }

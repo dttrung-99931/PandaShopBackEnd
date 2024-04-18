@@ -8,6 +8,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public int id { get; set; }
         public int productId { get; set; }
         public int imageId { get; set; }
+        public override bool isDeleted { get; set; }
 
         public virtual Image image { get; set; }
         public virtual Product product { get; set; }

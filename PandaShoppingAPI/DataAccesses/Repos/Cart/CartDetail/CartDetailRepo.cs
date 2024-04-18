@@ -14,10 +14,10 @@ namespace PandaShoppingAPI.DataAccesses.Repos
 
         public override void Update(CartDetail entityToUpdate, object id)
         {
-            Update(entityToUpdate, id, 
+            Update(entityToUpdate, id,
                 changeUpdate => changeUpdate
-                    .Property(cartDetail => cartDetail.cartId).IsModified = false
-            );
+                    .Property(cartDetail => cartDetail.cartId).IsModified = false);
         }
+
     }
 }
