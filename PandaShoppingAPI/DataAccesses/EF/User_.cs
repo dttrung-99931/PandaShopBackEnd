@@ -22,6 +22,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public DateTime? updatedAt { get; set; }
         public int cartId { get; set; }
         public int? shopId { get; set; }
+        public override bool isDeleted { get; set; }
 
         public virtual Cart cart { get; set; }
         public virtual Shop shop { get; set; }

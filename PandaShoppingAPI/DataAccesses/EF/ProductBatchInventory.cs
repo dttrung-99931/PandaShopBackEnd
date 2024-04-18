@@ -8,6 +8,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public int productBatchId { get; set; }
         public int remainingNumber { get; set; }
         public int id { get; set; }
+        public override bool isDeleted { get; set; }
 
         public virtual ProductBatch productBatch { get; set; }
     }

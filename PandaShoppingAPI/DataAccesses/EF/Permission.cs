@@ -10,6 +10,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public int resourceId { get; set; }
         public bool? canRead { get; set; }
         public bool canWrite { get; set; }
+        public override bool isDeleted { get; set; }
 
         public virtual Resource resource { get; set; }
     }

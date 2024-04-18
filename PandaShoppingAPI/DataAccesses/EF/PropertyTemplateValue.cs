@@ -8,6 +8,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public int id { get; set; }
         public int propertyTemplateId { get; set; }
         public string value { get; set; }
+        public override bool isDeleted { get; set; }
 
         public virtual PropertyTemplate propertyTemplate { get; set; }
     }

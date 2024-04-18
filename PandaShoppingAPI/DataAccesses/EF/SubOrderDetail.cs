@@ -12,6 +12,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public int productNum { get; set; }
         public int productOptionId { get; set; }
         public int subOrderId { get; set; }
+        public override bool isDeleted { get; set; }
 
         public virtual ProductOption productOption { get; set; }
         public virtual SubOrder subOrder { get; set; }
