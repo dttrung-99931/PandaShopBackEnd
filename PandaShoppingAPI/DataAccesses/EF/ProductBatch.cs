@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PandaShoppingAPI.DataAccesses.EF
 {
-    public partial class ProductBatch
+    public partial class ProductBatch : BaseEntity
     {
         public ProductBatch()
         {
@@ -18,7 +18,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public DateTime manufactureDate { get; set; }
         public DateTime? expireDate { get; set; }
         public DateTime? arriveDate { get; set; }
-        public override bool isDeleted { get; set; }
+        
 
         public virtual ProductOption productOption { get; set; }
         public virtual WarehouseInput warehouseInput { get; set; }

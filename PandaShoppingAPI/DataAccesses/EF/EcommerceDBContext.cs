@@ -58,6 +58,8 @@ namespace PandaShoppingAPI.DataAccesses.EF
         {
             modelBuilder.Entity<Address>(entity =>
             {
+                entity.HasIndex(e => e.userId, "IX_Address_userId");
+
                 entity.Property(e => e.communeOrWard)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -94,6 +96,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<CartDetail>(entity =>
             {
+                entity.HasIndex(e => e.cartId, "IX_CartDetail_cartId");
+
+                entity.HasIndex(e => e.productOptionId, "IX_CartDetail_productOptionId");
+
                 entity.HasOne(d => d.cart)
                     .WithMany(p => p.CartDetail)
                     .HasForeignKey(d => d.cartId)
@@ -107,6 +113,12 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<Category>(entity =>
             {
+                entity.HasIndex(e => e.imageId, "IX_Category_imageId");
+
+                entity.HasIndex(e => e.parentId, "IX_Category_parentId");
+
+                entity.HasIndex(e => e.templateId, "IX_Category_templateId");
+
                 entity.Property(e => e.level).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.name)
@@ -131,6 +143,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<Delivery>(entity =>
             {
+                entity.HasIndex(e => e.addressId, "IX_Delivery_addressId");
+
+                entity.HasIndex(e => e.deliveryMethodId, "IX_Delivery_deliveryMethodId");
+
                 entity.Property(e => e.finishedAt).HasColumnType("datetime");
 
                 entity.Property(e => e.startedAt).HasColumnType("datetime");
@@ -168,6 +184,12 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<Feedback>(entity =>
             {
+                entity.HasIndex(e => e.parentId, "IX_Feedback_parentId");
+
+                entity.HasIndex(e => e.productId, "IX_Feedback_productId");
+
+                entity.HasIndex(e => e.userId, "IX_Feedback_userId");
+
                 entity.Property(e => e.content).HasMaxLength(500);
 
                 entity.Property(e => e.createdAt)
@@ -208,6 +230,8 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<Invoice>(entity =>
             {
+                entity.HasIndex(e => e.orderId, "IX_Invoice_orderId");
+
                 entity.Property(e => e.createdAt)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
@@ -222,6 +246,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<Order_>(entity =>
             {
+                entity.HasIndex(e => e.paymentMethodId, "IX_Order__paymentMethodId");
+
+                entity.HasIndex(e => e.userId, "IX_Order__userId");
+
                 entity.Property(e => e.createdAt)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
@@ -250,6 +278,8 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<Permission>(entity =>
             {
+                entity.HasIndex(e => e.resourceId, "IX_Permission_resourceId");
+
                 entity.Property(e => e.canRead)
                     .IsRequired()
                     .HasDefaultValueSql("((1))");
@@ -266,6 +296,12 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<Product>(entity =>
             {
+                entity.HasIndex(e => e.addressId, "IX_Product_addressId");
+
+                entity.HasIndex(e => e.categoryId, "IX_Product_categoryId");
+
+                entity.HasIndex(e => e.shopId, "IX_Product_shopId");
+
                 entity.Property(e => e.description)
                     .IsRequired()
                     .HasMaxLength(500);
@@ -290,6 +326,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<ProductBatch>(entity =>
             {
+                entity.HasIndex(e => e.productOptionId, "IX_ProductBatch_productOptionId");
+
+                entity.HasIndex(e => e.warehouseInputId, "IX_ProductBatch_warehouseInputId");
+
                 entity.Property(e => e.arriveDate).HasColumnType("datetime");
 
                 entity.Property(e => e.expireDate).HasColumnType("datetime");
@@ -311,6 +351,8 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<ProductBatchInventory>(entity =>
             {
+                entity.HasIndex(e => e.productBatchId, "IX_ProductBatchInventory_productBatchId");
+
                 entity.HasOne(d => d.productBatch)
                     .WithMany(p => p.ProductBatchInventory)
                     .HasForeignKey(d => d.productBatchId)
@@ -320,6 +362,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<ProductDeliveryMethod>(entity =>
             {
+                entity.HasIndex(e => e.deliveryMethodId, "IX_ProductDeliveryMethod_deliveryMethodId");
+
+                entity.HasIndex(e => e.productId, "IX_ProductDeliveryMethod_productId");
+
                 entity.HasOne(d => d.deliveryMethod)
                     .WithMany(p => p.ProductDeliveryMethod)
                     .HasForeignKey(d => d.deliveryMethodId)
@@ -335,6 +381,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<ProductImage>(entity =>
             {
+                entity.HasIndex(e => e.imageId, "IX_ProductImage_imageId");
+
+                entity.HasIndex(e => e.productId, "IX_ProductImage_productId");
+
                 entity.HasOne(d => d.image)
                     .WithMany(p => p.ProductImage)
                     .HasForeignKey(d => d.imageId)
@@ -348,6 +398,8 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<ProductOption>(entity =>
             {
+                entity.HasIndex(e => e.productId, "IX_ProductOption_productId");
+
                 entity.Property(e => e.name).HasMaxLength(50);
 
                 entity.Property(e => e.price).HasColumnType("money");
@@ -360,6 +412,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<ProductOptionImage>(entity =>
             {
+                entity.HasIndex(e => e.imageId, "IX_ProductOptionImage_imageId");
+
+                entity.HasIndex(e => e.productOptionId, "IX_ProductOptionImage_productOptionId");
+
                 entity.HasOne(d => d.image)
                     .WithMany(p => p.ProductOptionImage)
                     .HasForeignKey(d => d.imageId)
@@ -373,6 +429,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<ProductOptionValue>(entity =>
             {
+                entity.HasIndex(e => e.productOptionId, "IX_ProductOptionValue_productOptionId");
+
+                entity.HasIndex(e => e.propertyId, "IX_ProductOptionValue_propertyId");
+
                 entity.Property(e => e.value)
                     .IsRequired()
                     .HasMaxLength(500);
@@ -390,6 +450,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<ProductPropertyValue>(entity =>
             {
+                entity.HasIndex(e => e.productId, "IX_ProductPropertyValue_productId");
+
+                entity.HasIndex(e => e.propertyId, "IX_ProductPropertyValue_propertyId");
+
                 entity.Property(e => e.value)
                     .IsRequired()
                     .HasMaxLength(500);
@@ -408,10 +472,12 @@ namespace PandaShoppingAPI.DataAccesses.EF
             modelBuilder.Entity<Property>(entity =>
             {
                 entity.HasIndex(e => e.secondaryId, "UQ__Property__2D08ACCF5EA3BA00")
-                    .IsUnique();
+                    .IsUnique()
+                    .HasFilter("([secondaryId] IS NOT NULL)");
 
                 entity.HasIndex(e => e.secondaryId, "UQ__Property__2D08ACCF6D2F21AB")
-                    .IsUnique();
+                    .IsUnique()
+                    .HasFilter("([secondaryId] IS NOT NULL)");
 
                 entity.Property(e => e.name).HasMaxLength(50);
 
@@ -422,6 +488,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<PropertyTemplate>(entity =>
             {
+                entity.HasIndex(e => e.propertyId, "IX_PropertyTemplate_propertyId");
+
+                entity.HasIndex(e => e.templateId, "IX_PropertyTemplate_templateId");
+
                 entity.Property(e => e.isRequired).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.orderIndex).HasDefaultValueSql("((0))");
@@ -439,6 +509,8 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<PropertyTemplateValue>(entity =>
             {
+                entity.HasIndex(e => e.propertyTemplateId, "IX_PropertyTemplateValue_propertyTemplateId");
+
                 entity.Property(e => e.value)
                     .IsRequired()
                     .HasMaxLength(500);
@@ -461,6 +533,8 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.Property(e => e.name)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.Property(e => e.id).ValueGeneratedNever();
             });
 
             modelBuilder.Entity<Shop>(entity =>
@@ -472,6 +546,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<SubOrder>(entity =>
             {
+                entity.HasIndex(e => e.deliveryId, "IX_SubOrder_deliveryId");
+
+                entity.HasIndex(e => e.orderId, "IX_SubOrder_orderId");
+
                 entity.HasOne(d => d.delivery)
                     .WithMany(p => p.SubOrder)
                     .HasForeignKey(d => d.deliveryId)
@@ -487,6 +565,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<SubOrderDetail>(entity =>
             {
+                entity.HasIndex(e => e.productOptionId, "IX_SubOrderDetail_productOptionId");
+
+                entity.HasIndex(e => e.subOrderId, "IX_SubOrderDetail_subOrderId");
+
                 entity.Property(e => e.createdAt)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
@@ -509,6 +591,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<UserRole>(entity =>
             {
+                entity.HasIndex(e => e.roleId, "IX_UserRole_roleId");
+
+                entity.HasIndex(e => e.userId, "IX_UserRole_userId");
+
                 entity.HasOne(d => d.role)
                     .WithMany(p => p.UserRole)
                     .HasForeignKey(d => d.roleId)
@@ -522,6 +608,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<User_>(entity =>
             {
+                entity.HasIndex(e => e.cartId, "IX_User__cartId");
+
+                entity.HasIndex(e => e.shopId, "IX_User__shopId");
+
                 entity.Property(e => e.createdAt)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
@@ -560,6 +650,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<Warehouse>(entity =>
             {
+                entity.HasIndex(e => e.addressId, "IX_Warehouse_addressId");
+
+                entity.HasIndex(e => e.shopId, "IX_Warehouse_shopId");
+
                 entity.Property(e => e.name)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -579,6 +673,8 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<WarehouseInput>(entity =>
             {
+                entity.HasIndex(e => e.warehouseId, "IX_WarehouseInput_warehouseId");
+
                 entity.Property(e => e.date).HasColumnType("datetime");
 
                 entity.HasOne(d => d.warehouse)
@@ -595,6 +691,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<WarehouseOutputDetail>(entity =>
             {
+                entity.HasIndex(e => e.productBatchId, "IX_WarehouseOutputDetail_productBatchId");
+
+                entity.HasIndex(e => e.warehouseOutputId, "IX_WarehouseOutputDetail_warehouseOutputId");
+
                 entity.HasOne(d => d.productBatch)
                     .WithMany(p => p.WarehouseOutputDetail)
                     .HasForeignKey(d => d.productBatchId)

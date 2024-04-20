@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PandaShoppingAPI.DataAccesses.EF
 {
-    public partial class Delivery
+    public partial class Delivery: BaseEntity
     {
         public Delivery()
         {
@@ -16,7 +16,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public string state { get; set; }
         public int deliveryMethodId { get; set; }
         public int addressId { get; set; }
-        public override bool isDeleted { get; set; }
+        
 
         public virtual Address address { get; set; }
         public virtual DeliveryMethod deliveryMethod { get; set; }

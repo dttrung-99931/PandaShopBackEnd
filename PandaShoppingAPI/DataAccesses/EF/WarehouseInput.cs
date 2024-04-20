@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PandaShoppingAPI.DataAccesses.EF
 {
-    public partial class WarehouseInput
+    public partial class WarehouseInput : BaseEntity
     {
         public WarehouseInput()
         {
@@ -13,7 +13,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public int id { get; set; }
         public int warehouseId { get; set; }
         public DateTime date { get; set; }
-        public override bool isDeleted { get; set; }
+        
 
         public virtual Warehouse warehouse { get; set; }
         public virtual ICollection<ProductBatch> ProductBatch { get; set; }

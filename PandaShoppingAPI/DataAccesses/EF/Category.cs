@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PandaShoppingAPI.DataAccesses.EF
 {
-    public partial class Category
+    public partial class Category: BaseEntity
     {
         public Category()
         {
@@ -17,7 +17,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public int level { get; set; }
         public int? imageId { get; set; }
         public int? templateId { get; set; }
-        public override bool isDeleted { get; set; }
+        
 
         public virtual Image image { get; set; }
         public virtual Category parent { get; set; }
