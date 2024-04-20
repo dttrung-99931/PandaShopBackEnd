@@ -97,6 +97,7 @@ namespace PandaShoppingAPI.Services
             {
                 new Claim(Constants.CLAIM_USER_ID, user.id.ToString()),
                 new Claim(Constants.CLAIM_CART_ID, user.cartId.ToString()),
+                new Claim(Constants.CLAIM_SHOP_ID, user.shopId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, user.phone)
             };
 

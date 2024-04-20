@@ -8,5 +8,7 @@ namespace PandaShoppingAPI.DataAccesses.Repos
 {
     public interface ICartDetailRepo: IBaseRepo<CartDetail>
     {
+        void DeleteCartItems(int cartId, IEnumerable<int> productOptionsIds);
+
     }
 }

@@ -11,5 +11,7 @@ namespace PandaShoppingAPI.DataAccesses.Repos
         public CartRepo(EcommerceDBContext dbContext) : base(dbContext)
         {
         }
+
+
     }
 }

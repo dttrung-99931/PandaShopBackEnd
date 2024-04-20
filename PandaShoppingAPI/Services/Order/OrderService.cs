@@ -7,6 +7,7 @@ using PandaShoppingAPI.Utils.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Services
@@ -18,13 +19,62 @@ namespace PandaShoppingAPI.Services
         private readonly ISubOrderRepo _subOrderdetailRepo;
         private readonly IProductBatchInventoryRepo _productBatchInvRepo;
         private readonly IWarehouseOutputRepo _warehouseOutputRepo;
+        private readonly ICartDetailRepo _cartDetailRepo;
 
-        public OrderService(IOrderRepo repo, ISubOrderRepo subOrderRepo, ISubOrderRepo subOrderdetailRepo, IProductBatchInventoryRepo productBatchInvRepo, IWarehouseOutputRepo warehouseOutputRepo) : base(repo)
+        public OrderService(IOrderRepo repo,
+            ISubOrderRepo subOrderRepo,
+            ISubOrderRepo subOrderdetailRepo,
+            IProductBatchInventoryRepo productBatchInvRepo,
+            IWarehouseOutputRepo warehouseOutputRepo,
+            ICartDetailRepo cartDetailRepo) : base(repo)
         {
             _subOrderRepo = subOrderRepo;
             _subOrderdetailRepo = subOrderdetailRepo;
             _productBatchInvRepo = productBatchInvRepo;
             _warehouseOutputRepo = warehouseOutputRepo;
+            _cartDetailRepo = cartDetailRepo;
+        }
+
+        public override IQueryable<Order_> Fill(OrderFilter filter)
+        {
+            IQueryable<Order_> orders = base.Fill(filter);
+
+            orders = FilterByRole(orders);
+
+            if (filter.userId != null)
+            {
+                orders = orders.Where((order) => order.userId == filter.userId);
+            }
+
+            if (filter.shopId != null)
+            {
+                orders = orders.Where((order) => order.SubOrder.Any(
+                    (subOrder) => subOrder.SubOrderDetail.Any(
+                        (detail) => detail.productOption.product.shopId == User.ShopId)));
+            }
+
+            return orders;
+        }
+
+        private IQueryable<Order_> FilterByRole(IQueryable<Order_> orders)
+        {
+            if (!User.IsAdmin)
+            {
+                if (User.IsShop)
+                {
+                    orders = orders.Where(
+                        (order) => order.userId == User.UserId || order.SubOrder.Any(
+                                (subOrder) => subOrder.SubOrderDetail.Any(
+                                    (detail) => detail.productOption.product.shopId == User.ShopId)));
+
+                }
+                else
+                { // user
+                    orders = orders.Where((order) => order.userId == User.UserId);
+                }
+            }
+
+            return orders;
         }
 
         protected override void ValidateInsert(OrderModel requestModel)
@@ -36,6 +86,16 @@ namespace PandaShoppingAPI.Services
         {
             ValidateInsert(requestModel);
             OutputWarehouse(requestModel);
+            Order_ order = CreateOrder(requestModel);
+            _cartDetailRepo.DeleteCartItems(
+                User.CartId,
+                requestModel.subOrders.SelectMany((subOrder) => subOrder.subOrderDetails.Select((detail) => detail.productOptionId))
+             );
+            return order;
+        }
+
+        private Order_ CreateOrder(OrderModel requestModel)
+        {
             Order_ order = _repo.Insert(MapInsertEntity(requestModel));
             List<SubOrder> subOrders = requestModel.subOrders.Select((subOrder) =>
                 new SubOrder()
@@ -60,7 +120,6 @@ namespace PandaShoppingAPI.Services
             _subOrderRepo.InsertRange(subOrders);
             return order;
         }
-
 
         private void ValidateAvailableInventory(OrderModel requestModel)
         {
