@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PandaShoppingAPI.DataAccesses.EF
 {
-    public partial class Property
+    public partial class Property : BaseEntity
     {
         public Property()
         {
@@ -15,7 +15,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public int id { get; set; }
         public string name { get; set; }
         public string secondaryId { get; set; }
-        public override bool isDeleted { get; set; }
+        
 
         public virtual ICollection<ProductOptionValue> ProductOptionValue { get; set; }
         public virtual ICollection<ProductPropertyValue> ProductPropertyValue { get; set; }

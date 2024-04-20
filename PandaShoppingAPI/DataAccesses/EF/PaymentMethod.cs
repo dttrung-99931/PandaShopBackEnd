@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PandaShoppingAPI.DataAccesses.EF
 {
-    public partial class PaymentMethod
+    public partial class PaymentMethod : BaseEntity
     {
         public PaymentMethod()
         {
@@ -12,7 +12,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
         public int id { get; set; }
         public string name { get; set; }
-        public override bool isDeleted { get; set; }
+        
 
         public virtual ICollection<Order_> Order_ { get; set; }
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PandaShoppingAPI.DataAccesses.EF
 {
-    public partial class Warehouse
+    public partial class Warehouse : BaseEntity
     {
         public Warehouse()
         {
@@ -14,7 +14,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public int addressId { get; set; }
         public int shopId { get; set; }
         public string name { get; set; }
-        public override bool isDeleted { get; set; }
+        
 
         public virtual Address address { get; set; }
         public virtual Shop shop { get; set; }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PandaShoppingAPI.DataAccesses.EF
 {
-    public partial class Feedback
+    public partial class Feedback: BaseEntity
     {
         public Feedback()
         {
@@ -18,7 +18,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public int parentId { get; set; }
         public int userId { get; set; }
         public int productId { get; set; }
-        public override bool isDeleted { get; set; }
+        
 
         public virtual Feedback parent { get; set; }
         public virtual Product product { get; set; }

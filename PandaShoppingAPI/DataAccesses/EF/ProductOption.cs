@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PandaShoppingAPI.DataAccesses.EF
 {
-    public partial class ProductOption
+    public partial class ProductOption : BaseEntity
     {
         public ProductOption()
         {
@@ -18,7 +18,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public decimal price { get; set; }
         public string name { get; set; }
         public int productId { get; set; }
-        public override bool isDeleted { get; set; }
+        
 
         public virtual Product product { get; set; }
         public virtual ICollection<CartDetail> CartDetail { get; set; }

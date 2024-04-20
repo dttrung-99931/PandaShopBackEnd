@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PandaShoppingAPI.DataAccesses.EF
 {
-    public partial class PropertyTemplate
+    public partial class PropertyTemplate : BaseEntity
     {
         public PropertyTemplate()
         {
@@ -15,7 +15,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public int propertyId { get; set; }
         public bool? isRequired { get; set; }
         public int? orderIndex { get; set; }
-        public override bool isDeleted { get; set; }
+        
 
         public virtual Property property { get; set; }
         public virtual Template template { get; set; }

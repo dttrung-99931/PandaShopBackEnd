@@ -1,9 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
+
 namespace PandaShoppingAPI.DataAccesses.EF
 {
     public abstract class BaseEntity
     {
-        abstract public bool isDeleted { get; set; }
+        [DefaultValue(false)]
+        public bool isDeleted { get; set; } = false;
     }
 }
 
