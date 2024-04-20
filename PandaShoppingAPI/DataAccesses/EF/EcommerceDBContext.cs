@@ -92,6 +92,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .WithMany(p => p.Address)
                     .HasForeignKey(d => d.userId)
                     .HasConstraintName("FK_Address_User");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<CartDetail>(entity =>
@@ -109,6 +113,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .WithMany(p => p.CartDetail)
                     .HasForeignKey(d => d.productOptionId)
                     .HasConstraintName("FK_CartDetail_ProductOption");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<Category>(entity =>
@@ -139,6 +147,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .WithMany(p => p.Category)
                     .HasForeignKey(d => d.templateId)
                     .HasConstraintName("FK_Category_Template");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<Delivery>(entity =>
@@ -166,6 +178,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .WithMany(p => p.Delivery)
                     .HasForeignKey(d => d.deliveryMethodId)
                     .HasConstraintName("FK_Delivery_DeliveryPartner");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<DeliveryMethod>(entity =>
@@ -173,6 +189,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.Property(e => e.name)
                     .IsRequired()
                     .HasMaxLength(50);
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<DeliveryPartner>(entity =>
@@ -180,6 +200,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.Property(e => e.name)
                     .IsRequired()
                     .HasMaxLength(50);
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<Feedback>(entity =>
@@ -216,6 +240,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .WithMany(p => p.Feedback)
                     .HasForeignKey(d => d.userId)
                     .HasConstraintName("FK_Feedback_User");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<Image>(entity =>
@@ -226,6 +254,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .IsRequired()
                     .HasMaxLength(100)
                     .IsUnicode(false);
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<Invoice>(entity =>
@@ -242,6 +274,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .WithMany(p => p.Invoice)
                     .HasForeignKey(d => d.orderId)
                     .HasConstraintName("FK_Invoice_Order");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<Order_>(entity =>
@@ -267,6 +303,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .WithMany(p => p.Order_)
                     .HasForeignKey(d => d.userId)
                     .HasConstraintName("FK_Order_User");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<PaymentMethod>(entity =>
@@ -274,6 +314,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.Property(e => e.name)
                     .IsRequired()
                     .HasMaxLength(50);
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<Permission>(entity =>
@@ -292,6 +336,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .WithMany(p => p.Permission)
                     .HasForeignKey(d => d.resourceId)
                     .HasConstraintName("FK_Permission_Resource");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<Product>(entity =>
@@ -322,6 +370,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .WithMany(p => p.Product)
                     .HasForeignKey(d => d.shopId)
                     .HasConstraintName("FK_Product_Shop");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<ProductBatch>(entity =>
@@ -347,6 +399,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasForeignKey(d => d.warehouseInputId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ProductBatch_WarehouseInput");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<ProductBatchInventory>(entity =>
@@ -358,6 +414,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasForeignKey(d => d.productBatchId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ProductBatchInventory_ProductBatch");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<ProductDeliveryMethod>(entity =>
@@ -377,6 +437,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasForeignKey(d => d.productId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ProductDeliveryMethod_Product");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<ProductImage>(entity =>
@@ -394,6 +458,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .WithMany(p => p.ProductImage)
                     .HasForeignKey(d => d.productId)
                     .HasConstraintName("FK_ProductImage_Product");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<ProductOption>(entity =>
@@ -408,6 +476,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .WithMany(p => p.ProductOption)
                     .HasForeignKey(d => d.productId)
                     .HasConstraintName("FK_ProductOption_Product");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<ProductOptionImage>(entity =>
@@ -425,6 +497,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .WithMany(p => p.ProductOptionImage)
                     .HasForeignKey(d => d.productOptionId)
                     .HasConstraintName("FK_ProductOptionImage_ProductOption");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<ProductOptionValue>(entity =>
@@ -446,6 +522,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .WithMany(p => p.ProductOptionValue)
                     .HasForeignKey(d => d.propertyId)
                     .HasConstraintName("FK_ProductOptionValue_Property");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<ProductPropertyValue>(entity =>
@@ -467,6 +547,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .WithMany(p => p.ProductPropertyValue)
                     .HasForeignKey(d => d.propertyId)
                     .HasConstraintName("FK_ProductPropertyValue_Property");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<Property>(entity =>
@@ -484,6 +568,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.Property(e => e.secondaryId)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<PropertyTemplate>(entity =>
@@ -505,6 +593,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .WithMany(p => p.PropertyTemplate)
                     .HasForeignKey(d => d.templateId)
                     .HasConstraintName("FK_PropertyTemplate_Template");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<PropertyTemplateValue>(entity =>
@@ -519,6 +611,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .WithMany(p => p.PropertyTemplateValue)
                     .HasForeignKey(d => d.propertyTemplateId)
                     .HasConstraintName("FK_PropertyTemplateValue_PropertyTemplate");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<Resource>(entity =>
@@ -526,6 +622,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.Property(e => e.name)
                     .IsRequired()
                     .HasMaxLength(50);
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<Role>(entity =>
@@ -535,6 +635,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasMaxLength(50);
 
                 entity.Property(e => e.id).ValueGeneratedNever();
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<Shop>(entity =>
@@ -542,6 +646,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.Property(e => e.name)
                     .IsRequired()
                     .HasMaxLength(50);
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<SubOrder>(entity =>
@@ -561,6 +669,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasForeignKey(d => d.orderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_SubOrder_Order");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<SubOrderDetail>(entity =>
@@ -587,6 +699,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasForeignKey(d => d.subOrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_SubOrderDetail_SubOrder");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<UserRole>(entity =>
@@ -604,6 +720,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .WithMany(p => p.UserRole)
                     .HasForeignKey(d => d.userId)
                     .HasConstraintName("FK_UserRole_User");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<User_>(entity =>
@@ -646,6 +766,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasForeignKey(d => d.shopId)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_User_Shop");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<Warehouse>(entity =>
@@ -669,6 +793,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasForeignKey(d => d.shopId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Warehouse_Shop");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<WarehouseInput>(entity =>
@@ -682,11 +810,19 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasForeignKey(d => d.warehouseId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_WarehouseInput_Warehouse");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<WarehouseOutput>(entity =>
             {
                 entity.Property(e => e.date).HasColumnType("datetime");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<WarehouseOutputDetail>(entity =>
@@ -706,6 +842,17 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasForeignKey(d => d.warehouseOutputId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_WarehouseOutputDetail_WarehouseOutput");
+
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
+            });
+
+
+            modelBuilder.Entity<Template>(entity =>
+            {
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
             });
 
             OnModelCreatingPartial(modelBuilder);
