@@ -101,6 +101,8 @@
     <None Remove="DataAccesses\Repos\Order\SubOrder\" />
     <None Remove="DataAccesses\Repos\Order\SubOrderDetail\" />
     <None Remove="DataAccesses\EF\Base\" />
+    <None Remove="Models\Order\Order\" />
+    <None Remove="Models\Order\SubOrder\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\Warehouse\" />
@@ -130,5 +132,7 @@
     <Folder Include="DataAccesses\Repos\Order\SubOrder\" />
     <Folder Include="DataAccesses\Repos\Order\SubOrderDetail\" />
     <Folder Include="DataAccesses\EF\Base\" />
+    <Folder Include="Models\Order\Order\" />
+    <Folder Include="Models\Order\SubOrder\" />
   </ItemGroup>
 </Project>

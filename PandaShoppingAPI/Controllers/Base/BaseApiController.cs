@@ -132,6 +132,8 @@ namespace PandaShoppingAPI.Controllers
         {
             return new UserIdentifier(
                 GetUserIdFromToken(user), 
+                GetCartIdFromToken(user),
+                GetShopIdFromToken(user), 
                 GetRoleNamesFromToken(user)
             );
         }
@@ -184,6 +186,21 @@ namespace PandaShoppingAPI.Controllers
             {
                 return int.Parse(
                     user?.FindFirst(Constants.CLAIM_CART_ID)?.Value
+                );
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("GetCartIdFromToken " + e.Message);
+                return -1;
+            }
+        }
+
+        protected int GetShopIdFromToken(ClaimsPrincipal user)
+        {
+            try
+            {
+                return int.Parse(
+                    user?.FindFirst(Constants.CLAIM_SHOP_ID)?.Value
                 );
             }
             catch (Exception e)

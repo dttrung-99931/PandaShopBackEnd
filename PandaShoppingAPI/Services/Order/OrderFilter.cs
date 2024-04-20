@@ -4,6 +4,7 @@ namespace PandaShoppingAPI.Services
 {
     public class OrderFilter : Filter
     {
-        // TODO
+        public int? shopId { get; set; }
+        public int? userId { get; set; }
     }
 }

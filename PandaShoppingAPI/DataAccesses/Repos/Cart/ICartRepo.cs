@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.DataAccesses.Repos
 {
-    public interface ICartRepo: IBaseRepo<Cart>
-    {
+    public interface ICartRepo : IBaseRepo<Cart>
+    { 
     }
 }

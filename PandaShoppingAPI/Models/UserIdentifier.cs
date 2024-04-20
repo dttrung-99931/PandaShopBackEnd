@@ -12,12 +12,46 @@ namespace PandaShoppingAPI.Models
     public class UserIdentifier
     {
         public int UserId { get; set; }
+        public int CartId { get; set; }
+        public int ShopId { get; set; }
         public List<string> RoleNames { get; set; }
 
-        public UserIdentifier(int userId, List<string> roleNames)
+        public UserIdentifier(
+            int userId,
+            int cartId,
+            int shopId,
+            List<string> roleNames
+         )
         {
             UserId = userId;
+            CartId = cartId;
+            ShopId = shopId;
             RoleNames = roleNames;
         }
+
+        public bool IsShop
+        {
+            get
+            {
+                return RoleNames.Contains("shop");
+            }
+        }
+
+        public bool IsAdmin
+        {
+            get
+            {
+                return RoleNames.Contains("admin");
+            }
+        }
+
+        public bool IsUser
+        {
+            get
+            {
+                return RoleNames.Contains("user");
+            }
+        }
+
     }
 }

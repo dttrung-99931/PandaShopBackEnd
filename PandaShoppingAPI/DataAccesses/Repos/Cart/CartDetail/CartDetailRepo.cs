@@ -19,5 +19,10 @@ namespace PandaShoppingAPI.DataAccesses.Repos
                     .Property(cartDetail => cartDetail.cartId).IsModified = false);
         }
 
+        public void DeleteCartItems(int cartId, IEnumerable<int> productOptionsIds)
+        {
+            DeleteIf((item) => item.cartId == cartId && productOptionsIds.Contains(item.productOptionId));
+        }
+
     }
 }
