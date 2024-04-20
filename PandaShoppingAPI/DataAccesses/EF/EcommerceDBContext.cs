@@ -190,6 +190,8 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .IsRequired()
                     .HasMaxLength(50);
 
+                // TODO
+                //entity.Property(e => e.id).ValueGeneratedNever();
 
                 entity.Property(e => e.isDeleted)
                     .HasDefaultValue(false);
@@ -315,6 +317,8 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .IsRequired()
                     .HasMaxLength(50);
 
+                // TODO
+                //entity.Property(e => e.id).ValueGeneratedNever();
 
                 entity.Property(e => e.isDeleted)
                     .HasDefaultValue(false);

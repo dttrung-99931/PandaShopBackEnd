@@ -78,7 +78,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "userId" }, "IX_Address_userId");
 
-                    b.ToTable("Address");
+                    b.ToTable("Address", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Cart", b =>
@@ -94,7 +94,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Cart");
+                    b.ToTable("Cart", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.CartDetail", b =>
@@ -125,7 +125,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "productOptionId" }, "IX_CartDetail_productOptionId");
 
-                    b.ToTable("CartDetail");
+                    b.ToTable("CartDetail", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Category", b =>
@@ -168,7 +168,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "templateId" }, "IX_Category_templateId");
 
-                    b.ToTable("Category");
+                    b.ToTable("Category", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Delivery", b =>
@@ -208,7 +208,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "deliveryMethodId" }, "IX_Delivery_deliveryMethodId");
 
-                    b.ToTable("Delivery");
+                    b.ToTable("Delivery", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.DeliveryMethod", b =>
@@ -234,7 +234,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("DeliveryMethod");
+                    b.ToTable("DeliveryMethod", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.DeliveryPartner", b =>
@@ -257,7 +257,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("DeliveryPartner");
+                    b.ToTable("DeliveryPartner", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Feedback", b =>
@@ -307,7 +307,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "userId" }, "IX_Feedback_userId");
 
-                    b.ToTable("Feedback");
+                    b.ToTable("Feedback", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Image", b =>
@@ -335,7 +335,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Image");
+                    b.ToTable("Image", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Invoice", b =>
@@ -367,7 +367,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "orderId" }, "IX_Invoice_orderId");
 
-                    b.ToTable("Invoice");
+                    b.ToTable("Invoice", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Order_", b =>
@@ -407,7 +407,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "userId" }, "IX_Order__userId");
 
-                    b.ToTable("Order_");
+                    b.ToTable("Order_", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.PaymentMethod", b =>
@@ -430,7 +430,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("PaymentMethod");
+                    b.ToTable("PaymentMethod", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Permission", b =>
@@ -467,7 +467,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "resourceId" }, "IX_Permission_resourceId");
 
-                    b.ToTable("Permission");
+                    b.ToTable("Permission", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Product", b =>
@@ -518,7 +518,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "shopId" }, "IX_Product_shopId");
 
-                    b.ToTable("Product");
+                    b.ToTable("Product", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.ProductBatch", b =>
@@ -558,7 +558,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "warehouseInputId" }, "IX_ProductBatch_warehouseInputId");
 
-                    b.ToTable("ProductBatch");
+                    b.ToTable("ProductBatch", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.ProductBatchInventory", b =>
@@ -584,7 +584,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "productBatchId" }, "IX_ProductBatchInventory_productBatchId");
 
-                    b.ToTable("ProductBatchInventory");
+                    b.ToTable("ProductBatchInventory", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.ProductDeliveryMethod", b =>
@@ -612,7 +612,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "productId" }, "IX_ProductDeliveryMethod_productId");
 
-                    b.ToTable("ProductDeliveryMethod");
+                    b.ToTable("ProductDeliveryMethod", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.ProductImage", b =>
@@ -640,7 +640,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "productId" }, "IX_ProductImage_productId");
 
-                    b.ToTable("ProductImage");
+                    b.ToTable("ProductImage", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.ProductOption", b =>
@@ -670,7 +670,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "productId" }, "IX_ProductOption_productId");
 
-                    b.ToTable("ProductOption");
+                    b.ToTable("ProductOption", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.ProductOptionImage", b =>
@@ -698,7 +698,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "productOptionId" }, "IX_ProductOptionImage_productOptionId");
 
-                    b.ToTable("ProductOptionImage");
+                    b.ToTable("ProductOptionImage", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.ProductOptionValue", b =>
@@ -731,7 +731,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "propertyId" }, "IX_ProductOptionValue_propertyId");
 
-                    b.ToTable("ProductOptionValue");
+                    b.ToTable("ProductOptionValue", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.ProductPropertyValue", b =>
@@ -764,7 +764,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "propertyId" }, "IX_ProductPropertyValue_propertyId");
 
-                    b.ToTable("ProductPropertyValue");
+                    b.ToTable("ProductPropertyValue", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Property", b =>
@@ -799,7 +799,7 @@ namespace PandaShoppingAPI.Migrations
                         .IsUnique()
                         .HasFilter("([secondaryId] IS NOT NULL)");
 
-                    b.ToTable("Property");
+                    b.ToTable("Property", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.PropertyTemplate", b =>
@@ -837,7 +837,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "templateId" }, "IX_PropertyTemplate_templateId");
 
-                    b.ToTable("PropertyTemplate");
+                    b.ToTable("PropertyTemplate", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.PropertyTemplateValue", b =>
@@ -865,7 +865,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "propertyTemplateId" }, "IX_PropertyTemplateValue_propertyTemplateId");
 
-                    b.ToTable("PropertyTemplateValue");
+                    b.ToTable("PropertyTemplateValue", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Resource", b =>
@@ -888,7 +888,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Resource");
+                    b.ToTable("Resource", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Role", b =>
@@ -908,7 +908,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Role");
+                    b.ToTable("Role", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Shop", b =>
@@ -931,7 +931,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Shop");
+                    b.ToTable("Shop", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.SubOrder", b =>
@@ -959,7 +959,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "orderId" }, "IX_SubOrder_orderId");
 
-                    b.ToTable("SubOrder");
+                    b.ToTable("SubOrder", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.SubOrderDetail", b =>
@@ -1003,7 +1003,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "subOrderId" }, "IX_SubOrderDetail_subOrderId");
 
-                    b.ToTable("SubOrderDetail");
+                    b.ToTable("SubOrderDetail", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Template", b =>
@@ -1021,7 +1021,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Template");
+                    b.ToTable("Template", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.User_", b =>
@@ -1080,7 +1080,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "shopId" }, "IX_User__shopId");
 
-                    b.ToTable("User_");
+                    b.ToTable("User_", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.UserRole", b =>
@@ -1108,7 +1108,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "userId" }, "IX_UserRole_userId");
 
-                    b.ToTable("UserRole");
+                    b.ToTable("UserRole", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Warehouse", b =>
@@ -1141,7 +1141,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "shopId" }, "IX_Warehouse_shopId");
 
-                    b.ToTable("Warehouse");
+                    b.ToTable("Warehouse", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.WarehouseInput", b =>
@@ -1167,7 +1167,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "warehouseId" }, "IX_WarehouseInput_warehouseId");
 
-                    b.ToTable("WarehouseInput");
+                    b.ToTable("WarehouseInput", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.WarehouseOutput", b =>
@@ -1188,7 +1188,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("WarehouseOutput");
+                    b.ToTable("WarehouseOutput", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.WarehouseOutputDetail", b =>
@@ -1219,7 +1219,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.HasIndex(new[] { "warehouseOutputId" }, "IX_WarehouseOutputDetail_warehouseOutputId");
 
-                    b.ToTable("WarehouseOutputDetail");
+                    b.ToTable("WarehouseOutputDetail", (string)null);
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Address", b =>
