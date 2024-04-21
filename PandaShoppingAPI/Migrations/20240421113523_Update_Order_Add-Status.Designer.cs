@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PandaShoppingAPI.DataAccesses.EF;
 
@@ -11,9 +12,10 @@ using PandaShoppingAPI.DataAccesses.EF;
 namespace PandaShoppingAPI.Migrations
 {
     [DbContext(typeof(EcommerceDBContext))]
-    partial class EcommerceDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240421113523_Update_Order_Add-Status")]
+    partial class Update_Order_AddStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -196,8 +198,11 @@ namespace PandaShoppingAPI.Migrations
                     b.Property<DateTime?>("startedAt")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("status")
-                        .HasColumnType("int");
+                    b.Property<string>("state")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(10)");
 
                     b.HasKey("id");
 

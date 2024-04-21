@@ -12,7 +12,8 @@ namespace PandaShoppingAPI.Models
     {
         public DateTime? startedAt { get; set; }
         public DateTime? finishedAt { get; set; }
-        public string state { get; set; }
+        public DeliveryStatus status { get; set; }
         public DeliveryMethodResponse deliveryMethod { get; set; }
+        public AddressResponseModel address { get; set; }
     }
 }

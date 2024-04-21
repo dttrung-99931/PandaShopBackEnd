@@ -1,4 +1,5 @@
 ﻿using System;
+using PandaShoppingAPI.DataAccesses.EF;
 
 namespace PandaShoppingAPI.Services
 {
@@ -6,5 +7,6 @@ namespace PandaShoppingAPI.Services
     {
         public int? shopId { get; set; }
         public int? userId { get; set; }
+        public OrderStatus? status { get; set; }
     }
 }

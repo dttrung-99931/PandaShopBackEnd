@@ -103,6 +103,7 @@
     <None Remove="DataAccesses\EF\Base\" />
     <None Remove="Models\Order\Order\" />
     <None Remove="Models\Order\SubOrder\" />
+    <None Remove="DataAccesses\EF\Enums\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\Warehouse\" />
@@ -134,5 +135,6 @@
     <Folder Include="DataAccesses\EF\Base\" />
     <Folder Include="Models\Order\Order\" />
     <Folder Include="Models\Order\SubOrder\" />
+    <Folder Include="DataAccesses\EF\Enums\" />
   </ItemGroup>
 </Project>
