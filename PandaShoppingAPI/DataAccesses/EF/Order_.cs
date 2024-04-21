@@ -17,6 +17,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public DateTime? updatedAt { get; set; }
         public int userId { get; set; }
         public int paymentMethodId { get; set; }
+        public OrderStatus status { get; set; } 
         
 
         public virtual PaymentMethod paymentMethod { get; set; }

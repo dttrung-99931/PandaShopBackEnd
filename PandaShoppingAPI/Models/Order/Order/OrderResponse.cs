@@ -11,8 +11,10 @@ namespace PandaShoppingAPI.Models
         public string note { get; set; }
         public DateTime? createdAt { get; set; }
         public DateTime? updatedAt { get; set; }
+        public OrderStatus status { get; set; }
         [JsonProperty("subOrders")]
         public List<SubOrderResponse> SubOrder { get; set; }
         public PaymentMethodResponse paymentMethod { get; set; }
+        public UserShortResponseModel user { get; set; }
     }
 }

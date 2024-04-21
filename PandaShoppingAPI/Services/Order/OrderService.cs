@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace PandaShoppingAPI.Services
 {
     public class OrderService : BaseService<IOrderRepo, Order_, OrderModel, OrderFilter>, 
-        IOrderService
+        IOrderService   
     {
         private readonly ISubOrderRepo _subOrderRepo;
         private readonly ISubOrderRepo _subOrderdetailRepo;
@@ -51,6 +51,11 @@ namespace PandaShoppingAPI.Services
                 orders = orders.Where((order) => order.SubOrder.Any(
                     (subOrder) => subOrder.SubOrderDetail.Any(
                         (detail) => detail.productOption.product.shopId == User.ShopId)));
+            }
+
+            if (filter.status != null)
+            {
+                orders = orders.Where((order) => order.status == filter.status);
             }
 
             return orders;
@@ -96,7 +101,9 @@ namespace PandaShoppingAPI.Services
 
         private Order_ CreateOrder(OrderModel requestModel)
         {
-            Order_ order = _repo.Insert(MapInsertEntity(requestModel));
+            Order_ order = MapInsertEntity(requestModel);
+            order.status = OrderStatus.Created;
+            _repo.Insert(order);
             List<SubOrder> subOrders = requestModel.subOrders.Select((subOrder) =>
                 new SubOrder()
                 {
@@ -113,7 +120,7 @@ namespace PandaShoppingAPI.Services
                     {
                         addressId = subOrder.addressId,
                         deliveryMethodId = subOrder.deliveryMethodId,
-                        state = "created", // TODO: create enum
+                        status = DeliveryStatus.Created,
                     }
                 }
             ).ToList();

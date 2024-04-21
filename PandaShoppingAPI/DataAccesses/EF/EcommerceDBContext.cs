@@ -163,11 +163,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
                 entity.Property(e => e.startedAt).HasColumnType("datetime");
 
-                entity.Property(e => e.state)
-                    .IsRequired()
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
-
                 entity.HasOne(d => d.address)
                     .WithMany(p => p.Delivery)
                     .HasForeignKey(d => d.addressId)
