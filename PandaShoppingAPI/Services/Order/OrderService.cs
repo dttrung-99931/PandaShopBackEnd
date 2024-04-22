@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Services
 {
-    public class OrderService : BaseService<IOrderRepo, Order_, OrderModel, OrderFilter>, 
+    public partial class OrderService : BaseService<IOrderRepo, Order_, OrderModel, OrderFilter>, 
         IOrderService   
     {
         private readonly ISubOrderRepo _subOrderRepo;

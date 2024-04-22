@@ -5,7 +5,9 @@ using PandaShoppingAPI.Utils;
 
 namespace PandaShoppingAPI.Services
 {
-    public interface IOrderService : IBaseService<Order_, OrderModel, OrderFilter>, IOrderProcessService
+    public interface IOrderProcessService
     {
+        void StartProcessingOrder(int orderId);
+        void CompleteProcessingOrder(int orderId);
     }
 }
