@@ -20,7 +20,14 @@ namespace PandaShoppingAPI.Configs
 
             // TODO: fix lazy load
             services.AddDbContext<EcommerceDBContext>(opt => opt.UseLazyLoadingProxies().UseSqlServer(connectionString));
+            if (Program.IsStartedWithMain)
+            {
+                RUnInitSql(services);
+            }
+        }
 
+        private static void RUnInitSql(IServiceCollection services)
+        {
             EcommerceDBContext context = services.BuildServiceProvider().GetService<EcommerceDBContext>();
 
             string initSql = File.ReadAllText("Server/init.sql");
