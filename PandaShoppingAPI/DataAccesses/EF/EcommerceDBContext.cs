@@ -854,6 +854,12 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder.Entity<Cart>(entity =>
+            {
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
+            });
+
             OnModelCreatingPartial(modelBuilder);
         }
 
