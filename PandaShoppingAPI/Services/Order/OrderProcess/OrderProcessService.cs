@@ -2,7 +2,6 @@
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
 using PandaShoppingAPI.Models;
-using PandaShoppingAPI.Models.Order;
 using PandaShoppingAPI.Utils;
 using PandaShoppingAPI.Utils.Exceptions;
 using System;
@@ -27,7 +26,7 @@ namespace PandaShoppingAPI.Services
 
         private void UpdateOrderStatus(int orderId, OrderStatus status)
         {
-            Order_ order = _repo.GetById(orderId);
+            Order order = _repo.GetById(orderId);
             order.status = status;
             _repo.Update(order, order.id);
         }

@@ -3,19 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PandaShoppingAPI.DataAccesses.EF;
 
 #nullable disable
 
-namespace PandaShoppingAPI.Migrations
+namespace PandaShoppingAPI.DataAccesses.EF.Migrations
 {
     [DbContext(typeof(EcommerceDBContext))]
-    [Migration("20240420040814_Update_Template_Default_isDeleted")]
-    partial class Update_Template_Default_isDeleted
+    partial class EcommerceDBContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,7 +90,9 @@ namespace PandaShoppingAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
 
                     b.Property<bool>("isDeleted")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.HasKey("id");
 
@@ -195,16 +195,19 @@ namespace PandaShoppingAPI.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
+                    b.Property<int>("orderId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("startedAt")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("state")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(10)");
+                    b.Property<int>("status")
+                        .HasColumnType("int");
 
                     b.HasKey("id");
+
+                    b.HasIndex("orderId")
+                        .IsUnique();
 
                     b.HasIndex(new[] { "addressId" }, "IX_Delivery_addressId");
 
@@ -365,14 +368,60 @@ namespace PandaShoppingAPI.Migrations
                     b.Property<int>("orderId")
                         .HasColumnType("int");
 
+                    b.Property<int>("paymentMethodId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("paymentStatus")
+                        .HasColumnType("int");
+
                     b.HasKey("id");
+
+                    b.HasIndex("paymentMethodId");
 
                     b.HasIndex(new[] { "orderId" }, "IX_Invoice_orderId");
 
                     b.ToTable("Invoice");
                 });
 
-            modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Order_", b =>
+            modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Order", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+
+                    b.Property<DateTime?>("createdAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("invoiceId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("isDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("updatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("userId");
+
+                    b.ToTable("Order");
+                });
+
+            modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.OrderDetail", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
@@ -385,31 +434,35 @@ namespace PandaShoppingAPI.Migrations
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
+                    b.Property<double?>("discountPercent")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("float")
+                        .HasDefaultValueSql("((0))");
+
                     b.Property<bool>("isDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<string>("note")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int>("paymentMethodId")
+                    b.Property<int>("orderId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("updatedAt")
-                        .HasColumnType("datetime");
+                    b.Property<decimal>("price")
+                        .HasColumnType("money");
 
-                    b.Property<int>("userId")
+                    b.Property<int>("productNum")
+                        .HasColumnType("int");
+
+                    b.Property<int>("productOptionId")
                         .HasColumnType("int");
 
                     b.HasKey("id");
 
-                    b.HasIndex(new[] { "paymentMethodId" }, "IX_Order__paymentMethodId");
+                    b.HasIndex(new[] { "orderId" }, "IX_OrderDetail_orderId");
 
-                    b.HasIndex(new[] { "userId" }, "IX_Order__userId");
+                    b.HasIndex(new[] { "productOptionId" }, "IX_OrderDetail_productOptionId");
 
-                    b.ToTable("Order_");
+                    b.ToTable("OrderDetail");
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.PaymentMethod", b =>
@@ -936,78 +989,6 @@ namespace PandaShoppingAPI.Migrations
                     b.ToTable("Shop");
                 });
 
-            modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.SubOrder", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
-
-                    b.Property<int>("deliveryId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("isDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<int>("orderId")
-                        .HasColumnType("int");
-
-                    b.HasKey("id");
-
-                    b.HasIndex(new[] { "deliveryId" }, "IX_SubOrder_deliveryId");
-
-                    b.HasIndex(new[] { "orderId" }, "IX_SubOrder_orderId");
-
-                    b.ToTable("SubOrder");
-                });
-
-            modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.SubOrderDetail", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
-
-                    b.Property<DateTime?>("createdAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getdate())");
-
-                    b.Property<double?>("discountPercent")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("float")
-                        .HasDefaultValueSql("((0))");
-
-                    b.Property<bool>("isDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<decimal>("price")
-                        .HasColumnType("money");
-
-                    b.Property<int>("productNum")
-                        .HasColumnType("int");
-
-                    b.Property<int>("productOptionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("subOrderId")
-                        .HasColumnType("int");
-
-                    b.HasKey("id");
-
-                    b.HasIndex(new[] { "productOptionId" }, "IX_SubOrderDetail_productOptionId");
-
-                    b.HasIndex(new[] { "subOrderId" }, "IX_SubOrderDetail_subOrderId");
-
-                    b.ToTable("SubOrderDetail");
-                });
-
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Template", b =>
                 {
                     b.Property<int>("id")
@@ -1229,6 +1210,7 @@ namespace PandaShoppingAPI.Migrations
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.User_", "user")
                         .WithMany("Address")
                         .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .HasConstraintName("FK_Address_User");
 
                     b.Navigation("user");
@@ -1239,14 +1221,14 @@ namespace PandaShoppingAPI.Migrations
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Cart", "cart")
                         .WithMany("CartDetail")
                         .HasForeignKey("cartId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_CartDetail_Cart");
 
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.ProductOption", "productOption")
                         .WithMany("CartDetail")
                         .HasForeignKey("productOptionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_CartDetail_ProductOption");
 
@@ -1260,16 +1242,19 @@ namespace PandaShoppingAPI.Migrations
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Image", "image")
                         .WithMany("Category")
                         .HasForeignKey("imageId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .HasConstraintName("FK_Category_Image");
 
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Category", "parent")
                         .WithMany("Inverseparent")
                         .HasForeignKey("parentId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .HasConstraintName("FK_Category_Category");
 
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Template", "template")
                         .WithMany("Category")
                         .HasForeignKey("templateId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .HasConstraintName("FK_Category_Template");
 
                     b.Navigation("image");
@@ -1284,19 +1269,29 @@ namespace PandaShoppingAPI.Migrations
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Address", "address")
                         .WithMany("Delivery")
                         .HasForeignKey("addressId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_Delivery_Address");
 
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.DeliveryMethod", "deliveryMethod")
                         .WithMany("Delivery")
                         .HasForeignKey("deliveryMethodId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_Delivery_DeliveryPartner");
+
+                    b.HasOne("PandaShoppingAPI.DataAccesses.EF.Order", "order")
+                        .WithOne("delivery")
+                        .HasForeignKey("PandaShoppingAPI.DataAccesses.EF.Delivery", "orderId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_Delivery_Order");
 
                     b.Navigation("address");
 
                     b.Navigation("deliveryMethod");
+
+                    b.Navigation("order");
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Feedback", b =>
@@ -1304,19 +1299,21 @@ namespace PandaShoppingAPI.Migrations
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Feedback", "parent")
                         .WithMany("Inverseparent")
                         .HasForeignKey("parentId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_Feedback_Feedback");
 
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Product", "product")
                         .WithMany("Feedback")
                         .HasForeignKey("productId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_Feedback_Product");
 
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.User_", "user")
                         .WithMany("Feedback")
                         .HasForeignKey("userId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_Feedback_User");
 
@@ -1329,35 +1326,56 @@ namespace PandaShoppingAPI.Migrations
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Invoice", b =>
                 {
-                    b.HasOne("PandaShoppingAPI.DataAccesses.EF.Order_", "order")
+                    b.HasOne("PandaShoppingAPI.DataAccesses.EF.PaymentMethod", "paymentMethod")
                         .WithMany("Invoice")
-                        .HasForeignKey("orderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("paymentMethodId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
-                        .HasConstraintName("FK_Invoice_Order");
+                        .HasConstraintName("FK_Invoice_PaymentMethod");
 
-                    b.Navigation("order");
+                    b.Navigation("paymentMethod");
                 });
 
-            modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Order_", b =>
+            modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Order", b =>
                 {
-                    b.HasOne("PandaShoppingAPI.DataAccesses.EF.PaymentMethod", "paymentMethod")
-                        .WithMany("Order_")
-                        .HasForeignKey("paymentMethodId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("PandaShoppingAPI.DataAccesses.EF.Invoice", "invoice")
+                        .WithMany("Order")
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
-                        .HasConstraintName("FK_Order_PaymentMethod");
+                        .HasConstraintName("FK_Order_Invoice");
 
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.User_", "user")
-                        .WithMany("Order_")
+                        .WithMany("Order")
                         .HasForeignKey("userId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_Order_User");
 
-                    b.Navigation("paymentMethod");
+                    b.Navigation("invoice");
 
                     b.Navigation("user");
+                });
+
+            modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.OrderDetail", b =>
+                {
+                    b.HasOne("PandaShoppingAPI.DataAccesses.EF.Order", "order")
+                        .WithMany("OrderDetail")
+                        .HasForeignKey("orderId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_OrderDetail_Order");
+
+                    b.HasOne("PandaShoppingAPI.DataAccesses.EF.ProductOption", "productOption")
+                        .WithMany("OrderDetail")
+                        .HasForeignKey("productOptionId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_OrderDetail_ProductOption");
+
+                    b.Navigation("order");
+
+                    b.Navigation("productOption");
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Permission", b =>
@@ -1365,7 +1383,7 @@ namespace PandaShoppingAPI.Migrations
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Resource", "resource")
                         .WithMany("Permission")
                         .HasForeignKey("resourceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_Permission_Resource");
 
@@ -1377,21 +1395,21 @@ namespace PandaShoppingAPI.Migrations
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Address", "address")
                         .WithMany("Product")
                         .HasForeignKey("addressId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_Product_Address");
 
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Category", "category")
                         .WithMany("Product")
                         .HasForeignKey("categoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_Product_Category");
 
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Shop", "shop")
                         .WithMany("Product")
                         .HasForeignKey("shopId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_Product_Shop");
 
@@ -1407,12 +1425,14 @@ namespace PandaShoppingAPI.Migrations
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.ProductOption", "productOption")
                         .WithMany("ProductBatch")
                         .HasForeignKey("productOptionId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_ProductBatch_ProductOption");
 
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.WarehouseInput", "warehouseInput")
                         .WithMany("ProductBatch")
                         .HasForeignKey("warehouseInputId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_ProductBatch_WarehouseInput");
 
@@ -1426,6 +1446,7 @@ namespace PandaShoppingAPI.Migrations
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.ProductBatch", "productBatch")
                         .WithMany("ProductBatchInventory")
                         .HasForeignKey("productBatchId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_ProductBatchInventory_ProductBatch");
 
@@ -1437,12 +1458,14 @@ namespace PandaShoppingAPI.Migrations
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.DeliveryMethod", "deliveryMethod")
                         .WithMany("ProductDeliveryMethod")
                         .HasForeignKey("deliveryMethodId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_ProductDeliveryMethod_DeliveryMethod");
 
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Product", "product")
                         .WithMany("ProductDeliveryMethod")
                         .HasForeignKey("productId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_ProductDeliveryMethod_Product");
 
@@ -1456,14 +1479,14 @@ namespace PandaShoppingAPI.Migrations
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Image", "image")
                         .WithMany("ProductImage")
                         .HasForeignKey("imageId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_ProductImage_Image");
 
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Product", "product")
                         .WithMany("ProductImage")
                         .HasForeignKey("productId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_ProductImage_Product");
 
@@ -1477,7 +1500,7 @@ namespace PandaShoppingAPI.Migrations
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Product", "product")
                         .WithMany("ProductOption")
                         .HasForeignKey("productId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_ProductOption_Product");
 
@@ -1489,14 +1512,14 @@ namespace PandaShoppingAPI.Migrations
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Image", "image")
                         .WithMany("ProductOptionImage")
                         .HasForeignKey("imageId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_ProductOptionImage_Image");
 
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.ProductOption", "productOption")
                         .WithMany("ProductOptionImage")
                         .HasForeignKey("productOptionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_ProductOptionImage_ProductOption");
 
@@ -1510,14 +1533,14 @@ namespace PandaShoppingAPI.Migrations
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.ProductOption", "productOption")
                         .WithMany("ProductOptionValue")
                         .HasForeignKey("productOptionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_ProductOptionValue_ProductOption");
 
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Property", "property")
                         .WithMany("ProductOptionValue")
                         .HasForeignKey("propertyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_ProductOptionValue_Property");
 
@@ -1531,14 +1554,14 @@ namespace PandaShoppingAPI.Migrations
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Product", "product")
                         .WithMany("ProductPropertyValue")
                         .HasForeignKey("productId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_ProductPropertyValue_Product");
 
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Property", "property")
                         .WithMany("ProductPropertyValue")
                         .HasForeignKey("propertyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_ProductPropertyValue_Property");
 
@@ -1552,14 +1575,14 @@ namespace PandaShoppingAPI.Migrations
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Property", "property")
                         .WithMany("PropertyTemplate")
                         .HasForeignKey("propertyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_PropertyTemplate_Property");
 
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Template", "template")
                         .WithMany("PropertyTemplate")
                         .HasForeignKey("templateId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_PropertyTemplate_Template");
 
@@ -1573,50 +1596,11 @@ namespace PandaShoppingAPI.Migrations
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.PropertyTemplate", "propertyTemplate")
                         .WithMany("PropertyTemplateValue")
                         .HasForeignKey("propertyTemplateId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_PropertyTemplateValue_PropertyTemplate");
 
                     b.Navigation("propertyTemplate");
-                });
-
-            modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.SubOrder", b =>
-                {
-                    b.HasOne("PandaShoppingAPI.DataAccesses.EF.Delivery", "delivery")
-                        .WithMany("SubOrder")
-                        .HasForeignKey("deliveryId")
-                        .IsRequired()
-                        .HasConstraintName("FK_SubOrder_Delivery");
-
-                    b.HasOne("PandaShoppingAPI.DataAccesses.EF.Order_", "order")
-                        .WithMany("SubOrder")
-                        .HasForeignKey("orderId")
-                        .IsRequired()
-                        .HasConstraintName("FK_SubOrder_Order");
-
-                    b.Navigation("delivery");
-
-                    b.Navigation("order");
-                });
-
-            modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.SubOrderDetail", b =>
-                {
-                    b.HasOne("PandaShoppingAPI.DataAccesses.EF.ProductOption", "productOption")
-                        .WithMany("SubOrderDetail")
-                        .HasForeignKey("productOptionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_OrderDetail_ProductOption");
-
-                    b.HasOne("PandaShoppingAPI.DataAccesses.EF.SubOrder", "subOrder")
-                        .WithMany("SubOrderDetail")
-                        .HasForeignKey("subOrderId")
-                        .IsRequired()
-                        .HasConstraintName("FK_SubOrderDetail_SubOrder");
-
-                    b.Navigation("productOption");
-
-                    b.Navigation("subOrder");
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.User_", b =>
@@ -1624,14 +1608,14 @@ namespace PandaShoppingAPI.Migrations
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Cart", "cart")
                         .WithMany("User_")
                         .HasForeignKey("cartId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_User_Cart");
 
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Shop", "shop")
                         .WithMany("User_")
                         .HasForeignKey("shopId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .HasConstraintName("FK_User_Shop");
 
                     b.Navigation("cart");
@@ -1644,14 +1628,14 @@ namespace PandaShoppingAPI.Migrations
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Role", "role")
                         .WithMany("UserRole")
                         .HasForeignKey("roleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_UserRole_Role");
 
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.User_", "user")
                         .WithMany("UserRole")
                         .HasForeignKey("userId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_UserRole_User");
 
@@ -1665,12 +1649,14 @@ namespace PandaShoppingAPI.Migrations
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Address", "address")
                         .WithMany("Warehouse")
                         .HasForeignKey("addressId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_Warehouse_Address");
 
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Shop", "shop")
                         .WithMany("Warehouse")
                         .HasForeignKey("shopId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_Warehouse_Shop");
 
@@ -1684,6 +1670,7 @@ namespace PandaShoppingAPI.Migrations
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.Warehouse", "warehouse")
                         .WithMany("WarehouseInput")
                         .HasForeignKey("warehouseId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_WarehouseInput_Warehouse");
 
@@ -1695,12 +1682,14 @@ namespace PandaShoppingAPI.Migrations
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.ProductBatch", "productBatch")
                         .WithMany("WarehouseOutputDetail")
                         .HasForeignKey("productBatchId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_WarehouseOutputDetail_ProductBatch");
 
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.WarehouseOutput", "warehouseOutput")
                         .WithMany("WarehouseOutputDetail")
                         .HasForeignKey("warehouseOutputId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("FK_WarehouseOutputDetail_WarehouseOutput");
 
@@ -1732,11 +1721,6 @@ namespace PandaShoppingAPI.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Delivery", b =>
-                {
-                    b.Navigation("SubOrder");
-                });
-
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.DeliveryMethod", b =>
                 {
                     b.Navigation("Delivery");
@@ -1758,16 +1742,21 @@ namespace PandaShoppingAPI.Migrations
                     b.Navigation("ProductOptionImage");
                 });
 
-            modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Order_", b =>
+            modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Invoice", b =>
                 {
-                    b.Navigation("Invoice");
+                    b.Navigation("Order");
+                });
 
-                    b.Navigation("SubOrder");
+            modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Order", b =>
+                {
+                    b.Navigation("OrderDetail");
+
+                    b.Navigation("delivery");
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.PaymentMethod", b =>
                 {
-                    b.Navigation("Order_");
+                    b.Navigation("Invoice");
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Product", b =>
@@ -1794,13 +1783,13 @@ namespace PandaShoppingAPI.Migrations
                 {
                     b.Navigation("CartDetail");
 
+                    b.Navigation("OrderDetail");
+
                     b.Navigation("ProductBatch");
 
                     b.Navigation("ProductOptionImage");
 
                     b.Navigation("ProductOptionValue");
-
-                    b.Navigation("SubOrderDetail");
                 });
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Property", b =>
@@ -1836,11 +1825,6 @@ namespace PandaShoppingAPI.Migrations
                     b.Navigation("Warehouse");
                 });
 
-            modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.SubOrder", b =>
-                {
-                    b.Navigation("SubOrderDetail");
-                });
-
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Template", b =>
                 {
                     b.Navigation("Category");
@@ -1854,7 +1838,7 @@ namespace PandaShoppingAPI.Migrations
 
                     b.Navigation("Feedback");
 
-                    b.Navigation("Order_");
+                    b.Navigation("Order");
 
                     b.Navigation("UserRole");
                 });

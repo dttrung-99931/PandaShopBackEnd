@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.DataAccesses.Repos
 {
-    public interface ISubOrderRepo: IBaseRepo<SubOrder>
+    public interface IOrderDetailRepo: IBaseRepo<Order>
     {
     }
 }

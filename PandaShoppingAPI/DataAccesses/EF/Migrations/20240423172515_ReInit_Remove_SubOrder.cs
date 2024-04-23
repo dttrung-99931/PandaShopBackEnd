@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace PandaShoppingAPI.Migrations
+namespace PandaShoppingAPI.DataAccesses.EF.Migrations
 {
-    public partial class Init : Migration
+    public partial class ReInit_Remove_SubOrder : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,7 +15,7 @@ namespace PandaShoppingAPI.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -30,7 +30,7 @@ namespace PandaShoppingAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     maxDeliveryHours = table.Column<int>(type: "int", nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -44,7 +44,7 @@ namespace PandaShoppingAPI.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -59,7 +59,7 @@ namespace PandaShoppingAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     fileName = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -73,7 +73,7 @@ namespace PandaShoppingAPI.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -88,7 +88,7 @@ namespace PandaShoppingAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     secondaryId = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -102,7 +102,7 @@ namespace PandaShoppingAPI.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -115,7 +115,7 @@ namespace PandaShoppingAPI.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false),
                     name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -129,7 +129,7 @@ namespace PandaShoppingAPI.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -142,7 +142,7 @@ namespace PandaShoppingAPI.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -156,11 +156,35 @@ namespace PandaShoppingAPI.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     date = table.Column<DateTime>(type: "datetime", nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_WarehouseOutput", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Invoice",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    createdAt = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())"),
+                    note = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    orderId = table.Column<int>(type: "int", nullable: false),
+                    paymentMethodId = table.Column<int>(type: "int", nullable: false),
+                    paymentStatus = table.Column<int>(type: "int", nullable: false),
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Invoice", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Invoice_PaymentMethod_paymentMethodId",
+                        column: x => x.paymentMethodId,
+                        principalTable: "PaymentMethod",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -173,7 +197,7 @@ namespace PandaShoppingAPI.Migrations
                     resourceId = table.Column<int>(type: "int", nullable: false),
                     canRead = table.Column<bool>(type: "bit", nullable: false, defaultValueSql: "((1))"),
                     canWrite = table.Column<bool>(type: "bit", nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -182,8 +206,7 @@ namespace PandaShoppingAPI.Migrations
                         name: "FK_Permission_Resource",
                         column: x => x.resourceId,
                         principalTable: "Resource",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -200,7 +223,7 @@ namespace PandaShoppingAPI.Migrations
                     updatedAt = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())"),
                     cartId = table.Column<int>(type: "int", nullable: false),
                     shopId = table.Column<int>(type: "int", nullable: true),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -209,14 +232,12 @@ namespace PandaShoppingAPI.Migrations
                         name: "FK_User_Cart",
                         column: x => x.cartId,
                         principalTable: "Cart",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_User_Shop",
                         column: x => x.shopId,
                         principalTable: "Shop",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -230,7 +251,7 @@ namespace PandaShoppingAPI.Migrations
                     level = table.Column<int>(type: "int", nullable: false, defaultValueSql: "((1))"),
                     imageId = table.Column<int>(type: "int", nullable: true),
                     templateId = table.Column<int>(type: "int", nullable: true),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -262,7 +283,7 @@ namespace PandaShoppingAPI.Migrations
                     propertyId = table.Column<int>(type: "int", nullable: false),
                     isRequired = table.Column<bool>(type: "bit", nullable: true, defaultValueSql: "((1))"),
                     orderIndex = table.Column<int>(type: "int", nullable: true, defaultValueSql: "((0))"),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -271,14 +292,12 @@ namespace PandaShoppingAPI.Migrations
                         name: "FK_PropertyTemplate_Property",
                         column: x => x.propertyId,
                         principalTable: "Property",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_PropertyTemplate_Template",
                         column: x => x.templateId,
                         principalTable: "Template",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -295,7 +314,7 @@ namespace PandaShoppingAPI.Migrations
                     streetAndHouseNum = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     userId = table.Column<int>(type: "int", nullable: true),
                     name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -308,33 +327,38 @@ namespace PandaShoppingAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Order_",
+                name: "Order",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    note = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    createdAt = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())"),
-                    updatedAt = table.Column<DateTime>(type: "datetime", nullable: true),
+                    note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    createdAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    updatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    status = table.Column<int>(type: "int", nullable: false),
                     userId = table.Column<int>(type: "int", nullable: false),
-                    paymentMethodId = table.Column<int>(type: "int", nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    invoiceId = table.Column<int>(type: "int", nullable: false),
+                    PaymentMethodid = table.Column<int>(type: "int", nullable: true),
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Order_", x => x.id);
+                    table.PrimaryKey("PK_Order", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Order_PaymentMethod",
-                        column: x => x.paymentMethodId,
+                        name: "FK_Order_Invoice",
+                        column: x => x.userId,
+                        principalTable: "Invoice",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_Order_PaymentMethod_PaymentMethodid",
+                        column: x => x.PaymentMethodid,
                         principalTable: "PaymentMethod",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_Order_User",
                         column: x => x.userId,
                         principalTable: "User_",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -345,7 +369,7 @@ namespace PandaShoppingAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     userId = table.Column<int>(type: "int", nullable: false),
                     roleId = table.Column<int>(type: "int", nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -354,14 +378,12 @@ namespace PandaShoppingAPI.Migrations
                         name: "FK_UserRole_Role",
                         column: x => x.roleId,
                         principalTable: "Role",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_UserRole_User",
                         column: x => x.userId,
                         principalTable: "User_",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -372,7 +394,7 @@ namespace PandaShoppingAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     propertyTemplateId = table.Column<int>(type: "int", nullable: false),
                     value = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -381,37 +403,7 @@ namespace PandaShoppingAPI.Migrations
                         name: "FK_PropertyTemplateValue_PropertyTemplate",
                         column: x => x.propertyTemplateId,
                         principalTable: "PropertyTemplate",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Delivery",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    startedAt = table.Column<DateTime>(type: "datetime", nullable: true),
-                    finishedAt = table.Column<DateTime>(type: "datetime", nullable: true),
-                    state = table.Column<string>(type: "varchar(10)", unicode: false, maxLength: 10, nullable: false),
-                    deliveryMethodId = table.Column<int>(type: "int", nullable: false),
-                    addressId = table.Column<int>(type: "int", nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Delivery", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_Delivery_Address",
-                        column: x => x.addressId,
-                        principalTable: "Address",
                         principalColumn: "id");
-                    table.ForeignKey(
-                        name: "FK_Delivery_DeliveryPartner",
-                        column: x => x.deliveryMethodId,
-                        principalTable: "DeliveryMethod",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -428,7 +420,7 @@ namespace PandaShoppingAPI.Migrations
                     categoryId = table.Column<int>(type: "int", nullable: false),
                     shopId = table.Column<int>(type: "int", nullable: false),
                     addressId = table.Column<int>(type: "int", nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -437,20 +429,17 @@ namespace PandaShoppingAPI.Migrations
                         name: "FK_Product_Address",
                         column: x => x.addressId,
                         principalTable: "Address",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_Product_Category",
                         column: x => x.categoryId,
                         principalTable: "Category",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_Product_Shop",
                         column: x => x.shopId,
                         principalTable: "Shop",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -462,7 +451,7 @@ namespace PandaShoppingAPI.Migrations
                     addressId = table.Column<int>(type: "int", nullable: false),
                     shopId = table.Column<int>(type: "int", nullable: false),
                     name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -480,49 +469,36 @@ namespace PandaShoppingAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Invoice",
+                name: "Delivery",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    createdAt = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())"),
-                    note = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    startedAt = table.Column<DateTime>(type: "datetime", nullable: true),
+                    finishedAt = table.Column<DateTime>(type: "datetime", nullable: true),
+                    deliveryMethodId = table.Column<int>(type: "int", nullable: false),
+                    addressId = table.Column<int>(type: "int", nullable: false),
+                    status = table.Column<int>(type: "int", nullable: false),
                     orderId = table.Column<int>(type: "int", nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Invoice", x => x.id);
+                    table.PrimaryKey("PK_Delivery", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Invoice_Order",
-                        column: x => x.orderId,
-                        principalTable: "Order_",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SubOrder",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    orderId = table.Column<int>(type: "int", nullable: false),
-                    deliveryId = table.Column<int>(type: "int", nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SubOrder", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_SubOrder_Delivery",
-                        column: x => x.deliveryId,
-                        principalTable: "Delivery",
+                        name: "FK_Delivery_Address",
+                        column: x => x.addressId,
+                        principalTable: "Address",
                         principalColumn: "id");
                     table.ForeignKey(
-                        name: "FK_SubOrder_Order",
+                        name: "FK_Delivery_DeliveryPartner",
+                        column: x => x.deliveryMethodId,
+                        principalTable: "DeliveryMethod",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_Delivery_Order",
                         column: x => x.orderId,
-                        principalTable: "Order_",
+                        principalTable: "Order",
                         principalColumn: "id");
                 });
 
@@ -539,7 +515,7 @@ namespace PandaShoppingAPI.Migrations
                     parentId = table.Column<int>(type: "int", nullable: false),
                     userId = table.Column<int>(type: "int", nullable: false),
                     productId = table.Column<int>(type: "int", nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -558,8 +534,7 @@ namespace PandaShoppingAPI.Migrations
                         name: "FK_Feedback_User",
                         column: x => x.userId,
                         principalTable: "User_",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -570,7 +545,7 @@ namespace PandaShoppingAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     productId = table.Column<int>(type: "int", nullable: false),
                     deliveryMethodId = table.Column<int>(type: "int", nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -595,7 +570,7 @@ namespace PandaShoppingAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     productId = table.Column<int>(type: "int", nullable: false),
                     imageId = table.Column<int>(type: "int", nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -604,14 +579,12 @@ namespace PandaShoppingAPI.Migrations
                         name: "FK_ProductImage_Image",
                         column: x => x.imageId,
                         principalTable: "Image",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_ProductImage_Product",
                         column: x => x.productId,
                         principalTable: "Product",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -623,7 +596,7 @@ namespace PandaShoppingAPI.Migrations
                     price = table.Column<decimal>(type: "money", nullable: false),
                     name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     productId = table.Column<int>(type: "int", nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -632,8 +605,7 @@ namespace PandaShoppingAPI.Migrations
                         name: "FK_ProductOption_Product",
                         column: x => x.productId,
                         principalTable: "Product",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -645,7 +617,7 @@ namespace PandaShoppingAPI.Migrations
                     value = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     productId = table.Column<int>(type: "int", nullable: false),
                     propertyId = table.Column<int>(type: "int", nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -654,14 +626,12 @@ namespace PandaShoppingAPI.Migrations
                         name: "FK_ProductPropertyValue_Product",
                         column: x => x.productId,
                         principalTable: "Product",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_ProductPropertyValue_Property",
                         column: x => x.propertyId,
                         principalTable: "Property",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -672,7 +642,7 @@ namespace PandaShoppingAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     warehouseId = table.Column<int>(type: "int", nullable: false),
                     date = table.Column<DateTime>(type: "datetime", nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -693,7 +663,7 @@ namespace PandaShoppingAPI.Migrations
                     productNum = table.Column<int>(type: "int", nullable: false),
                     cartId = table.Column<int>(type: "int", nullable: false),
                     productOptionId = table.Column<int>(type: "int", nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -702,14 +672,41 @@ namespace PandaShoppingAPI.Migrations
                         name: "FK_CartDetail_Cart",
                         column: x => x.cartId,
                         principalTable: "Cart",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_CartDetail_ProductOption",
                         column: x => x.productOptionId,
                         principalTable: "ProductOption",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderDetail",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    createdAt = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())"),
+                    discountPercent = table.Column<double>(type: "float", nullable: true, defaultValueSql: "((0))"),
+                    price = table.Column<decimal>(type: "money", nullable: false),
+                    productNum = table.Column<int>(type: "int", nullable: false),
+                    productOptionId = table.Column<int>(type: "int", nullable: false),
+                    orderId = table.Column<int>(type: "int", nullable: false),
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderDetail", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_OrderDetail_Order",
+                        column: x => x.orderId,
+                        principalTable: "Order",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_OrderDetail_ProductOption",
+                        column: x => x.productOptionId,
+                        principalTable: "ProductOption",
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -720,7 +717,7 @@ namespace PandaShoppingAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     productOptionId = table.Column<int>(type: "int", nullable: false),
                     imageId = table.Column<int>(type: "int", nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -729,14 +726,12 @@ namespace PandaShoppingAPI.Migrations
                         name: "FK_ProductOptionImage_Image",
                         column: x => x.imageId,
                         principalTable: "Image",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_ProductOptionImage_ProductOption",
                         column: x => x.productOptionId,
                         principalTable: "ProductOption",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -748,7 +743,7 @@ namespace PandaShoppingAPI.Migrations
                     productOptionId = table.Column<int>(type: "int", nullable: false),
                     propertyId = table.Column<int>(type: "int", nullable: false),
                     value = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -757,43 +752,11 @@ namespace PandaShoppingAPI.Migrations
                         name: "FK_ProductOptionValue_ProductOption",
                         column: x => x.productOptionId,
                         principalTable: "ProductOption",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_ProductOptionValue_Property",
                         column: x => x.propertyId,
                         principalTable: "Property",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SubOrderDetail",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    createdAt = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())"),
-                    discountPercent = table.Column<double>(type: "float", nullable: true, defaultValueSql: "((0))"),
-                    price = table.Column<decimal>(type: "money", nullable: false),
-                    productNum = table.Column<int>(type: "int", nullable: false),
-                    productOptionId = table.Column<int>(type: "int", nullable: false),
-                    subOrderId = table.Column<int>(type: "int", nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SubOrderDetail", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_OrderDetail_ProductOption",
-                        column: x => x.productOptionId,
-                        principalTable: "ProductOption",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_SubOrderDetail_SubOrder",
-                        column: x => x.subOrderId,
-                        principalTable: "SubOrder",
                         principalColumn: "id");
                 });
 
@@ -809,7 +772,7 @@ namespace PandaShoppingAPI.Migrations
                     manufactureDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     expireDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     arriveDate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -834,7 +797,7 @@ namespace PandaShoppingAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     productBatchId = table.Column<int>(type: "int", nullable: false),
                     remainingNumber = table.Column<int>(type: "int", nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -855,7 +818,7 @@ namespace PandaShoppingAPI.Migrations
                     warehouseOutputId = table.Column<int>(type: "int", nullable: false),
                     productBatchId = table.Column<int>(type: "int", nullable: false),
                     number = table.Column<int>(type: "int", nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -913,6 +876,12 @@ namespace PandaShoppingAPI.Migrations
                 column: "deliveryMethodId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Delivery_orderId",
+                table: "Delivery",
+                column: "orderId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Feedback_parentId",
                 table: "Feedback",
                 column: "parentId");
@@ -933,14 +902,29 @@ namespace PandaShoppingAPI.Migrations
                 column: "orderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Order__paymentMethodId",
-                table: "Order_",
+                name: "IX_Invoice_paymentMethodId",
+                table: "Invoice",
                 column: "paymentMethodId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Order__userId",
-                table: "Order_",
+                name: "IX_Order_PaymentMethodid",
+                table: "Order",
+                column: "PaymentMethodid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Order_userId",
+                table: "Order",
                 column: "userId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderDetail_orderId",
+                table: "OrderDetail",
+                column: "orderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderDetail_productOptionId",
+                table: "OrderDetail",
+                column: "productOptionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Permission_resourceId",
@@ -1062,26 +1046,6 @@ namespace PandaShoppingAPI.Migrations
                 column: "propertyTemplateId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SubOrder_deliveryId",
-                table: "SubOrder",
-                column: "deliveryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SubOrder_orderId",
-                table: "SubOrder",
-                column: "orderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SubOrderDetail_productOptionId",
-                table: "SubOrderDetail",
-                column: "productOptionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SubOrderDetail_subOrderId",
-                table: "SubOrderDetail",
-                column: "subOrderId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_User__cartId",
                 table: "User_",
                 column: "cartId");
@@ -1133,13 +1097,16 @@ namespace PandaShoppingAPI.Migrations
                 name: "CartDetail");
 
             migrationBuilder.DropTable(
+                name: "Delivery");
+
+            migrationBuilder.DropTable(
                 name: "DeliveryPartner");
 
             migrationBuilder.DropTable(
                 name: "Feedback");
 
             migrationBuilder.DropTable(
-                name: "Invoice");
+                name: "OrderDetail");
 
             migrationBuilder.DropTable(
                 name: "Permission");
@@ -1166,22 +1133,22 @@ namespace PandaShoppingAPI.Migrations
                 name: "PropertyTemplateValue");
 
             migrationBuilder.DropTable(
-                name: "SubOrderDetail");
-
-            migrationBuilder.DropTable(
                 name: "UserRole");
 
             migrationBuilder.DropTable(
                 name: "WarehouseOutputDetail");
 
             migrationBuilder.DropTable(
+                name: "Order");
+
+            migrationBuilder.DropTable(
                 name: "Resource");
 
             migrationBuilder.DropTable(
-                name: "PropertyTemplate");
+                name: "DeliveryMethod");
 
             migrationBuilder.DropTable(
-                name: "SubOrder");
+                name: "PropertyTemplate");
 
             migrationBuilder.DropTable(
                 name: "Role");
@@ -1193,22 +1160,16 @@ namespace PandaShoppingAPI.Migrations
                 name: "WarehouseOutput");
 
             migrationBuilder.DropTable(
+                name: "Invoice");
+
+            migrationBuilder.DropTable(
                 name: "Property");
-
-            migrationBuilder.DropTable(
-                name: "Delivery");
-
-            migrationBuilder.DropTable(
-                name: "Order_");
 
             migrationBuilder.DropTable(
                 name: "ProductOption");
 
             migrationBuilder.DropTable(
                 name: "WarehouseInput");
-
-            migrationBuilder.DropTable(
-                name: "DeliveryMethod");
 
             migrationBuilder.DropTable(
                 name: "PaymentMethod");

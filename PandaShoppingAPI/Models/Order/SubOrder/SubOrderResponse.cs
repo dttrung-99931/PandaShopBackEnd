@@ -10,14 +10,14 @@ using System.Linq;
 
 namespace PandaShoppingAPI.Models
 {
-    public class SubOrderResponse : BaseModel<SubOrder, SubOrderModel>
+    public class OrderDetailResponse : BaseModel<Order, OrderDetailModel>
     {
         public virtual DeliveryResponse delivery { get; set; }
-        [JsonProperty("subOrderDetails")]
-        public virtual List<SubOrderDetailResponse> SubOrderDetail { get; set; }
+        [JsonProperty("OrderDetailDetails")]
+        public virtual List<OrderDetailDetailResponse> OrderDetailDetail { get; set; }
     }
 
-    public class SubOrderDetailResponse : BaseModel<SubOrderDetail, SubOrderDetailResponse>
+    public class OrderDetailDetailResponse : BaseModel<OrderDetail, OrderDetailDetailResponse>
     {
         public DateTime? createdAt { get; set; }
         public double? discountPercent { get; set; }
@@ -26,13 +26,13 @@ namespace PandaShoppingAPI.Models
         public ProductOptionResponse productOption { get; set; }
         public ShortProductResponse product { get; set; }
 
-        protected override void CustomMapping(IMappingExpression<SubOrderDetail, SubOrderDetailResponse> mappingExpression, IConfiguration config)
+        protected override void CustomMapping(IMappingExpression<OrderDetail, OrderDetailDetailResponse> mappingExpression, IConfiguration config)
         {
             mappingExpression.ForMember
             (
-                (SubOrderDetailResponse detail) => detail.product,
+                (OrderDetailDetailResponse detail) => detail.product,
                 option => option.MapFrom(
-                        (SubOrderDetail entity) => Mapper.Map<ShortProductResponse>(entity.productOption.product)
+                        (OrderDetail entity) => Mapper.Map<ShortProductResponse>(entity.productOption.product)
                 )
             );
         }

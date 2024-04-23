@@ -1,5 +1,5 @@
 ﻿using System;
-namespace PandaShoppingAPI.Models.Order
+namespace PandaShoppingAPI.Models
 {
 	public class AvailableProductOptionRespone
 	{

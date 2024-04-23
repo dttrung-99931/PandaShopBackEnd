@@ -9,7 +9,7 @@ using PandaShoppingAPI.Utils;
 namespace PandaShoppingAPI.Controllers
 {
     [Route("v1/[controller]")]
-    public class OrdersController : CrudApiController2<Order_, OrderModel,
+    public class OrdersController : CrudApiController2<Order, OrderModel,
             OrderResponseModel, IOrderService, OrderFilter>
     {
         public OrdersController(IOrderService service, IHttpContextAccessor httpContextAccessor) : base(service, httpContextAccessor)
