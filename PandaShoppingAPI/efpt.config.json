@@ -54,7 +54,7 @@
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[Order_]"
+         "Name": "[dbo].[Order]"
       },
       {
          "HasPrimaryKey": true,

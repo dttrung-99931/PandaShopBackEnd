@@ -7,7 +7,7 @@ namespace PandaShoppingAPI.Services
 {
     public interface IOrderProcessService
     {
-        void StartProcessingOrder(int orderId);
-        void CompleteProcessingOrder(int orderId);
+        void StartProcessingOrder(int OrderDetailId);
+        void CompleteProcessingOrder(int OrderDetailId);
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Models
 {
-    public class SubOrderDetailModel
+    public class OrderDetailDetailModel
     {
         public DateTime? createdAt { get; set; }
         public double? discountPercent { get; set; }

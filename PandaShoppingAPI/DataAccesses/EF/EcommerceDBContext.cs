@@ -26,7 +26,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public virtual DbSet<Feedback> Feedback { get; set; }
         public virtual DbSet<Image> Image { get; set; }
         public virtual DbSet<Invoice> Invoice { get; set; }
-        public virtual DbSet<Order_> Order_ { get; set; }
         public virtual DbSet<PaymentMethod> PaymentMethod { get; set; }
         public virtual DbSet<Permission> Permission { get; set; }
         public virtual DbSet<Product> Product { get; set; }
@@ -44,8 +43,8 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public virtual DbSet<Resource> Resource { get; set; }
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<Shop> Shop { get; set; }
-        public virtual DbSet<SubOrder> SubOrder { get; set; }
-        public virtual DbSet<SubOrderDetail> SubOrderDetail { get; set; }
+        public virtual DbSet<Order> Order { get; set; }
+        public virtual DbSet<OrderDetail> OrderDetail { get; set; }
         public virtual DbSet<Template> Template { get; set; }
         public virtual DbSet<UserRole> UserRole { get; set; }
         public virtual DbSet<User_> User_ { get; set; }
@@ -91,7 +90,8 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.HasOne(d => d.user)
                     .WithMany(p => p.Address)
                     .HasForeignKey(d => d.userId)
-                    .HasConstraintName("FK_Address_User");
+                    .HasConstraintName("FK_Address_User")
+                    .OnDelete(DeleteBehavior.NoAction);
 
 
                 entity.Property(e => e.isDeleted)
@@ -107,12 +107,14 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.HasOne(d => d.cart)
                     .WithMany(p => p.CartDetail)
                     .HasForeignKey(d => d.cartId)
-                    .HasConstraintName("FK_CartDetail_Cart");
+                    .HasConstraintName("FK_CartDetail_Cart")
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(d => d.productOption)
                     .WithMany(p => p.CartDetail)
                     .HasForeignKey(d => d.productOptionId)
-                    .HasConstraintName("FK_CartDetail_ProductOption");
+                    .HasConstraintName("FK_CartDetail_ProductOption")
+                    .OnDelete(DeleteBehavior.NoAction);
 
 
                 entity.Property(e => e.isDeleted)
@@ -136,17 +138,20 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.HasOne(d => d.image)
                     .WithMany(p => p.Category)
                     .HasForeignKey(d => d.imageId)
-                    .HasConstraintName("FK_Category_Image");
+                    .HasConstraintName("FK_Category_Image")
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(d => d.parent)
                     .WithMany(p => p.Inverseparent)
                     .HasForeignKey(d => d.parentId)
-                    .HasConstraintName("FK_Category_Category");
+                    .HasConstraintName("FK_Category_Category")
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(d => d.template)
                     .WithMany(p => p.Category)
                     .HasForeignKey(d => d.templateId)
-                    .HasConstraintName("FK_Category_Template");
+                    .HasConstraintName("FK_Category_Template")
+                    .OnDelete(DeleteBehavior.NoAction);
 
 
                 entity.Property(e => e.isDeleted)
@@ -166,14 +171,20 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.HasOne(d => d.address)
                     .WithMany(p => p.Delivery)
                     .HasForeignKey(d => d.addressId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Delivery_Address");
+                    .HasConstraintName("FK_Delivery_Address")
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(d => d.deliveryMethod)
                     .WithMany(p => p.Delivery)
                     .HasForeignKey(d => d.deliveryMethodId)
-                    .HasConstraintName("FK_Delivery_DeliveryPartner");
+                    .HasConstraintName("FK_Delivery_DeliveryPartner")
+                    .OnDelete(DeleteBehavior.NoAction);
 
+                entity.HasOne(d => d.order)
+                    .WithOne(p => p.delivery)
+                    .HasForeignKey<Delivery>(d => d.orderId)
+                    .HasConstraintName("FK_Delivery_Order")
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.Property(e => e.isDeleted)
                     .HasDefaultValue(false);
@@ -224,19 +235,20 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.HasOne(d => d.parent)
                     .WithMany(p => p.Inverseparent)
                     .HasForeignKey(d => d.parentId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Feedback_Feedback");
+                    .HasConstraintName("FK_Feedback_Feedback")
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(d => d.product)
                     .WithMany(p => p.Feedback)
                     .HasForeignKey(d => d.productId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Feedback_Product");
+                    .HasConstraintName("FK_Feedback_Product")
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(d => d.user)
                     .WithMany(p => p.Feedback)
                     .HasForeignKey(d => d.userId)
-                    .HasConstraintName("FK_Feedback_User");
+                    .HasConstraintName("FK_Feedback_User")
+                    .OnDelete(DeleteBehavior.NoAction);
 
 
                 entity.Property(e => e.isDeleted)
@@ -267,44 +279,16 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
                 entity.Property(e => e.note).HasMaxLength(200);
 
-                entity.HasOne(d => d.order)
-                    .WithMany(p => p.Invoice)
-                    .HasForeignKey(d => d.orderId)
-                    .HasConstraintName("FK_Invoice_Order");
-
-
                 entity.Property(e => e.isDeleted)
                     .HasDefaultValue(false);
-            });
-
-            modelBuilder.Entity<Order_>(entity =>
-            {
-                entity.HasIndex(e => e.paymentMethodId, "IX_Order__paymentMethodId");
-
-                entity.HasIndex(e => e.userId, "IX_Order__userId");
-
-                entity.Property(e => e.createdAt)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.note).HasMaxLength(200);
-
-                entity.Property(e => e.updatedAt).HasColumnType("datetime");
 
                 entity.HasOne(d => d.paymentMethod)
-                    .WithMany(p => p.Order_)
-                    .HasForeignKey(d => d.paymentMethodId)
-                    .HasConstraintName("FK_Order_PaymentMethod");
-
-                entity.HasOne(d => d.user)
-                    .WithMany(p => p.Order_)
-                    .HasForeignKey(d => d.userId)
-                    .HasConstraintName("FK_Order_User");
-
-
-                entity.Property(e => e.isDeleted)
-                    .HasDefaultValue(false);
+                   .WithMany(p => p.Invoice)
+                   .HasForeignKey(d => d.paymentMethodId)
+                   .HasConstraintName("FK_Invoice_PaymentMethod")
+                   .OnDelete(DeleteBehavior.NoAction);
             });
+
 
             modelBuilder.Entity<PaymentMethod>(entity =>
             {
@@ -334,7 +318,8 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.HasOne(d => d.resource)
                     .WithMany(p => p.Permission)
                     .HasForeignKey(d => d.resourceId)
-                    .HasConstraintName("FK_Permission_Resource");
+                    .HasConstraintName("FK_Permission_Resource")
+                    .OnDelete(DeleteBehavior.NoAction);
 
 
                 entity.Property(e => e.isDeleted)
@@ -358,17 +343,20 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.HasOne(d => d.address)
                     .WithMany(p => p.Product)
                     .HasForeignKey(d => d.addressId)
-                    .HasConstraintName("FK_Product_Address");
+                    .HasConstraintName("FK_Product_Address")
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(d => d.category)
                     .WithMany(p => p.Product)
                     .HasForeignKey(d => d.categoryId)
-                    .HasConstraintName("FK_Product_Category");
+                    .HasConstraintName("FK_Product_Category")
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(d => d.shop)
                     .WithMany(p => p.Product)
                     .HasForeignKey(d => d.shopId)
-                    .HasConstraintName("FK_Product_Shop");
+                    .HasConstraintName("FK_Product_Shop")
+                    .OnDelete(DeleteBehavior.NoAction);
 
 
                 entity.Property(e => e.isDeleted)
@@ -390,14 +378,14 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.HasOne(d => d.productOption)
                     .WithMany(p => p.ProductBatch)
                     .HasForeignKey(d => d.productOptionId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ProductBatch_ProductOption");
+                    .HasConstraintName("FK_ProductBatch_ProductOption")
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(d => d.warehouseInput)
                     .WithMany(p => p.ProductBatch)
                     .HasForeignKey(d => d.warehouseInputId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ProductBatch_WarehouseInput");
+                    .HasConstraintName("FK_ProductBatch_WarehouseInput")
+                    .OnDelete(DeleteBehavior.NoAction);
 
 
                 entity.Property(e => e.isDeleted)
@@ -411,8 +399,8 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.HasOne(d => d.productBatch)
                     .WithMany(p => p.ProductBatchInventory)
                     .HasForeignKey(d => d.productBatchId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ProductBatchInventory_ProductBatch");
+                    .HasConstraintName("FK_ProductBatchInventory_ProductBatch")
+                    .OnDelete(DeleteBehavior.NoAction);
 
 
                 entity.Property(e => e.isDeleted)
@@ -428,14 +416,14 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.HasOne(d => d.deliveryMethod)
                     .WithMany(p => p.ProductDeliveryMethod)
                     .HasForeignKey(d => d.deliveryMethodId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ProductDeliveryMethod_DeliveryMethod");
+                    .HasConstraintName("FK_ProductDeliveryMethod_DeliveryMethod")
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(d => d.product)
                     .WithMany(p => p.ProductDeliveryMethod)
                     .HasForeignKey(d => d.productId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ProductDeliveryMethod_Product");
+                    .HasConstraintName("FK_ProductDeliveryMethod_Product")
+                    .OnDelete(DeleteBehavior.NoAction);
 
 
                 entity.Property(e => e.isDeleted)
@@ -451,12 +439,14 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.HasOne(d => d.image)
                     .WithMany(p => p.ProductImage)
                     .HasForeignKey(d => d.imageId)
-                    .HasConstraintName("FK_ProductImage_Image");
+                    .HasConstraintName("FK_ProductImage_Image")
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(d => d.product)
                     .WithMany(p => p.ProductImage)
                     .HasForeignKey(d => d.productId)
-                    .HasConstraintName("FK_ProductImage_Product");
+                    .HasConstraintName("FK_ProductImage_Product")
+                    .OnDelete(DeleteBehavior.NoAction);
 
 
                 entity.Property(e => e.isDeleted)
@@ -474,7 +464,8 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.HasOne(d => d.product)
                     .WithMany(p => p.ProductOption)
                     .HasForeignKey(d => d.productId)
-                    .HasConstraintName("FK_ProductOption_Product");
+                    .HasConstraintName("FK_ProductOption_Product")
+                    .OnDelete(DeleteBehavior.NoAction);
 
 
                 entity.Property(e => e.isDeleted)
@@ -490,12 +481,14 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.HasOne(d => d.image)
                     .WithMany(p => p.ProductOptionImage)
                     .HasForeignKey(d => d.imageId)
-                    .HasConstraintName("FK_ProductOptionImage_Image");
+                    .HasConstraintName("FK_ProductOptionImage_Image")
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(d => d.productOption)
                     .WithMany(p => p.ProductOptionImage)
                     .HasForeignKey(d => d.productOptionId)
-                    .HasConstraintName("FK_ProductOptionImage_ProductOption");
+                    .HasConstraintName("FK_ProductOptionImage_ProductOption")
+                    .OnDelete(DeleteBehavior.NoAction);
 
 
                 entity.Property(e => e.isDeleted)
@@ -515,12 +508,14 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.HasOne(d => d.productOption)
                     .WithMany(p => p.ProductOptionValue)
                     .HasForeignKey(d => d.productOptionId)
-                    .HasConstraintName("FK_ProductOptionValue_ProductOption");
+                    .HasConstraintName("FK_ProductOptionValue_ProductOption")
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(d => d.property)
                     .WithMany(p => p.ProductOptionValue)
                     .HasForeignKey(d => d.propertyId)
-                    .HasConstraintName("FK_ProductOptionValue_Property");
+                    .HasConstraintName("FK_ProductOptionValue_Property")
+                    .OnDelete(DeleteBehavior.NoAction);
 
 
                 entity.Property(e => e.isDeleted)
@@ -540,12 +535,14 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.HasOne(d => d.product)
                     .WithMany(p => p.ProductPropertyValue)
                     .HasForeignKey(d => d.productId)
-                    .HasConstraintName("FK_ProductPropertyValue_Product");
+                    .HasConstraintName("FK_ProductPropertyValue_Product")
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(d => d.property)
                     .WithMany(p => p.ProductPropertyValue)
                     .HasForeignKey(d => d.propertyId)
-                    .HasConstraintName("FK_ProductPropertyValue_Property");
+                    .HasConstraintName("FK_ProductPropertyValue_Property")
+                    .OnDelete(DeleteBehavior.NoAction);
 
 
                 entity.Property(e => e.isDeleted)
@@ -586,12 +583,14 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.HasOne(d => d.property)
                     .WithMany(p => p.PropertyTemplate)
                     .HasForeignKey(d => d.propertyId)
-                    .HasConstraintName("FK_PropertyTemplate_Property");
+                    .HasConstraintName("FK_PropertyTemplate_Property")
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(d => d.template)
                     .WithMany(p => p.PropertyTemplate)
                     .HasForeignKey(d => d.templateId)
-                    .HasConstraintName("FK_PropertyTemplate_Template");
+                    .HasConstraintName("FK_PropertyTemplate_Template")
+                    .OnDelete(DeleteBehavior.NoAction);
 
 
                 entity.Property(e => e.isDeleted)
@@ -609,7 +608,8 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.HasOne(d => d.propertyTemplate)
                     .WithMany(p => p.PropertyTemplateValue)
                     .HasForeignKey(d => d.propertyTemplateId)
-                    .HasConstraintName("FK_PropertyTemplateValue_PropertyTemplate");
+                    .HasConstraintName("FK_PropertyTemplateValue_PropertyTemplate")
+                    .OnDelete(DeleteBehavior.NoAction);
 
 
                 entity.Property(e => e.isDeleted)
@@ -651,34 +651,31 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
-            modelBuilder.Entity<SubOrder>(entity =>
+            modelBuilder.Entity<Order>(entity =>
             {
-                entity.HasIndex(e => e.deliveryId, "IX_SubOrder_deliveryId");
+                entity.HasOne(d => d.user)
+                    .WithMany(p => p.Order)
+                    .HasForeignKey(d => d.userId)
+                    .HasConstraintName("FK_Order_User")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
 
-                entity.HasIndex(e => e.orderId, "IX_SubOrder_orderId");
-
-                entity.HasOne(d => d.delivery)
-                    .WithMany(p => p.SubOrder)
-                    .HasForeignKey(d => d.deliveryId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_SubOrder_Delivery");
-
-                entity.HasOne(d => d.order)
-                    .WithMany(p => p.SubOrder)
-                    .HasForeignKey(d => d.orderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_SubOrder_Order");
-
+                entity.HasOne(d => d.invoice)
+                    .WithMany(p => p.Order)
+                    .HasForeignKey(d => d.userId)
+                    .HasConstraintName("FK_Order_Invoice")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
 
                 entity.Property(e => e.isDeleted)
                     .HasDefaultValue(false);
             });
 
-            modelBuilder.Entity<SubOrderDetail>(entity =>
+            modelBuilder.Entity<OrderDetail>(entity =>
             {
-                entity.HasIndex(e => e.productOptionId, "IX_SubOrderDetail_productOptionId");
+                entity.HasIndex(e => e.productOptionId, "IX_OrderDetail_productOptionId");
 
-                entity.HasIndex(e => e.subOrderId, "IX_SubOrderDetail_subOrderId");
+                entity.HasIndex(e => e.orderId, "IX_OrderDetail_orderId");
 
                 entity.Property(e => e.createdAt)
                     .HasColumnType("datetime")
@@ -689,15 +686,16 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.Property(e => e.price).HasColumnType("money");
 
                 entity.HasOne(d => d.productOption)
-                    .WithMany(p => p.SubOrderDetail)
+                    .WithMany(p => p.OrderDetail)
                     .HasForeignKey(d => d.productOptionId)
-                    .HasConstraintName("FK_OrderDetail_ProductOption");
+                    .HasConstraintName("FK_OrderDetail_ProductOption")
+                    .OnDelete(DeleteBehavior.NoAction);
 
-                entity.HasOne(d => d.subOrder)
-                    .WithMany(p => p.SubOrderDetail)
-                    .HasForeignKey(d => d.subOrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_SubOrderDetail_SubOrder");
+                entity.HasOne(d => d.order)
+                    .WithMany(p => p.OrderDetail)
+                    .HasForeignKey(d => d.orderId)
+                    .HasConstraintName("FK_OrderDetail_Order")
+                    .OnDelete(DeleteBehavior.NoAction);
 
 
                 entity.Property(e => e.isDeleted)
@@ -713,12 +711,14 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.HasOne(d => d.role)
                     .WithMany(p => p.UserRole)
                     .HasForeignKey(d => d.roleId)
-                    .HasConstraintName("FK_UserRole_Role");
+                    .HasConstraintName("FK_UserRole_Role")
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(d => d.user)
                     .WithMany(p => p.UserRole)
                     .HasForeignKey(d => d.userId)
-                    .HasConstraintName("FK_UserRole_User");
+                    .HasConstraintName("FK_UserRole_User")
+                    .OnDelete(DeleteBehavior.NoAction);
 
 
                 entity.Property(e => e.isDeleted)
@@ -758,13 +758,14 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.HasOne(d => d.cart)
                     .WithMany(p => p.User_)
                     .HasForeignKey(d => d.cartId)
-                    .HasConstraintName("FK_User_Cart");
+                    .HasConstraintName("FK_User_Cart")
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(d => d.shop)
                     .WithMany(p => p.User_)
                     .HasForeignKey(d => d.shopId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK_User_Shop");
+                    .HasConstraintName("FK_User_Shop")
+                    .OnDelete(DeleteBehavior.NoAction);
 
 
                 entity.Property(e => e.isDeleted)
@@ -784,14 +785,14 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.HasOne(d => d.address)
                     .WithMany(p => p.Warehouse)
                     .HasForeignKey(d => d.addressId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Warehouse_Address");
+                    .HasConstraintName("FK_Warehouse_Address")
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(d => d.shop)
                     .WithMany(p => p.Warehouse)
                     .HasForeignKey(d => d.shopId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Warehouse_Shop");
+                    .HasConstraintName("FK_Warehouse_Shop")
+                    .OnDelete(DeleteBehavior.NoAction);
 
 
                 entity.Property(e => e.isDeleted)
@@ -807,8 +808,8 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.HasOne(d => d.warehouse)
                     .WithMany(p => p.WarehouseInput)
                     .HasForeignKey(d => d.warehouseId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_WarehouseInput_Warehouse");
+                    .HasConstraintName("FK_WarehouseInput_Warehouse")
+                    .OnDelete(DeleteBehavior.NoAction);
 
 
                 entity.Property(e => e.isDeleted)
@@ -833,14 +834,14 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.HasOne(d => d.productBatch)
                     .WithMany(p => p.WarehouseOutputDetail)
                     .HasForeignKey(d => d.productBatchId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_WarehouseOutputDetail_ProductBatch");
+                    .HasConstraintName("FK_WarehouseOutputDetail_ProductBatch")
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(d => d.warehouseOutput)
                     .WithMany(p => p.WarehouseOutputDetail)
                     .HasForeignKey(d => d.warehouseOutputId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_WarehouseOutputDetail_WarehouseOutput");
+                    .HasConstraintName("FK_WarehouseOutputDetail_WarehouseOutput")
+                    .OnDelete(DeleteBehavior.NoAction);
 
 
                 entity.Property(e => e.isDeleted)

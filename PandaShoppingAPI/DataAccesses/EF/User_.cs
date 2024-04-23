@@ -5,14 +5,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
 {
     public partial class User_ : BaseEntity
     {
-        public User_()
-        {
-            Address = new HashSet<Address>();
-            Feedback = new HashSet<Feedback>();
-            Order_ = new HashSet<Order_>();
-            UserRole = new HashSet<UserRole>();
-        }
-
         public int id { get; set; }
         public string name { get; set; }
         public string phone { get; set; }
@@ -28,7 +20,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public virtual Shop shop { get; set; }
         public virtual ICollection<Address> Address { get; set; }
         public virtual ICollection<Feedback> Feedback { get; set; }
-        public virtual ICollection<Order_> Order_ { get; set; }
+        public virtual ICollection<Order> Order { get; set; }
         public virtual ICollection<UserRole> UserRole { get; set; }
     }
 }

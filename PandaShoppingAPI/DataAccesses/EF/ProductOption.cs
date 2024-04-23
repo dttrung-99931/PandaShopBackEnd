@@ -11,7 +11,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
             ProductBatch = new HashSet<ProductBatch>();
             ProductOptionImage = new HashSet<ProductOptionImage>();
             ProductOptionValue = new HashSet<ProductOptionValue>();
-            SubOrderDetail = new HashSet<SubOrderDetail>();
+            OrderDetail = new HashSet<OrderDetail>();
         }
 
         public int id { get; set; }
@@ -25,6 +25,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public virtual ICollection<ProductBatch> ProductBatch { get; set; }
         public virtual ICollection<ProductOptionImage> ProductOptionImage { get; set; }
         public virtual ICollection<ProductOptionValue> ProductOptionValue { get; set; }
-        public virtual ICollection<SubOrderDetail> SubOrderDetail { get; set; }
+        public virtual ICollection<OrderDetail> OrderDetail { get; set; }
     }
 }

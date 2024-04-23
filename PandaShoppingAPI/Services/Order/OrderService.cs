@@ -1,7 +1,6 @@
 ﻿using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
 using PandaShoppingAPI.Models;
-using PandaShoppingAPI.Models.Order;
 using PandaShoppingAPI.Utils;
 using PandaShoppingAPI.Utils.Exceptions;
 using System;
@@ -12,32 +11,32 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Services
 {
-    public partial class OrderService : BaseService<IOrderRepo, Order_, OrderModel, OrderFilter>, 
+    public partial class OrderService : BaseService<IOrderRepo, Order, OrderModel, OrderFilter>, 
         IOrderService   
     {
-        private readonly ISubOrderRepo _subOrderRepo;
-        private readonly ISubOrderRepo _subOrderdetailRepo;
+        private readonly IOrderDetailRepo _orderDetailRepo;
+        private readonly IOrderDetailRepo _OrderDetaildetailRepo;
         private readonly IProductBatchInventoryRepo _productBatchInvRepo;
         private readonly IWarehouseOutputRepo _warehouseOutputRepo;
         private readonly ICartDetailRepo _cartDetailRepo;
 
         public OrderService(IOrderRepo repo,
-            ISubOrderRepo subOrderRepo,
-            ISubOrderRepo subOrderdetailRepo,
+            IOrderDetailRepo OrderDetailRepo,
+            IOrderDetailRepo OrderDetaildetailRepo,
             IProductBatchInventoryRepo productBatchInvRepo,
             IWarehouseOutputRepo warehouseOutputRepo,
             ICartDetailRepo cartDetailRepo) : base(repo)
         {
-            _subOrderRepo = subOrderRepo;
-            _subOrderdetailRepo = subOrderdetailRepo;
+            _orderDetailRepo = OrderDetailRepo;
+            _OrderDetaildetailRepo = OrderDetaildetailRepo;
             _productBatchInvRepo = productBatchInvRepo;
             _warehouseOutputRepo = warehouseOutputRepo;
             _cartDetailRepo = cartDetailRepo;
         }
 
-        public override IQueryable<Order_> Fill(OrderFilter filter)
+        public override IQueryable<Order> Fill(OrderFilter filter)
         {
-            IQueryable<Order_> orders = base.Fill(filter);
+            IQueryable<Order> orders = base.Fill(filter);
 
             orders = FilterByRole(orders);
 
@@ -48,9 +47,8 @@ namespace PandaShoppingAPI.Services
 
             if (filter.shopId != null)
             {
-                orders = orders.Where((order) => order.SubOrder.Any(
-                    (subOrder) => subOrder.SubOrderDetail.Any(
-                        (detail) => detail.productOption.product.shopId == User.ShopId)));
+                orders = orders.Where((order) => order.OrderDetail.Any(
+                    (detail) => detail.productOption.product.shopId == User.ShopId));
             }
 
             if (filter.status != null)
@@ -61,16 +59,15 @@ namespace PandaShoppingAPI.Services
             return orders;
         }
 
-        private IQueryable<Order_> FilterByRole(IQueryable<Order_> orders)
+        private IQueryable<Order> FilterByRole(IQueryable<Order> orders)
         {
             if (!User.IsAdmin)
             {
                 if (User.IsShop)
                 {
                     orders = orders.Where(
-                        (order) => order.userId == User.UserId || order.SubOrder.Any(
-                                (subOrder) => subOrder.SubOrderDetail.Any(
-                                    (detail) => detail.productOption.product.shopId == User.ShopId)));
+                        (order) => order.userId == User.UserId || order.OrderDetail.Any(
+                            (detail) => detail.productOption.product.shopId == User.ShopId));
 
                 }
                 else
@@ -87,29 +84,25 @@ namespace PandaShoppingAPI.Services
             ValidateAvailableInventory(requestModel);
         }
 
-        public override Order_ Insert(OrderModel requestModel)
+        public override Order Insert(OrderModel requestModel)
         {
             ValidateInsert(requestModel);
             OutputWarehouse(requestModel);
-            Order_ order = CreateOrder(requestModel);
+            Order order = CreateOrder(requestModel);
             _cartDetailRepo.DeleteCartItems(
                 User.CartId,
-                requestModel.subOrders.SelectMany((subOrder) => subOrder.subOrderDetails.Select((detail) => detail.productOptionId))
+                requestModel.OrderDetails.SelectMany((OrderDetail) => OrderDetail.OrderDetailDetails.Select((detail) => detail.productOptionId))
              );
             return order;
         }
 
-        private Order_ CreateOrder(OrderModel requestModel)
+        private Order CreateOrder(OrderModel requestModel)
         {
-            Order_ order = MapInsertEntity(requestModel);
-            order.status = OrderStatus.Created;
-            _repo.Insert(order);
-            List<SubOrder> subOrders = requestModel.subOrders.Select((subOrder) =>
-                new SubOrder()
+            List<Order> orders = requestModel.OrderDetails.Select((OrderDetail) =>
+                new Order()
                 {
-                    orderId = order.id,
-                    SubOrderDetail = subOrder.subOrderDetails.Select(
-                        (detail) => new SubOrderDetail
+                    OrderDetail = OrderDetail.OrderDetailDetails.Select(
+                        (detail) => new OrderDetail
                         {
                             productOptionId = detail.productOptionId,
                             productNum = detail.productNum,
@@ -118,20 +111,20 @@ namespace PandaShoppingAPI.Services
                         }).ToList(),
                     delivery = new Delivery
                     {
-                        addressId = subOrder.addressId,
-                        deliveryMethodId = subOrder.deliveryMethodId,
+                        addressId = OrderDetail.addressId,
+                        deliveryMethodId = OrderDetail.deliveryMethodId,
                         status = DeliveryStatus.Created,
                     }
                 }
             ).ToList();
-            _subOrderRepo.InsertRange(subOrders);
-            return order;
+            _orderDetailRepo.InsertRange(orders);
+            return null;
         }
 
         private void ValidateAvailableInventory(OrderModel requestModel)
         {
-            List<int> productOptionIds = requestModel.subOrders
-                .SelectMany((subOrder) => subOrder.subOrderDetails
+            List<int> productOptionIds = requestModel.OrderDetails
+                .SelectMany((OrderDetail) => OrderDetail.OrderDetailDetails
                     .Select((subDetail) => subDetail.productOptionId)).ToList();
             List<AvailableProductOptionRespone> availableOpotions = _productBatchInvRepo
                 .Where((batchInven) => productOptionIds.Contains(batchInven.productBatch.productOptionId))
@@ -152,9 +145,9 @@ namespace PandaShoppingAPI.Services
             Dictionary<int, int> availableOptionDic = availableOpotions
                 .ToDictionary((x) => x.productOptionId, (x) => x.remainingNumber);
 
-            foreach (SubOrderModel subOrder in requestModel.subOrders)
+            foreach (OrderDetailModel OrderDetail in requestModel.OrderDetails)
             {
-                foreach (SubOrderDetailModel detail in subOrder.subOrderDetails)
+                foreach (OrderDetailDetailModel detail in OrderDetail.OrderDetailDetails)
                 {
                     if (!availableOptionDic.ContainsKey(detail.productOptionId) ||
                         availableOptionDic[detail.productOptionId] < detail.productNum)
@@ -170,8 +163,8 @@ namespace PandaShoppingAPI.Services
         private void OutputWarehouse(OrderModel requestModel)
         {
 
-            List<int> productOptionIds = requestModel.subOrders
-                .SelectMany((subOrder) => subOrder.subOrderDetails
+            List<int> productOptionIds = requestModel.OrderDetails
+                .SelectMany((OrderDetail) => OrderDetail.OrderDetailDetails
                     .Select((subDetail) => subDetail.productOptionId)).ToList();
             List<IGrouping<int, ProductBatchInventory>> optionInvenGroups = _productBatchInvRepo
                 .Where((batchInven) => productOptionIds.Contains(batchInven.productBatch.productOptionId) && batchInven.remainingNumber > 0)
@@ -182,9 +175,9 @@ namespace PandaShoppingAPI.Services
             List<WarehouseOutputDetail> outputDetails = new List<WarehouseOutputDetail>();
             List<ProductBatchInventory> updatedBatchInvens = new List<ProductBatchInventory>();
 
-            foreach (SubOrderModel subOrder in requestModel.subOrders)
+            foreach (OrderDetailModel OrderDetail in requestModel.OrderDetails)
             {
-                foreach (SubOrderDetailModel detail in subOrder.subOrderDetails)
+                foreach (OrderDetailDetailModel detail in OrderDetail.OrderDetailDetails)
                 {
                     IGrouping<int, ProductBatchInventory> group = optionInvenGroups.First(
                         (group) => group.Key == detail.productOptionId);
