@@ -98,13 +98,12 @@
     <None Remove="Services\Delivery\DeliveryMethod\" />
     <None Remove="DataAccesses\Repos\Delivery\DeliveryMethod\" />
     <None Remove="DataAccesses\Repos\Delivery\ProductDeliveryMethod\" />
-    <None Remove="DataAccesses\Repos\Order\SubOrder\" />
-    <None Remove="DataAccesses\Repos\Order\SubOrderDetail\" />
     <None Remove="DataAccesses\EF\Base\" />
     <None Remove="Models\Order\Order\" />
-    <None Remove="Models\Order\SubOrder\" />
     <None Remove="DataAccesses\EF\Enums\" />
     <None Remove="Services\Order\OrderProcess\" />
+    <None Remove="DataAccesses\Repos\Order\OrdferDetail\" />
+    <None Remove="DataAccesses\Repos\Order\Invoice\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\Warehouse\" />
@@ -131,12 +130,11 @@
     <Folder Include="Services\Delivery\DeliveryMethod\" />
     <Folder Include="DataAccesses\Repos\Delivery\DeliveryMethod\" />
     <Folder Include="DataAccesses\Repos\Delivery\ProductDeliveryMethod\" />
-    <Folder Include="DataAccesses\Repos\Order\SubOrder\" />
-    <Folder Include="DataAccesses\Repos\Order\SubOrderDetail\" />
     <Folder Include="DataAccesses\EF\Base\" />
     <Folder Include="Models\Order\Order\" />
-    <Folder Include="Models\Order\SubOrder\" />
     <Folder Include="DataAccesses\EF\Enums\" />
     <Folder Include="Services\Order\OrderProcess\" />
+    <Folder Include="DataAccesses\Repos\Order\OrdferDetail\" />
+    <Folder Include="DataAccesses\Repos\Order\Invoice\" />
   </ItemGroup>
 </Project>

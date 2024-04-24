@@ -8,21 +8,34 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Models
 {
-    public class OrderModel: BaseModel<Order, OrderModel>
+    public class CreateOrdersModel
     {
-        public int userId { get; set; }
         public int paymentMethodId { get; set; }
-        public string note { get; set; }
-        public DateTime? createdAt { get; set; }
-        public DateTime? updatedAt { get; set; }
-        public List<OrderDetailModel> OrderDetails { get; set; }
+        public List<OrderModel> orders { get; set; }
+
+        public List<int> productOptionIds
+        {
+            get
+            {
+                return orders.SelectMany(
+                    (order) => order.OrderDetails.Select((detail) => detail.productOptionId)).ToList();
+            }
+        }
     }
 
-    public class OrderDetailModel : BaseModel<Order, OrderDetailModel>
+    public class OrderModel: BaseModel<Order, OrderModel>
     {
         public int addressId { get; set; }
         public int deliveryMethodId { get; set; }
-        public List<OrderDetailDetailModel> OrderDetailDetails { get; set; }
+        public string note { get; set; }
+        public List<OrderDetailModel> OrderDetails { get; set; }
+    }
+
+    public class OrderDetailModel : BaseModel<OrderDetail, OrderDetailModel>
+    {
+        public DateTime? createdAt { get; set; }
+        public int productNum { get; set; }
+        public int productOptionId { get; set; }
     }
 
 }

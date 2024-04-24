@@ -8,7 +8,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public int id { get; set; }
         public DateTime? createdAt { get; set; }
         public string note { get; set; }
-        public int orderId { get; set; }
         public int paymentMethodId { get; set;  }
         public PaymentStatus paymentStatus { get; set;  }
 

@@ -15,23 +15,26 @@ namespace PandaShoppingAPI.Services
         IOrderService   
     {
         private readonly IOrderDetailRepo _orderDetailRepo;
-        private readonly IOrderDetailRepo _OrderDetaildetailRepo;
         private readonly IProductBatchInventoryRepo _productBatchInvRepo;
         private readonly IWarehouseOutputRepo _warehouseOutputRepo;
         private readonly ICartDetailRepo _cartDetailRepo;
+        private readonly IProductOptionRepo _productOptionRepo;
+        private readonly IInvoiceRepo _invoiceRepo;
 
         public OrderService(IOrderRepo repo,
-            IOrderDetailRepo OrderDetailRepo,
-            IOrderDetailRepo OrderDetaildetailRepo,
+            IOrderDetailRepo orderdetailRepo,
             IProductBatchInventoryRepo productBatchInvRepo,
             IWarehouseOutputRepo warehouseOutputRepo,
-            ICartDetailRepo cartDetailRepo) : base(repo)
+            ICartDetailRepo cartDetailRepo,
+            IProductOptionRepo productOptionRepo,
+            IInvoiceRepo invoiceRepo) : base(repo)
         {
-            _orderDetailRepo = OrderDetailRepo;
-            _OrderDetaildetailRepo = OrderDetaildetailRepo;
+            _orderDetailRepo = orderdetailRepo;
             _productBatchInvRepo = productBatchInvRepo;
             _warehouseOutputRepo = warehouseOutputRepo;
             _cartDetailRepo = cartDetailRepo;
+            _productOptionRepo = productOptionRepo;
+            _invoiceRepo = invoiceRepo;
         }
 
         public override IQueryable<Order> Fill(OrderFilter filter)
@@ -79,53 +82,73 @@ namespace PandaShoppingAPI.Services
             return orders;
         }
 
-        protected override void ValidateInsert(OrderModel requestModel)
+
+        public List<Order> Insert(CreateOrdersModel model)
         {
-            ValidateAvailableInventory(requestModel);
+            ValidateAvailableInventory(model.orders);
+            Invoice invoice = CreateInvoice(model);
+            List<Order> created = CreateOrders(model, invoice.id);
+            model.orders.ForEach(OutputWarehouse);
+            // Create invoice
+            _cartDetailRepo.DeleteCartItems(User.CartId, model.productOptionIds);
+            return created;
         }
 
-        public override Order Insert(OrderModel requestModel)
+        private Invoice CreateInvoice(CreateOrdersModel model)
         {
-            ValidateInsert(requestModel);
-            OutputWarehouse(requestModel);
-            Order order = CreateOrder(requestModel);
-            _cartDetailRepo.DeleteCartItems(
-                User.CartId,
-                requestModel.OrderDetails.SelectMany((OrderDetail) => OrderDetail.OrderDetailDetails.Select((detail) => detail.productOptionId))
-             );
-            return order;
-        }
-
-        private Order CreateOrder(OrderModel requestModel)
-        {
-            List<Order> orders = requestModel.OrderDetails.Select((OrderDetail) =>
-                new Order()
+            return _invoiceRepo.Insert(
+                new Invoice
                 {
-                    OrderDetail = OrderDetail.OrderDetailDetails.Select(
-                        (detail) => new OrderDetail
+                    paymentMethodId = model.paymentMethodId,
+                    paymentStatus = PaymentStatus.PayLatter,
+                });
+        }
+
+        private List<Order> CreateOrders(CreateOrdersModel model, int invoiceId)
+        {
+            List<Order> orders = model.orders
+                .Select((orderModel) => BuildOrder(orderModel, invoiceId))
+                .ToList();
+            _repo.InsertRange(orders);
+            return orders;
+        }
+
+        private Order BuildOrder(OrderModel requestModel, int invoiceId)
+        {
+            Order order = new Order()
+                {
+                    userId = User.UserId,
+                    invoiceId = invoiceId,
+                    createdAt = DateTime.UtcNow,
+                    status = OrderStatus.Created,
+                    OrderDetail = requestModel.OrderDetails.Select(
+                        (detail) =>
                         {
-                            productOptionId = detail.productOptionId,
-                            productNum = detail.productNum,
-                            discountPercent = detail.discountPercent,
-                            price = detail.price
+                            ProductOption productOption = _productOptionRepo.GetById(detail.productOptionId);
+                            return new OrderDetail
+                            {
+                                productOptionId = detail.productOptionId,
+                                productNum = detail.productNum,
+                                discountPercent = 0, 
+                                price = productOption.price,
+                            };
                         }).ToList(),
                     delivery = new Delivery
                     {
-                        addressId = OrderDetail.addressId,
-                        deliveryMethodId = OrderDetail.deliveryMethodId,
+                        addressId = requestModel.addressId,
+                        deliveryMethodId = requestModel.deliveryMethodId,
                         status = DeliveryStatus.Created,
                     }
-                }
-            ).ToList();
-            _orderDetailRepo.InsertRange(orders);
-            return null;
+                };
+            
+            return order;
         }
 
-        private void ValidateAvailableInventory(OrderModel requestModel)
+        private void ValidateAvailableInventory(List<OrderModel> orderModels)
         {
-            List<int> productOptionIds = requestModel.OrderDetails
-                .SelectMany((OrderDetail) => OrderDetail.OrderDetailDetails
-                    .Select((subDetail) => subDetail.productOptionId)).ToList();
+            List<int> productOptionIds = orderModels
+                    .SelectMany((order) => order.OrderDetails.Select((detail) => detail.productOptionId))
+                    .ToList();
             List<AvailableProductOptionRespone> availableOpotions = _productBatchInvRepo
                 .Where((batchInven) => productOptionIds.Contains(batchInven.productBatch.productOptionId))
                 .GroupBy((batchInven) => batchInven.productBatch.productOptionId)
@@ -145,9 +168,9 @@ namespace PandaShoppingAPI.Services
             Dictionary<int, int> availableOptionDic = availableOpotions
                 .ToDictionary((x) => x.productOptionId, (x) => x.remainingNumber);
 
-            foreach (OrderDetailModel OrderDetail in requestModel.OrderDetails)
+            foreach (OrderModel order in orderModels)
             {
-                foreach (OrderDetailDetailModel detail in OrderDetail.OrderDetailDetails)
+                foreach (OrderDetailModel detail in order.OrderDetails)
                 {
                     if (!availableOptionDic.ContainsKey(detail.productOptionId) ||
                         availableOptionDic[detail.productOptionId] < detail.productNum)
@@ -164,8 +187,7 @@ namespace PandaShoppingAPI.Services
         {
 
             List<int> productOptionIds = requestModel.OrderDetails
-                .SelectMany((OrderDetail) => OrderDetail.OrderDetailDetails
-                    .Select((subDetail) => subDetail.productOptionId)).ToList();
+                    .Select((detail) => detail.productOptionId).ToList();
             List<IGrouping<int, ProductBatchInventory>> optionInvenGroups = _productBatchInvRepo
                 .Where((batchInven) => productOptionIds.Contains(batchInven.productBatch.productOptionId) && batchInven.remainingNumber > 0)
                 .ToList()
@@ -175,10 +197,8 @@ namespace PandaShoppingAPI.Services
             List<WarehouseOutputDetail> outputDetails = new List<WarehouseOutputDetail>();
             List<ProductBatchInventory> updatedBatchInvens = new List<ProductBatchInventory>();
 
-            foreach (OrderDetailModel OrderDetail in requestModel.OrderDetails)
+            foreach (OrderDetailModel detail in requestModel.OrderDetails)
             {
-                foreach (OrderDetailDetailModel detail in OrderDetail.OrderDetailDetails)
-                {
                     IGrouping<int, ProductBatchInventory> group = optionInvenGroups.First(
                         (group) => group.Key == detail.productOptionId);
                     List<ProductBatchInventory> batches = group.OrderByDescending(
@@ -200,8 +220,6 @@ namespace PandaShoppingAPI.Services
                         outputDetails.Add(output);
                         i++;
                     }
-                }
-
             }
 
             _warehouseOutputRepo.Insert(new WarehouseOutput
