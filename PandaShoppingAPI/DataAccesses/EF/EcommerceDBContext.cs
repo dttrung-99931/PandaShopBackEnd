@@ -271,8 +271,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             modelBuilder.Entity<Invoice>(entity =>
             {
-                entity.HasIndex(e => e.orderId, "IX_Invoice_orderId");
-
                 entity.Property(e => e.createdAt)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
@@ -662,7 +660,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
                 entity.HasOne(d => d.invoice)
                     .WithMany(p => p.Order)
-                    .HasForeignKey(d => d.userId)
+                    .HasForeignKey(d => d.invoiceId)
                     .HasConstraintName("FK_Order_Invoice")
                     .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.DataAccesses.Repos
 {
-    public class OrderDetailDetailRepo : BaseRepo<OrderDetail>, IOrderDetailDetailRepo
+    public class InvoiceRepo : BaseRepo<Invoice>, IInvoiceRepo
     {
-        public OrderDetailDetailRepo(EcommerceDBContext dbContext) : base(dbContext)
+        public InvoiceRepo(EcommerceDBContext dbContext) : base(dbContext)
         {
         }
     }
