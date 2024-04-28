@@ -50,7 +50,7 @@ namespace PandaShoppingAPI.Controllers
         {
             return Handle(() =>
             {
-                _service.StartProcessingOrder(id);
+                _service.CompleteProcessingOrder(id);
                 return ok_update();
             });
         }
