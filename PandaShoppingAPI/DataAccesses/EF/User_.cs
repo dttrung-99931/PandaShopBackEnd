@@ -22,5 +22,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public virtual ICollection<Feedback> Feedback { get; set; }
         public virtual ICollection<Order> Order { get; set; }
         public virtual ICollection<UserRole> UserRole { get; set; }
+        public virtual ICollection<NotificationReceiver> Receivers{ get; set; }
     }
 }

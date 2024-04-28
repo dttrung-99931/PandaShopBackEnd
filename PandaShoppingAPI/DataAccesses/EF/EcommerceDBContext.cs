@@ -967,6 +967,75 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            /// Notification
+            modelBuilder
+                .Entity<Notification>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
+            modelBuilder.Entity<Notification>(entity =>
+            {
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
+            });
+
+            modelBuilder
+                .Entity<NotificationData>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
+            modelBuilder.Entity<NotificationData>(entity =>
+            {
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
+
+                entity.HasOne(d => d.notification)
+                    .WithOne(p => p.data)
+                    .HasForeignKey<NotificationData>(d => d.notificationId)
+                    .HasConstraintName("FK_NotificationData_Notification")
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasOne(d => d.order)
+                    .WithMany(p => p.NotificationData)
+                    .HasForeignKey(d => d.orderId)
+                    .HasConstraintName("FK_NotificationData_Order")
+                    .OnDelete(DeleteBehavior.NoAction);
+            });
+
+            modelBuilder
+                .Entity<UserNotification>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
+            modelBuilder.Entity<UserNotification>(entity =>
+            {
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
+
+                entity.HasOne(d => d.notification)
+                    .WithMany(p => p.UserNotification)
+                    .HasForeignKey(d => d.notificationId)
+                    .HasConstraintName("FK_UserNotification_Notification")
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasOne(d => d.receiver)
+                    .WithMany(p => p.UserNotification)
+                    .HasForeignKey(d => d.notificationId)
+                    .HasConstraintName("FK_UserNotification_NotificationReceiver")
+                    .OnDelete(DeleteBehavior.NoAction);
+
+            });
+
+            modelBuilder
+               .Entity<NotificationReceiver>()
+               .HasQueryFilter((entity) => !entity.isDeleted);
+            modelBuilder.Entity<NotificationReceiver>(entity =>
+            {
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
+
+                entity.HasOne(d => d.user)
+                    .WithMany(p => p.Receivers)
+                    .HasForeignKey(d => d.userId)
+                    .HasConstraintName("FK_NotificationReceiver_User")
+                    .OnDelete(DeleteBehavior.NoAction);
+
+            });
+
             OnModelCreatingPartial(modelBuilder);
         }
 
