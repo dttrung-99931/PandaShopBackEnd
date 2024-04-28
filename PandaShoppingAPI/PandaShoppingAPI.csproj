@@ -104,6 +104,7 @@
     <None Remove="Services\Order\OrderProcess\" />
     <None Remove="DataAccesses\Repos\Order\OrdferDetail\" />
     <None Remove="DataAccesses\Repos\Order\Invoice\" />
+    <None Remove="DataAccesses\EF\Interceptor\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\Warehouse\" />
@@ -136,5 +137,6 @@
     <Folder Include="Services\Order\OrderProcess\" />
     <Folder Include="DataAccesses\Repos\Order\OrdferDetail\" />
     <Folder Include="DataAccesses\Repos\Order\Invoice\" />
+    <Folder Include="DataAccesses\EF\Interceptor\" />
   </ItemGroup>
 </Project>

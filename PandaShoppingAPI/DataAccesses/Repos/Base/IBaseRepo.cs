@@ -59,5 +59,8 @@ namespace PandaShoppingAPI.DataAccesses.Repos
         
         delegate void Updater(T entity);
         void Update(object id, Updater updater);
+
+        void ReplaceRange(IEnumerable<T> deleted, IEnumerable<T> inserted);
+
     }
 }
