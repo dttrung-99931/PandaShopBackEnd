@@ -118,10 +118,12 @@ namespace PandaShoppingAPI.Services
             product.categoryId = requestModel.categoryId;
             product.shopId = requestModel.shopId;
             product.addressId = requestModel.addressId;
-            product.ProductPropertyValue = Mapper.Map<List<ProductPropertyValue>>(requestModel.properties);
             _repo.Update(product, id);
 
-            _productPropertyValueRepo.DeleteRange(product.ProductPropertyValue);
+            List<ProductPropertyValue> properties = Mapper.Map<List<ProductPropertyValue>>(requestModel.properties);
+            properties.ForEach(prop => prop.productId = product.id);
+            _productPropertyValueRepo.ReplaceRange(product.ProductPropertyValue, properties);
+
             _productOptionRepo.UpsertRange((int)id, requestModel.productOptions);
             // TODO: update what else?
         }
