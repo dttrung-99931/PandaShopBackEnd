@@ -105,6 +105,8 @@
     <None Remove="DataAccesses\Repos\Order\OrdferDetail\" />
     <None Remove="DataAccesses\Repos\Order\Invoice\" />
     <None Remove="DataAccesses\EF\Interceptor\" />
+    <None Remove="DataAccesses\EF\Notification\" />
+    <None Remove="DataAccesses\EF\Enums\Notification\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\Warehouse\" />
@@ -138,5 +140,7 @@
     <Folder Include="DataAccesses\Repos\Order\OrdferDetail\" />
     <Folder Include="DataAccesses\Repos\Order\Invoice\" />
     <Folder Include="DataAccesses\EF\Interceptor\" />
+    <Folder Include="DataAccesses\EF\Notification\" />
+    <Folder Include="DataAccesses\EF\Enums\Notification\" />
   </ItemGroup>
 </Project>

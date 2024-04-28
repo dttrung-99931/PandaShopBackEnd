@@ -5,10 +5,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
 {
     public partial class Order : BaseEntity
     {
-        public Order()
-        {
-            OrderDetail = new HashSet<OrderDetail>();
-        }
         public int id { get; set; }
         public string note { get; set; }
         public DateTime? createdAt { get; set; }
@@ -21,5 +17,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public virtual Delivery delivery { get; set; }
         public virtual Invoice invoice { get; set; }
         public virtual ICollection<OrderDetail> OrderDetail { get; set; }
+        public virtual ICollection<NotificationData> NotificationData { get; set; }
     }
 }
