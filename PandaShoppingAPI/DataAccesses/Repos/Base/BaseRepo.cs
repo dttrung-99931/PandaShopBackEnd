@@ -239,5 +239,10 @@ namespace PandaShoppingAPI.DataAccesses.Repos
             UpdateRange(entities);
         }
 
+        public void DeleteThenInsert(IEnumerable<T> deleted, IEnumerable<T> inserted)
+        {
+            DeleteRange(deleted);
+            InsertRange(inserted);
+        }
     }
 }

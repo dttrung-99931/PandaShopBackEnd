@@ -55,6 +55,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder
+                .Entity<Address>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<Address>(entity =>
             {
                 entity.HasIndex(e => e.userId, "IX_Address_userId");
@@ -98,6 +101,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<CartDetail>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<CartDetail>(entity =>
             {
                 entity.HasIndex(e => e.cartId, "IX_CartDetail_cartId");
@@ -121,6 +127,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<Category>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<Category>(entity =>
             {
                 entity.HasIndex(e => e.imageId, "IX_Category_imageId");
@@ -158,6 +167,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<Delivery>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<Delivery>(entity =>
             {
                 entity.HasIndex(e => e.addressId, "IX_Delivery_addressId");
@@ -190,6 +202,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<DeliveryMethod>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<DeliveryMethod>(entity =>
             {
                 entity.Property(e => e.name)
@@ -203,6 +218,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<DeliveryPartner>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<DeliveryPartner>(entity =>
             {
                 entity.Property(e => e.name)
@@ -214,6 +232,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<Feedback>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<Feedback>(entity =>
             {
                 entity.HasIndex(e => e.parentId, "IX_Feedback_parentId");
@@ -255,6 +276,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<Image>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<Image>(entity =>
             {
                 entity.Property(e => e.description).HasMaxLength(100);
@@ -269,6 +293,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<Invoice>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<Invoice>(entity =>
             {
                 entity.Property(e => e.createdAt)
@@ -288,6 +315,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
             });
 
 
+            modelBuilder
+                .Entity<PaymentMethod>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<PaymentMethod>(entity =>
             {
                 entity.Property(e => e.name)
@@ -301,6 +331,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<Permission>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<Permission>(entity =>
             {
                 entity.HasIndex(e => e.resourceId, "IX_Permission_resourceId");
@@ -324,6 +357,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<Product>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.HasIndex(e => e.addressId, "IX_Product_addressId");
@@ -361,6 +397,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<ProductBatch>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<ProductBatch>(entity =>
             {
                 entity.HasIndex(e => e.productOptionId, "IX_ProductBatch_productOptionId");
@@ -390,6 +429,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<ProductBatchInventory>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<ProductBatchInventory>(entity =>
             {
                 entity.HasIndex(e => e.productBatchId, "IX_ProductBatchInventory_productBatchId");
@@ -405,6 +447,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<ProductDeliveryMethod>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<ProductDeliveryMethod>(entity =>
             {
                 entity.HasIndex(e => e.deliveryMethodId, "IX_ProductDeliveryMethod_deliveryMethodId");
@@ -428,6 +473,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<ProductImage>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<ProductImage>(entity =>
             {
                 entity.HasIndex(e => e.imageId, "IX_ProductImage_imageId");
@@ -451,6 +499,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<ProductOption>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<ProductOption>(entity =>
             {
                 entity.HasIndex(e => e.productId, "IX_ProductOption_productId");
@@ -470,6 +521,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<ProductOptionImage>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<ProductOptionImage>(entity =>
             {
                 entity.HasIndex(e => e.imageId, "IX_ProductOptionImage_imageId");
@@ -493,6 +547,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<ProductOptionValue>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<ProductOptionValue>(entity =>
             {
                 entity.HasIndex(e => e.productOptionId, "IX_ProductOptionValue_productOptionId");
@@ -520,6 +577,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<ProductPropertyValue>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<ProductPropertyValue>(entity =>
             {
                 entity.HasIndex(e => e.productId, "IX_ProductPropertyValue_productId");
@@ -547,6 +607,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<Property>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<Property>(entity =>
             {
                 entity.HasIndex(e => e.secondaryId, "UQ__Property__2D08ACCF5EA3BA00")
@@ -568,6 +631,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<PropertyTemplate>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<PropertyTemplate>(entity =>
             {
                 entity.HasIndex(e => e.propertyId, "IX_PropertyTemplate_propertyId");
@@ -595,6 +661,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<PropertyTemplateValue>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<PropertyTemplateValue>(entity =>
             {
                 entity.HasIndex(e => e.propertyTemplateId, "IX_PropertyTemplateValue_propertyTemplateId");
@@ -614,6 +683,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<Resource>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<Resource>(entity =>
             {
                 entity.Property(e => e.name)
@@ -625,6 +697,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<Role>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<Role>(entity =>
             {
                 entity.Property(e => e.name)
@@ -638,6 +713,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<Shop>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<Shop>(entity =>
             {
                 entity.Property(e => e.name)
@@ -649,6 +727,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<Order>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<Order>(entity =>
             {
                 entity.HasOne(d => d.user)
@@ -669,6 +750,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<OrderDetail>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<OrderDetail>(entity =>
             {
                 entity.HasIndex(e => e.productOptionId, "IX_OrderDetail_productOptionId");
@@ -700,6 +784,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<UserRole>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<UserRole>(entity =>
             {
                 entity.HasIndex(e => e.roleId, "IX_UserRole_roleId");
@@ -723,6 +810,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<User_>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<User_>(entity =>
             {
                 entity.HasIndex(e => e.cartId, "IX_User__cartId");
@@ -770,6 +860,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<Warehouse>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<Warehouse>(entity =>
             {
                 entity.HasIndex(e => e.addressId, "IX_Warehouse_addressId");
@@ -797,6 +890,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<WarehouseInput>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<WarehouseInput>(entity =>
             {
                 entity.HasIndex(e => e.warehouseId, "IX_WarehouseInput_warehouseId");
@@ -814,6 +910,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<WarehouseOutput>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<WarehouseOutput>(entity =>
             {
                 entity.Property(e => e.date).HasColumnType("datetime");
@@ -823,6 +922,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<WarehouseOutputDetail>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<WarehouseOutputDetail>(entity =>
             {
                 entity.HasIndex(e => e.productBatchId, "IX_WarehouseOutputDetail_productBatchId");
@@ -847,12 +949,18 @@ namespace PandaShoppingAPI.DataAccesses.EF
             });
 
 
+            modelBuilder
+                .Entity<Template>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<Template>(entity =>
             {
                 entity.Property(e => e.isDeleted)
                     .HasDefaultValue(false);
             });
 
+            modelBuilder
+                .Entity<Cart>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<Cart>(entity =>
             {
                 entity.Property(e => e.isDeleted)

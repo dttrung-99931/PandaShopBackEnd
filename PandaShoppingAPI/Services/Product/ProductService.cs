@@ -111,17 +111,17 @@ namespace PandaShoppingAPI.Services
 
         public override void Update(ProductModel requestModel, object id)
         {
-            _repo.Update(id, (product) =>
-            {
-                product.name = requestModel.name;   
-                product.description = requestModel.description;
-                product.sellingNum = requestModel.sellingNum;
-                product.categoryId = requestModel.categoryId;
-                product.shopId = requestModel.shopId;
-                product.addressId = requestModel.addressId;
-                _productPropertyValueRepo.DeleteRange(product.ProductPropertyValue);
-                product.ProductPropertyValue = Mapper.Map<List<ProductPropertyValue>>(requestModel.properties);
-            });
+            Product product = GetById(id);
+            product.name = requestModel.name;
+            product.description = requestModel.description;
+            product.sellingNum = requestModel.sellingNum;
+            product.categoryId = requestModel.categoryId;
+            product.shopId = requestModel.shopId;
+            product.addressId = requestModel.addressId;
+            product.ProductPropertyValue = Mapper.Map<List<ProductPropertyValue>>(requestModel.properties);
+            _repo.Update(product, id);
+
+            _productPropertyValueRepo.DeleteRange(product.ProductPropertyValue);
             _productOptionRepo.UpsertRange((int)id, requestModel.productOptions);
             // TODO: update what else?
         }

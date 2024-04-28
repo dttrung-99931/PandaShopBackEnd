@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PandaShoppingAPI.DataAccesses.EF;
+using PandaShoppingAPI.DataAccesses.EF.Interceptor;
 using System;
 using System.IO;
 
@@ -19,7 +20,11 @@ namespace PandaShoppingAPI.Configs
             }
 
             // TODO: fix lazy load
-            services.AddDbContext<EcommerceDBContext>(opt => opt.UseLazyLoadingProxies().UseSqlServer(connectionString));
+            services.AddDbContext<EcommerceDBContext>(
+                opt => opt.UseLazyLoadingProxies()
+                    .UseSqlServer(connectionString)
+                    .AddInterceptors(new SoftDeleteInterceptor())
+            );
             if (Program.IsStartedWithMain)
             {
                 RUnInitSql(services);
