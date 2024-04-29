@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using PandaShoppingAPI.Configs;
+using PandaShoppingAPI.Configs.Middlewares;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
 using PandaShoppingAPI.Services;
@@ -66,11 +67,14 @@ namespace PandaShoppingAPI
                 app.UseDeveloperExceptionPage();
             }
 
+
             app.UseSwagger();
             app.UseSwaggerUI(
                 action => action.SwaggerEndpoint("v1/swagger.json", "Panda shop api"));
 
             app.UseHttpsRedirection();
+
+            app.UseNotificationMiddleware();
 
             app.UseRouting();
 

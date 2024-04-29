@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PandaShoppingAPI.Controllers.Base;
@@ -10,6 +11,7 @@ using PandaShoppingAPI.Utils;
 namespace PandaShoppingAPI.Controllers
 {
     [Route("v1/[controller]")]
+    [Authorize(Roles = "shop")]
     public class OrdersController : CrudApiController2<Order, OrderModel,
             OrderResponseModel, IOrderService, OrderFilter>
     {
@@ -35,7 +37,7 @@ namespace PandaShoppingAPI.Controllers
             return notFound();
         }
 
-        [HttpPut("{id}/StartProcessing")]
+        [HttpPut(APIPaths.Orders.startProcessing)]
         public ActionResult<ResponseWrapper> StartProcessingOrder(int id)
         {
             return Handle(() =>
@@ -45,7 +47,7 @@ namespace PandaShoppingAPI.Controllers
             });
         }
 
-        [HttpPut("{id}/CompleteProcessing")]
+        [HttpPut(APIPaths.Orders.completeProcessing)]
         public ActionResult<ResponseWrapper> CompleteProcessing(int id)
         {
             return Handle(() =>

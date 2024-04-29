@@ -32,9 +32,7 @@ namespace PandaShoppingAPI.Utils
             Meta meta = null, string message = null, string errorCode = null)
         {
             this.statusCode = (int)statusCode;
-            this.success = this.statusCode == 200 ||
-                           this.statusCode == 201 ||
-                           this.statusCode == 204;
+            this.success = Constants.SUCESS_HTTP_CODES.Contains((int)statusCode);
             this.data = data;
             this.meta = meta;
             this.message = message;

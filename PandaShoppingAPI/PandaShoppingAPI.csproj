@@ -107,6 +107,18 @@
     <None Remove="DataAccesses\EF\Interceptor\" />
     <None Remove="DataAccesses\EF\Notification\" />
     <None Remove="DataAccesses\EF\Enums\Notification\" />
+    <None Remove="DataAccesses\Repos\Notification\" />
+    <None Remove="DataAccesses\Repos\Notification\NotificationData\" />
+    <None Remove="DataAccesses\Repos\Notification\UserNotification\" />
+    <None Remove="DataAccesses\Repos\Notification\NotificationReceiver\" />
+    <None Remove="Services\Notification\" />
+    <None Remove="Models\Notification\" />
+    <None Remove="Models\Notification\NotificationData\" />
+    <None Remove="Controllers\Notification\" />
+    <None Remove="Configs\Middlewares\" />
+    <None Remove="Utils\Constants\" />
+    <None Remove="Services\Notification\NotificationSender\" />
+    <None Remove="Services\Notification\NotificationSender\Senders\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\Warehouse\" />
@@ -142,5 +154,17 @@
     <Folder Include="DataAccesses\EF\Interceptor\" />
     <Folder Include="DataAccesses\EF\Notification\" />
     <Folder Include="DataAccesses\EF\Enums\Notification\" />
+    <Folder Include="DataAccesses\Repos\Notification\" />
+    <Folder Include="DataAccesses\Repos\Notification\NotificationData\" />
+    <Folder Include="DataAccesses\Repos\Notification\UserNotification\" />
+    <Folder Include="DataAccesses\Repos\Notification\NotificationReceiver\" />
+    <Folder Include="Services\Notification\" />
+    <Folder Include="Models\Notification\" />
+    <Folder Include="Models\Notification\NotificationData\" />
+    <Folder Include="Controllers\Notification\" />
+    <Folder Include="Configs\Middlewares\" />
+    <Folder Include="Utils\Constants\" />
+    <Folder Include="Services\Notification\NotificationSender\" />
+    <Folder Include="Services\Notification\NotificationSender\Senders\" />
   </ItemGroup>
 </Project>
