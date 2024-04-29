@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using PandaShoppingAPI.DataAccesses.EF;
 
 namespace PandaShoppingAPI.Utils
 {
@@ -20,6 +21,30 @@ namespace PandaShoppingAPI.Utils
         public static string fileSep = OperatingSystem.IsWindows() ? "\\" : "/";
 
         public const string SUCCESSFUL_MSG = "Successful";
+        public static List<int> SUCESS_HTTP_CODES = new List<int> {
+            200,
+            201,
+            204
+        };
+        public const int EMPTY_ID = -1;
+
+        // Order status groups that used for dertimine noti for who
+        static List<OrderStatus> StatusesByShop = new List<OrderStatus>
+        {
+            OrderStatus.Processing,
+            OrderStatus.WaitingForDelivering,
+            OrderStatus.Delivered,
+            OrderStatus.Delivered,
+            OrderStatus.CancelledByShop,
+            OrderStatus.CompletedBySystem,
+        };
+        static List<OrderStatus> StatusesByUser = new List<OrderStatus>
+        {
+            OrderStatus.Pending,
+            OrderStatus.Created,
+            OrderStatus.CompletedByUser,
+            OrderStatus.Lost,
+        };
 
     }
 

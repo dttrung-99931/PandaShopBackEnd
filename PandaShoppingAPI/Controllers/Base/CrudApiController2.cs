@@ -24,6 +24,8 @@ namespace PandaShoppingAPI.Controllers.Base
         where TFilter: Filter
         where TService: IBaseService<TEntity, TRequestModel, TFilter>        
     {
+        private INotificationService service;
+
         public CrudApiController2(TService service, IHttpContextAccessor httpContextAccessor) 
             : base(service)
         {
