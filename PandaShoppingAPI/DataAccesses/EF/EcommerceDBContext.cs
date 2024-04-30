@@ -1014,7 +1014,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
                 entity.HasOne(d => d.receiver)
                     .WithMany(p => p.UserNotification)
-                    .HasForeignKey(d => d.notificationId)
+                    .HasForeignKey(d => d.notificationReceiverId)
                     .HasConstraintName("FK_UserNotification_NotificationReceiver")
                     .OnDelete(DeleteBehavior.NoAction);
 
