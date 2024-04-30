@@ -10,7 +10,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public int notificationReceiverId { get; set; }
         public UserNotificationStatus status { get; set; }
         public DateTime? seenDate { get; set; }
-        public DateTime createdDate { get; set; } = DateTime.UtcNow;
 
         public virtual Notification notification { get; set; }
         public virtual NotificationReceiver receiver { get; set; }
