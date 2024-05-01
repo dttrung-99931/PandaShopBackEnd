@@ -9,8 +9,9 @@ namespace PandaShoppingAPI.Utils
 	{
         public class Orders
         {
-            public const string startProcessing = "/v1/Orders/{id}/StartProcessing";
-            public const string completeProcessing = "/v1/Orders/{id}/CompleteProcessing";
+            public const string endpoint = "/v1/Orders";
+            public const string startProcessing = $"{endpoint}/{{id}}/StartProcessing";
+            public const string completeProcessing = $"{endpoint}/{{id}}/CompleteProcessing";
             public static List<string> processingPaths = new List<string>() {
                 startProcessing,
                 completeProcessing

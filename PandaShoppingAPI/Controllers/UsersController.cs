@@ -9,6 +9,7 @@ using PandaShoppingAPI.Models;
 using PandaShoppingAPI.Services;
 using PandaShoppingAPI.Utils;
 using PandaShoppingAPI.Utils.Exceptions;
+using System.Collections.Generic;
 using System.Net;
 
 namespace PandaShoppingAPI.Controllers
@@ -34,8 +35,8 @@ namespace PandaShoppingAPI.Controllers
         {
             return Handle(() =>
             {
-                _service.InsertShop(id, shopModel);
-                return ok_create("Successfully");
+                Shop shop = _service.InsertShop(id, shopModel);
+                return ok_create("Successfully", new List<int> {shop.id});
             });
         }
 

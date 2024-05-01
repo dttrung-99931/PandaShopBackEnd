@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -58,7 +59,7 @@ namespace PandaShoppingAPI.Controllers
 
             if (exceptionResponse != null) return exceptionResponse;
 
-            return ok_create(cartDetail);
+            return ok_create(cartDetail, new List<int> {cartDetail.id});
         }        
         
         [HttpPut("UpdateCartDetail/{cartDetailId}")]

@@ -54,7 +54,7 @@ namespace PandaShoppingAPI.Services
         }
 
 
-        public void InsertShop(int userId, ShopModel shopModel)
+        public Shop InsertShop(int userId, ShopModel shopModel)
         {
             var user = GetById(userId);
             if (user == null)
@@ -66,7 +66,8 @@ namespace PandaShoppingAPI.Services
                 throw new ConflictException(ErrorCode.shopExisted);
             }
 
-            var shopId = _shopRepo.Insert(Mapper.Map<Shop>(shopModel)).id;
+            Shop shop = _shopRepo.Insert(Mapper.Map<Shop>(shopModel));
+            var shopId = shop.id;
             user.shopId = shopId;
             user.UserRole.Add(
                 new UserRole()
@@ -75,6 +76,7 @@ namespace PandaShoppingAPI.Services
                 }
             );
             _repo.Update(user, user.id);
+            return shop;
         }
 
         public LoginResponse Login(LoginModel loginModel)

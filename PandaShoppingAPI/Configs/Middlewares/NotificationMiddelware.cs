@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -28,12 +29,20 @@ namespace PandaShoppingAPI.Configs.Middlewares
                 if (APIPaths.Orders.isOrderProcessingPath(path, out int orderId) && orderId != Constants.EMPTY_ID)
                 {
                     notiService.CreateOrderStatusUpdatedNoti(orderId);
+                    return;
                 }
 
+                if (path == APIPaths.Orders.endpoint && context.Request.Method == "POST")
+                {
+                    List<int> orderIds = HeaderUtils.GetCreatedIdsFromHeader(context.Response.Headers);
+                    foreach (int id in orderIds){
+                        notiService.CreateOrderCreatedNoti(id);
+                    }
+                }
             }
             catch (Exception)
             {
-                // TODO log
+                // TODO show exceptiuin while debugging
             }
 
         }

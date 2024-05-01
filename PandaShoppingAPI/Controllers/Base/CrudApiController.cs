@@ -90,7 +90,7 @@ namespace PandaShoppingAPI.Controllers.Base
                 return unknownError(e.Message);
             }
 
-            return ok_create(responseModel);
+            return ok_create(responseModel, new List<int> {responseModel.id});
         }
 
         [HttpPut("{id}")]

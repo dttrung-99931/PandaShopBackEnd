@@ -2,6 +2,7 @@
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
 using PandaShoppingAPI.Models;
+using PandaShoppingAPI.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,32 +43,54 @@ namespace PandaShoppingAPI.Services
                 userNotis = userNotis.Where(userNoti => userNoti.status == filter.status.Value);
             }
             
-            if (filter.onlyForShop.HasValue)
+            if (filter.onlyForShop.HasValue )
             {
-                userNotis = userNotis.Where(userNoti => userNoti.receiver.userId != User.UserId == filter.onlyForShop.Value);
+                List<NotificationType> filterTypes = 
+                filter.onlyForShop.Value 
+                    ? new List<NotificationType>{
+                            NotificationType.ShopOrderNoti
+                        } 
+                    : 
+                    new List<NotificationType>{
+                        NotificationType.UserOrderNoti
+                    };
+                // TODO: used Noti type to determine wheather noti for shop insted of order status 
+                userNotis = userNotis.Where(userNoti => filterTypes.Contains(userNoti.notification.type));
             }
 
-            IQueryable<Notification> notis = userNotis.Select(userNoti => userNoti.notification);
+            IQueryable<Notification> notis = userNotis
+                .Select(userNoti => userNoti.notification)
+                .OrderByDescending(noti => noti.createdDate);
 
             return notis;
         }
 
         public Notification CreateOrderStatusUpdatedNoti(int orderId)
         {
+            return CreateOrderNoti(orderId, OrderMessages.titleStatusUpdated, NotificationType.UserOrderNoti);
+        }
+
+        public Notification CreateOrderCreatedNoti(int orderId)
+        {
+            return CreateOrderNoti(orderId, OrderMessages.titleCreated, NotificationType.ShopOrderNoti);
+        }
+
+        private Notification CreateOrderNoti(int orderId, string title, NotificationType type)
+        {
             Order order = _orderRepo.GetById(orderId);
             Notification noti = new Notification
             {
-                title = OrderMessages.titleStatusUpdated,
+                title = title,
                 description = order.GetStatusMessage(),
                 data = new NotificationData
                 {
                     orderId = orderId,
                 },
-                type = NotificationType.Order,
+                type = type,
                 UserNotification = new List<UserNotification>() {
                     new UserNotification
                     {
-                        notificationReceiverId = _notiSenderService.DetermineSuitableReceiver(order.user.Receivers).id,
+                        notificationReceiverId = _notiSenderService.DetermineSuitableReceiver(order.userId).id,
                     }
                 }
             };

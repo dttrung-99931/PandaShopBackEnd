@@ -6,5 +6,6 @@ namespace PandaShoppingAPI.Services
     public interface INotificationService : IBaseService<Notification, NotificationModel, NotificationFilter>
     {
         Notification CreateOrderStatusUpdatedNoti(int orderId);
+        Notification CreateOrderCreatedNoti(int orderId);
     }
 }

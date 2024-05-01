@@ -3,7 +3,8 @@ namespace PandaShoppingAPI.DataAccesses.EF
 {
 	public enum NotificationType
 	{
-        Order = 1, 
+        UserOrderNoti = 1, 
+        ShopOrderNoti = 2, 
         Ads = 4, // ...
     }
 }
