@@ -5,6 +5,7 @@ using PandaShoppingAPI.Controllers.Base;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.Models;
 using PandaShoppingAPI.Services;
+using PandaShoppingAPI.Utils;
 
 namespace PandaShoppingAPI.Controllers
 {
@@ -15,6 +16,14 @@ namespace PandaShoppingAPI.Controllers
     {
         public NotificationsController(INotificationService service, IHttpContextAccessor httpContextAccessor) : base(service, httpContextAccessor)
         {
+        }
+
+        [HttpGet("Overview")]
+        public ActionResult<ResponseWrapper> GetNotificaitonOverview([FromQuery] NotificationFilter filter){
+            return Handle(() => {
+                NotificationOverviewResponse overview = _service.GetNotificationOverview(filter);
+                return ok_get(overview);
+            });
         }
     }
 }
