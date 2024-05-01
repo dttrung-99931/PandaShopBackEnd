@@ -5,12 +5,9 @@ using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.Models.Base;
 using PandaShoppingAPI.Services;
 using PandaShoppingAPI.Utils;
-using PandaShoppingAPI.Utils.Exceptions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Controllers.Base
 {
@@ -24,8 +21,6 @@ namespace PandaShoppingAPI.Controllers.Base
         where TFilter: Filter
         where TService: IBaseService<TEntity, TRequestModel, TFilter>        
     {
-        private INotificationService service;
-
         public CrudApiController2(TService service, IHttpContextAccessor httpContextAccessor) 
             : base(service)
         {
@@ -95,7 +90,7 @@ namespace PandaShoppingAPI.Controllers.Base
                     _service.Insert(requestModel)
                 );
                 HandleResponseModel(responseModel);
-                return ok_create(responseModel);
+                return ok_create(responseModel, new List<int> {responseModel.id});
             });
         }
 

@@ -9,6 +9,7 @@ using PandaShoppingAPI.Utils;
 using PandaShoppingAPI.Utils.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 
 namespace PandaShoppingAPI.Controllers
@@ -41,7 +42,7 @@ namespace PandaShoppingAPI.Controllers
                     () => propertyValueIDs  = _service.InsertPropertyValues(id, propertyValueReqs)
                 );
         
-            return exceptionResponse == null ? ok_create(propertyValueIDs) : exceptionResponse;
+            return exceptionResponse == null ? ok_create(propertyValueIDs, propertyValueIDs.IDs) : exceptionResponse;
         }
 
         [HttpDelete("{id}/PropertyValues")]
@@ -70,7 +71,9 @@ namespace PandaShoppingAPI.Controllers
                     }
                 );
 
-            return exceptionResponse == null ? ok_create(insertedImages) : exceptionResponse;
+            return exceptionResponse == null 
+                ? ok_create(insertedImages, insertedImages.Select(img => img.id)) 
+                : exceptionResponse;
         }
 
         [HttpGet("{id}/Images")]
@@ -87,7 +90,9 @@ namespace PandaShoppingAPI.Controllers
                     }
                 );
 
-            return exceptionResponse == null ? ok_create(images) : exceptionResponse;
+            return exceptionResponse == null 
+                ? ok_create(images, images.Select(img => img.id)) 
+                : exceptionResponse;
         }
 
         [HttpPut("{id}/Images")]
@@ -110,7 +115,9 @@ namespace PandaShoppingAPI.Controllers
                     () => response = _service.CreateProductOption(id, option)
                 );
 
-            return exceptionResponse == null ? ok_create(response) : exceptionResponse;
+            return exceptionResponse == null ? 
+                ok_create(response, new List<int> {response.id}) 
+                : exceptionResponse;
         }
 
         [HttpDelete("{id}/Options")]

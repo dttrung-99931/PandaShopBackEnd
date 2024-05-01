@@ -11,6 +11,7 @@ using PandaShoppingAPI.Utils;
 using PandaShoppingAPI.Utils.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 
 namespace PandaShoppingAPI.Controllers
@@ -32,8 +33,8 @@ namespace PandaShoppingAPI.Controllers
         {
             return Handle(() =>
             {
-                _service.CreateMany(requestModel);
-                return ok_create(Constants.SUCCESSFUL_MSG);
+                List<ProductBatch> batches =  _service.CreateMany(requestModel);
+                return ok_create(Constants.SUCCESSFUL_MSG, batches.Select(batch => batch.id));
             });
         }
 

@@ -10,17 +10,24 @@ namespace PandaShoppingAPI.Services
     {
         private readonly NotificationSenderFactory _senderFactory;
         private readonly INotificationRepo _notiRepo;
+        private readonly INotificationReceiverRepo _notiReceiverRepo;
 
-        public NotificationSenderService(NotificationSenderFactory senderFactory, INotificationRepo notiRepo)
+        public NotificationSenderService(NotificationSenderFactory senderFactory, INotificationRepo notiRepo, INotificationReceiverRepo receiverRepo)
         {
             _senderFactory = senderFactory;
             _notiRepo = notiRepo;
+            _notiReceiverRepo = receiverRepo;
         }
 
         public NotificationReceiver DetermineSuitableReceiver(IEnumerable<NotificationReceiver> receivers)
         {
             // TODO: determine noti receiver by prefred SingalR fist then FCM, ...
             return receivers.First();
+        }
+
+        public NotificationReceiver DetermineSuitableReceiver(int userId)
+        {
+            return DetermineSuitableReceiver(_notiReceiverRepo.Where(receiver => receiver.userId == userId));
         }
 
         public bool Send(Notification noti)

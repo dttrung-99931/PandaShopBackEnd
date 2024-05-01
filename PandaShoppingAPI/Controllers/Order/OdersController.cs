@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,8 +26,8 @@ namespace PandaShoppingAPI.Controllers
         {
             return Handle(() =>
             {
-                _service.Insert(model);
-                return ok_create(Constants.SUCCESSFUL_MSG);
+                List<Order> orders = _service.Insert(model);
+                return ok_create(Constants.SUCCESSFUL_MSG, orders.Select(order => order.id));
             });
         }
 

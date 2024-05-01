@@ -29,7 +29,7 @@ namespace PandaShoppingAPI.Utils
         public const int EMPTY_ID = -1;
 
         // Order status groups that used for dertimine noti for who
-        static List<OrderStatus> StatusesByShop = new List<OrderStatus>
+        public static List<OrderStatus> StatusesByShop = new List<OrderStatus>
         {
             OrderStatus.Processing,
             OrderStatus.WaitingForDelivering,
@@ -38,7 +38,7 @@ namespace PandaShoppingAPI.Utils
             OrderStatus.CancelledByShop,
             OrderStatus.CompletedBySystem,
         };
-        static List<OrderStatus> StatusesByUser = new List<OrderStatus>
+        public static List<OrderStatus> StatusesByUser = new List<OrderStatus>
         {
             OrderStatus.Pending,
             OrderStatus.Created,
@@ -46,6 +46,9 @@ namespace PandaShoppingAPI.Utils
             OrderStatus.Lost,
         };
 
+        public class Headers {
+            public const string createdIds = "createdIds";
+        }
     }
 
     // TODO: Create init sql to create init role with specific id like defined in the enums

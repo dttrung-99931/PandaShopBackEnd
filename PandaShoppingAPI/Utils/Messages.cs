@@ -6,6 +6,7 @@ namespace PandaShoppingAPI.Configs.Messages
     public static class OrderMessages
     {
         public const string titleStatusUpdated = "[Tình trạng đơn hàng]";
+        public const string titleCreated = "[Đơn hàng]";
 
         public static string GetStatusMessage(this Order order)
         {

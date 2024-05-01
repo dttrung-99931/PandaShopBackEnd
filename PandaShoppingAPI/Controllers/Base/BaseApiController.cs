@@ -12,6 +12,7 @@ using System.Text;
 using PandaShoppingAPI.Models;
 using System.Collections.Generic;
 using PandaShoppingAPI.Utils.Exceptions;
+using System.Linq;
 
 namespace PandaShoppingAPI.Controllers
 {
@@ -55,8 +56,13 @@ namespace PandaShoppingAPI.Controllers
             return new ResponseWrapper(HttpStatusCode.OK, "Successfully", null);
         }
 
-        protected ResponseWrapper ok_create(object data)
+
+        /// [createdId] is id/ids of inseted entity/ entiteis 
+        protected ResponseWrapper ok_create(object data, IEnumerable<int> createdIds)
         {
+            if (createdIds != null){
+                HeaderUtils.SetCreatedIdsToHeader(Response.Headers, createdIds);
+            }
             Response.StatusCode = (int)HttpStatusCode.Created;
             return new ResponseWrapper(HttpStatusCode.Created, data);
         }

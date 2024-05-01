@@ -41,7 +41,7 @@ namespace PandaShoppingAPI.Controllers
                 return unknownError(e.Message);
             }
 
-            return ok_create("Successfully");
+            return ok_create("Successfully", null);
         }
 
         [HttpPut("{id}/Properties")]
