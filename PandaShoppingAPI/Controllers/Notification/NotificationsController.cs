@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PandaShoppingAPI.Controllers.Base;
@@ -16,6 +20,28 @@ namespace PandaShoppingAPI.Controllers
     {
         public NotificationsController(INotificationService service, IHttpContextAccessor httpContextAccessor) : base(service, httpContextAccessor)
         {
+        }
+
+        public override ActionResult<ResponseWrapper> Get([FromQuery] NotificationFilter filter)
+        {
+            return Handle(() =>
+            {
+                List<NotificationResponse> notis = _service.Get(filter, out Meta meta);
+                UpdateNotisSeen(notis);
+                return ok_get(notis, meta);
+            });
+        }
+
+        private void UpdateNotisSeen(List<NotificationResponse> notis)
+        {
+            List<int> ids = notis.Where(noti => noti.status == UserNotificationStatus.Sent)
+                .Select(noti => noti.id)
+                .ToList();
+            Response.OnCompleted(() =>
+            {
+                _service.UpdateNotificationStatusToSeen(ids);
+                return Task.CompletedTask;
+            });
         }
 
         [HttpGet("Overview")]
