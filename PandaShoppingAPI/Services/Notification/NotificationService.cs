@@ -1,4 +1,5 @@
-﻿using PandaShoppingAPI.Configs.Messages;
+﻿using AutoMapper;
+using PandaShoppingAPI.Configs.Messages;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
 using PandaShoppingAPI.Models;
@@ -29,6 +30,29 @@ namespace PandaShoppingAPI.Services
             _notiReceiverRepo = notiReceiverRepo;
             _orderRepo = orderRepo;
             _notiSenderService = notiSenderService;
+        }
+
+        public List<NotificationResponse> Get(NotificationFilter filter, out Meta meta)
+        {
+            var notis = FilterUserNotifications(filter)
+                .Select(userNoti => new {
+                    userNoti.notification,
+                    userNoti.status,
+                })
+                .OrderByDescending(userNoti => userNoti.notification.createdDate)
+                .ToList();
+            
+            List<NotificationResponse> responses = notis.Select(noti =>
+            {
+                NotificationResponse res = Mapper.Map<NotificationResponse>(noti.notification);
+                res.status = noti.status;
+                return res;
+            }
+            ).ToList(); 
+
+            meta = Meta.ProcessAndCreate(notis.Count(), filter);
+
+            return responses;
         }
 
         public override IQueryable<Notification> Fill(NotificationFilter filter)
@@ -109,12 +133,24 @@ namespace PandaShoppingAPI.Services
                     new UserNotification
                     {
                         notificationReceiverId = _notiSenderService.DetermineSuitableReceiver(order.userId).id,
+                        status = UserNotificationStatus.Sent,
                     }
-                }
+                },
             };
             _repo.Insert(noti);
             _notiSenderService.Send(noti.id);
             return noti;
+        }
+
+        public void UpdateNotificationStatusToSeen(List<int> notificaitonIds)
+        {
+            _userNotiRepo.UpdateIf(
+                userNoti => 
+                    notificaitonIds.Contains(userNoti.notificationId) && 
+                    userNoti.status == UserNotificationStatus.Sent, 
+                (userNoti) => userNoti.status = UserNotificationStatus.Seen
+            );
+                
         }
     }
 }

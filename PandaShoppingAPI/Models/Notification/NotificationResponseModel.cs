@@ -16,6 +16,7 @@ namespace PandaShoppingAPI.Models
         public string description { get; set; }
         public NotificationType type { get; set; }
         public DateTime createdDate { get; set; } = DateTime.UtcNow;
+        public UserNotificationStatus status { get; set; } 
 
         public virtual NotificationDataResponse data { get; set; }
     }
