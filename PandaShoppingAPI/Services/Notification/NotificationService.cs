@@ -120,6 +120,10 @@ namespace PandaShoppingAPI.Services
         private Notification CreateOrderNoti(int orderId, string title, NotificationType type)
         {
             Order order = _orderRepo.GetById(orderId);
+            int receivedUserId = type == NotificationType.ShopOrderNoti 
+                // TDOO: Otmz get shop user id from order
+                ? order.OrderDetail.First().productOption.product.shop.User_.First().id 
+                : order.userId;
             Notification noti = new Notification
             {
                 title = title,
@@ -132,7 +136,8 @@ namespace PandaShoppingAPI.Services
                 UserNotification = new List<UserNotification>() {
                     new UserNotification
                     {
-                        notificationReceiverId = _notiSenderService.DetermineSuitableReceiver(order.userId).id,
+                        notificationReceiverId = _notiSenderService
+                            .DetermineSuitableReceiver(receivedUserId).id,
                         status = UserNotificationStatus.Sent,
                     }
                 },

@@ -59,7 +59,7 @@ namespace PandaShoppingAPI.Services
                 orders = orders.Where((order) => order.status == filter.status);
             }
 
-            return orders;
+            return orders.OrderByDescending(order => order.createdAt);
         }
 
         private IQueryable<Order> FilterByRole(IQueryable<Order> orders)
