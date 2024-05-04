@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
+using PandaShoppingAPI.Models;
 
 namespace PandaShoppingAPI.Services
 {
@@ -32,9 +34,16 @@ namespace PandaShoppingAPI.Services
 
         public bool Send(Notification noti)
         {
+            NotificationSendData notiData = Mapper.Map<NotificationSendData>(noti);
             foreach (UserNotification userNoti in noti.UserNotification)
             {
-                if (!_senderFactory.Send(userNoti))
+                NotificationSend notiSend = new NotificationSend 
+                {
+                    data =  notiData,
+                    receiver = Mapper.Map<NotificationReceiverModel>(userNoti.receiver),
+
+                };
+                if (!_senderFactory.Send(notiSend))
                 {
                     return false;
                 }

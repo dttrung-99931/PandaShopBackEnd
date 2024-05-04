@@ -5,8 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using GarageSystem.Config;
+using GarageSystem.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -53,6 +55,8 @@ namespace PandaShoppingAPI
 
             SwaggerConfig.Config(services);
             
+            SignalRConfig.Config(services);
+
             services.AddHttpContextAccessor();
 
             //services.AddAuthentication().AddOAuth();
@@ -83,10 +87,20 @@ namespace PandaShoppingAPI
             app.UseAuthentication();
 
             app.UseAuthorization();
-            
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<SignalRNotificationHub>
+                (
+                    APIPaths.singalR, 
+                    options =>
+                    {
+                        options.Transports =
+                            HttpTransportType.WebSockets |
+                            HttpTransportType.LongPolling;
+                    }
+                );
             });
 
             // Config image storing folder, base request image url 
