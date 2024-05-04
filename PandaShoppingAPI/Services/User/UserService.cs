@@ -48,8 +48,14 @@ namespace PandaShoppingAPI.Services
             User_ insertUsr = base.MapInsertEntity(requestModel);
             // Currently all created users will be user 
             // TODO: created user with role param
-            insertUsr.UserRole.Add(new UserRole { roleId = (int)Roles.user });
-            insertUsr.Receivers.Add(new NotificationReceiver { signalRToken = "Default", senderType = NotificationSenderType.SignalR, });
+            insertUsr.UserRole = new List<UserRole> 
+            {
+                new UserRole { roleId = (int)Roles.user }
+            };
+            insertUsr.Receivers = new List<NotificationReceiver>
+            {
+                new NotificationReceiver { signalRToken = "Default", senderType = NotificationSenderType.SignalR, }
+            };
             return insertUsr;
         }
 
