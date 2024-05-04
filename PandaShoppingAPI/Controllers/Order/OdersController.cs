@@ -12,7 +12,6 @@ using PandaShoppingAPI.Utils;
 namespace PandaShoppingAPI.Controllers
 {
     [Route("v1/[controller]")]
-    [Authorize(Roles = "shop")]
     public class OrdersController : CrudApiController2<Order, OrderModel,
             OrderResponseModel, IOrderService, OrderFilter>
     {
@@ -21,6 +20,7 @@ namespace PandaShoppingAPI.Controllers
         }
 
 
+        [Authorize(Roles = "user")]
         [HttpPost(Order = -1)] // Mark -1 to override default insert api route
         public ActionResult<ResponseWrapper> Insert(CreateOrdersModel model)
         {
@@ -38,6 +38,7 @@ namespace PandaShoppingAPI.Controllers
             return notFound();
         }
 
+        [Authorize(Roles = "shop")]
         [HttpPut(APIPaths.Orders.startProcessing)]
         public ActionResult<ResponseWrapper> StartProcessingOrder(int id)
         {
@@ -48,6 +49,7 @@ namespace PandaShoppingAPI.Controllers
             });
         }
 
+        [Authorize(Roles = "shop")]
         [HttpPut(APIPaths.Orders.completeProcessing)]
         public ActionResult<ResponseWrapper> CompleteProcessing(int id)
         {
