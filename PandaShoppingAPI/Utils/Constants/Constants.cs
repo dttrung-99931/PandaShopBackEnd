@@ -27,6 +27,8 @@ namespace PandaShoppingAPI.Utils
             204
         };
         public const int EMPTY_ID = -1;
+        public const string QUERY_PARAM_ACCESS_TOKEN = "access_token";
+
 
         // Order status groups that used for dertimine noti for who
         public static List<OrderStatus> StatusesByShop = new List<OrderStatus>

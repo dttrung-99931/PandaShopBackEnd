@@ -7,6 +7,8 @@ namespace PandaShoppingAPI.Utils
 {
 	public class APIPaths
 	{
+        public const string singalR = "/SignalR";
+
         public class Orders
         {
             public const string endpoint = "/v1/Orders";

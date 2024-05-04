@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Models
 {
-    public class NotificationDataModel : BaseModel<NotificationData, NotificationDataModel>
+    public class NotificationDataModel : BaseModel<DataAccesses.EF.NotificationData, NotificationDataModel>
     {
         //public int? orderId { get; set; }
         // properties: TOPDO

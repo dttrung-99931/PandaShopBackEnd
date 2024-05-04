@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Models
 {
-    public class NotificationDataResponse : BaseModel<NotificationData, NotificationDataModel>
+    public class NotificationDataResponse : BaseModel<DataAccesses.EF.NotificationData, NotificationDataModel>
     {
         public ShortOrderResponseModel order { get; set; }
     }

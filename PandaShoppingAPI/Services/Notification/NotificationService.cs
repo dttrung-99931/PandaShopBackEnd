@@ -124,7 +124,7 @@ namespace PandaShoppingAPI.Services
             {
                 title = title,
                 description = order.GetStatusMessage(),
-                data = new NotificationData
+                data = new DataAccesses.EF.NotificationData
                 {
                     orderId = orderId,
                 },

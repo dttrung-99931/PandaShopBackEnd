@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using PandaShoppingAPI.DataAccesses.EF;
+using PandaShoppingAPI.Models;
 
 namespace PandaShoppingAPI.Services
 {
 	public interface INotificationSender
     {
-        public abstract bool Send(UserNotification noti);
+        public abstract bool Send(NotificationSend noti);
 	}
 
     public class NotificationSenderFactory
@@ -18,10 +19,10 @@ namespace PandaShoppingAPI.Services
             _serviceProvider = serviceProvider;
         }
 
-        public bool Send(UserNotification userNoti)
+        public bool Send(NotificationSend noti)
         {
             INotificationSender sender;
-            switch (userNoti.receiver.senderType)
+            switch (noti.receiver.senderType)
             {
                 case NotificationSenderType.SignalR:
                     sender = (INotificationSender) _serviceProvider.GetService(typeof(SignalRNotificationSender));
@@ -30,9 +31,9 @@ namespace PandaShoppingAPI.Services
                     sender = (INotificationSender)_serviceProvider.GetService(typeof(FCMNotificationSender));
                     break;
                 default:
-                    throw new Exception($"Invalid noti sender type {userNoti.receiver.senderType}");
+                    throw new Exception($"Invalid noti sender type {noti.receiver}");
             }
-            sender.Send(userNoti);
+            sender.Send(noti);
             return true;
         }
     }
