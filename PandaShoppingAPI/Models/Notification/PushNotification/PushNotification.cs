@@ -4,26 +4,9 @@ using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.Models.Base;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Models
 {
-    public class PushNotificationSend 
-    {
-        public PushNotification data;
-        public NotificationReceiverModel receiver;
-    }
-
-    public class NotificationReceiverModel : BaseModel<NotificationReceiver, NotificationReceiverModel>
-    {
-        public int userId { get; set; }
-        public string fcmToken { get; set; }
-        public string signalRToken { get; set; }
-        public NotificationSenderType senderType { get; set; }
-    }
-    
     public class PushNotification : BaseModel<Notification, PushNotification>
     {
         public string title { get; set; }
@@ -41,7 +24,14 @@ namespace PandaShoppingAPI.Models
 
     public class PushNotificationData : BaseModel<NotificationData, NotificationDataModel>
     {
-        public int? orderId { get; set; }
+        public PushNotificationOrderData order { get; set; }
     }
+
+    public class PushNotificationOrderData : BaseModel<Order, PushNotificationOrderData>
+    {
+        [JsonProperty("orderDetails")]
+        public List<ShortOrderDetailResponse> OrderDetail { get; set; }
+    }
+
 }
 
