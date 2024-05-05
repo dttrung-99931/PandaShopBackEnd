@@ -11,9 +11,8 @@ namespace PandaShoppingAPI.Models
 
     public class NotificationReceiverModel : BaseModel<NotificationReceiver, NotificationReceiverModel>
     {
+        public string token { get; set; }
         public int userId { get; set; }
-        public string fcmToken { get; set; }
-        public string signalRToken { get; set; }
         public NotificationSenderType senderType { get; set; }
     }
     

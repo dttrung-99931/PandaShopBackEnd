@@ -20,6 +20,13 @@ namespace PandaShoppingAPI.Models
             string json = JsonConvert.SerializeObject(this);
             return json;
         }
+        public Dictionary<string, string> ToDictionary()
+        {
+            string json = JsonConvert.SerializeObject(this);
+            Dictionary<string, string> dict = 
+                JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+            return dict;
+        }
     }
 
     public class PushNotificationData : BaseModel<NotificationData, NotificationDataModel>

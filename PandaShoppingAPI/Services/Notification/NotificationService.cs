@@ -157,5 +157,24 @@ namespace PandaShoppingAPI.Services
             );
                 
         }
+
+        public void CreateNotificationReceiver(NotificationReceiverModel model)
+        {
+            bool exists = _notiReceiverRepo.Any(receiver => 
+                receiver.userId == User.UserId && 
+                receiver.senderType == model.senderType && 
+                receiver.token == model.token);
+            
+            if (exists) {
+                _notiReceiverRepo.Insert(
+                    new NotificationReceiver {
+                        token  = model.token,
+                        senderType = model.senderType,        
+                        userId = User.UserId,
+                    }
+                );
+            }
+        }
+
     }
 }

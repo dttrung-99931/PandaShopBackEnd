@@ -21,17 +21,17 @@ namespace PandaShoppingAPI.Services
         IUserService
     {
         private readonly IShopRepo _shopRepo;
-        private readonly IRoleRepo _roleRepo;
+        private readonly INotificationReceiverRepo _notiReceiverRepo;
         private readonly IConfiguration _config;
 
         public UserService(
             IUserRepo repo,
             IShopRepo shopRepo,
-            IRoleRepo roleRepo,
+            INotificationReceiverRepo notiReceiverRepo,
             IConfiguration config) : base(repo)
         {
             _shopRepo = shopRepo;
-            _roleRepo = roleRepo;
+            _notiReceiverRepo = notiReceiverRepo;
             _config = config;
         }
 
@@ -54,7 +54,7 @@ namespace PandaShoppingAPI.Services
             };
             insertUsr.Receivers = new List<NotificationReceiver>
             {
-                new NotificationReceiver { signalRToken = "Default", senderType = NotificationSenderType.SignalR, }
+                new NotificationReceiver { senderType = NotificationSenderType.SignalR, }
             };
             return insertUsr;
         }
