@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Models
 {
-    public class NotificationSend 
+    public class PushNotificationSend 
     {
-        public NotificationSendData data;
+        public PushNotification data;
         public NotificationReceiverModel receiver;
     }
 
@@ -24,13 +24,13 @@ namespace PandaShoppingAPI.Models
         public NotificationSenderType senderType { get; set; }
     }
     
-    public class NotificationSendData : BaseModel<Notification, NotificationSendData>
+    public class PushNotification : BaseModel<Notification, PushNotification>
     {
         public string title { get; set; }
         public string description { get; set; }
         public NotificationType type { get; set; }
         public DateTime createdDate { get; set; } = DateTime.UtcNow;
-        public NotificationData data { get; set; }
+        public PushNotificationData data { get; set; }
 
         public string ToJson()
         {
@@ -39,7 +39,7 @@ namespace PandaShoppingAPI.Models
         }
     }
 
-    public class NotificationData : BaseModel<DataAccesses.EF.NotificationData, NotificationDataModel>
+    public class PushNotificationData : BaseModel<NotificationData, NotificationDataModel>
     {
         public int? orderId { get; set; }
     }

@@ -17,7 +17,7 @@ namespace PandaShoppingAPI.Services
             _hubContext = hubContext;
         }
 
-        public bool Send(NotificationSend noti)
+        public bool Send(PushNotificationSend noti)
         {
             try
             {

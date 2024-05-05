@@ -8,7 +8,7 @@ namespace PandaShoppingAPI.Services
 {
 	public interface INotificationSender
     {
-        public abstract bool Send(NotificationSend noti);
+        public abstract bool Send(PushNotificationSend noti);
 	}
 
     public class NotificationSenderFactory
@@ -19,7 +19,7 @@ namespace PandaShoppingAPI.Services
             _serviceProvider = serviceProvider;
         }
 
-        public bool Send(NotificationSend noti)
+        public bool Send(PushNotificationSend noti)
         {
             INotificationSender sender;
             switch (noti.receiver.senderType)
