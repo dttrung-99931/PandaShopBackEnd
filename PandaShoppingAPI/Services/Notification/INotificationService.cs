@@ -13,5 +13,6 @@ namespace PandaShoppingAPI.Services
         NotificationOverviewResponse GetNotificationOverview(NotificationFilter filter);
         List<NotificationResponse> Get(NotificationFilter filter, out Meta meta);
         void UpdateNotificationStatusToSeen(List<int> notificaitonIds);
+        void CreateNotificationReceiver(NotificationReceiverModel model);
     }
 }

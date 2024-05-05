@@ -57,6 +57,8 @@ namespace PandaShoppingAPI
             
             SignalRConfig.Config(services);
 
+            FirebaseAdminConfig.Config(services, Configuration);
+
             services.AddHttpContextAccessor();
 
             //services.AddAuthentication().AddOAuth();
