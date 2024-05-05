@@ -34,10 +34,10 @@ namespace PandaShoppingAPI.Services
 
         public bool Send(Notification noti)
         {
-            NotificationSendData notiData = Mapper.Map<NotificationSendData>(noti);
+            PushNotification notiData = Mapper.Map<PushNotification>(noti);
             foreach (UserNotification userNoti in noti.UserNotification)
             {
-                NotificationSend notiSend = new NotificationSend 
+                PushNotificationSend notiSend = new PushNotificationSend 
                 {
                     data =  notiData,
                     receiver = Mapper.Map<NotificationReceiverModel>(userNoti.receiver),

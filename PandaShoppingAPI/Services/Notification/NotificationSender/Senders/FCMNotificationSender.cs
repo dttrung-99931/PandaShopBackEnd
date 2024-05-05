@@ -6,7 +6,7 @@ namespace PandaShoppingAPI.Services
 {
     public class FCMNotificationSender : INotificationSender
     {
-        public bool Send(NotificationSend noti)
+        public bool Send(PushNotificationSend noti)
         {
             return true;
         }
