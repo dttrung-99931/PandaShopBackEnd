@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using GarageSystem.Services;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
 using PandaShoppingAPI.Models;
@@ -21,10 +22,14 @@ namespace PandaShoppingAPI.Services
             _notiReceiverRepo = receiverRepo;
         }
 
-        public NotificationReceiver DetermineSuitableReceiver(IEnumerable<NotificationReceiver> receivers)
+        public NotificationReceiver DetermineSuitableReceiver(IEnumerable<NotificationReceiver> userReceivers)
         {
-            // TODO: determine noti receiver by prefred SingalR fist then FCM, ...
-            return receivers.First();
+            NotificationReceiver signalRReceiver = userReceivers.First(receiver => receiver.senderType == NotificationSenderType.SignalR);
+            if (SignalRNotificationHub.IsUserConnecting(signalRReceiver.userId)){
+                return signalRReceiver;
+            }
+            // FIXME:
+            return userReceivers.FirstOrDefault(receiver => receiver.id != signalRReceiver.id);
         }
 
         public NotificationReceiver DetermineSuitableReceiver(int userId)

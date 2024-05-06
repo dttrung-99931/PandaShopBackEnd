@@ -124,6 +124,10 @@ namespace PandaShoppingAPI.Services
                 // TDOO: Otmz get shop user id from order
                 ? order.OrderDetail.First().productOption.product.shop.User_.First().id 
                 : order.userId;
+
+            NotificationReceiver receiver = _notiSenderService
+                .DetermineSuitableReceiver(receivedUserId);
+
             Notification noti = new Notification
             {
                 title = title,
@@ -136,8 +140,7 @@ namespace PandaShoppingAPI.Services
                 UserNotification = new List<UserNotification>() {
                     new UserNotification
                     {
-                        notificationReceiverId = _notiSenderService
-                            .DetermineSuitableReceiver(receivedUserId).id,
+                        notificationReceiverId = receiver.id,
                         status = UserNotificationStatus.Sent,
                     }
                 },
@@ -165,7 +168,7 @@ namespace PandaShoppingAPI.Services
                 receiver.senderType == model.senderType && 
                 receiver.token == model.token);
             
-            if (exists) {
+            if (!exists) {
                 _notiReceiverRepo.Insert(
                     new NotificationReceiver {
                         token  = model.token,

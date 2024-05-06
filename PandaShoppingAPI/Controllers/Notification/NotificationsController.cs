@@ -52,7 +52,7 @@ namespace PandaShoppingAPI.Controllers
             });
         }
 
-        [HttpPost("NotificationReceiver")]
+        [HttpPost("Receiver")]
         public ActionResult<ResponseWrapper> NotificationReceiver(NotificationReceiverModel model)
         {
             return Handle(() =>
