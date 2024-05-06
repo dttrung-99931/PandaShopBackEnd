@@ -51,9 +51,9 @@ namespace GarageSystem.Services
             Debug.WriteLine(signalRID + " disconnected");
         }
 
-        internal static bool IsUserConnecting(string userId)
+        internal static bool IsUserConnecting(int userId)
         {
-            return ConnectingSignalRIds.Contains(userId);
+            return ConnectingSignalRIds.Any(signalRId => SignalRUserIdProvider.GetUserId(signalRId) == userId);
         }
 
         internal static List<string> GetConnectingSignalRIdsOfUser(int userId)
