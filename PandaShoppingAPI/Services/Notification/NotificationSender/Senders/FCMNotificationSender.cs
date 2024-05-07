@@ -1,5 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data.Common;
 using FirebaseAdmin.Messaging;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.Data.SqlClient.Server;
+using Microsoft.Extensions.Options;
 using PandaShoppingAPI.Models;
 
 namespace PandaShoppingAPI.Services
@@ -10,7 +15,12 @@ namespace PandaShoppingAPI.Services
         {
             Message fcmNoti = new Message 
             {
-                Data = noti.data.ToDictionary(),
+                Data = new Dictionary<string, string>
+                {
+                    // To send [noti.data] so we need to convert to json string.
+                    // Data is Dictionary<string, string> that can not hold the noti.data (nested filed is not string)
+                    { "data", noti.data.ToJson() }
+                },
                 Token = noti.receiver.token,
             };
             FirebaseMessaging.DefaultInstance.SendAsync(fcmNoti);

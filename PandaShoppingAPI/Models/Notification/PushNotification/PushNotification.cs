@@ -1,5 +1,6 @@
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.Models.Base;
 using System;
@@ -20,11 +21,11 @@ namespace PandaShoppingAPI.Models
             string json = JsonConvert.SerializeObject(this);
             return json;
         }
-        public Dictionary<string, string> ToDictionary()
+        public Dictionary<string, object> ToDictionary()
         {
             string json = JsonConvert.SerializeObject(this);
-            Dictionary<string, string> dict = 
-                JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+            Dictionary<string, object> dict =
+                JsonConvert.DeserializeObject<Dictionary<string, object>>(Uri.UnescapeDataString(json));
             return dict;
         }
     }
