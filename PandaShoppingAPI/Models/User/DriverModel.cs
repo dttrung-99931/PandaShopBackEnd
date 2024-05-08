@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.Models.Base;
-using PandaShoppingAPI.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,12 +11,9 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Models
 {
-    public class UserModel : BaseModel<User_, UserModel>
+    public class DriverModel: UserModel
     {
-        public string name { get; set; }
-        public string phone { get; set; }
-        public string email { get; set; }
-        public string password { get; set; }
-
+        public string licensePlates { get; set; } // Biển số xe
+        public int addressId { get; set; } // Biển số xe
     }
 }
