@@ -8,8 +8,8 @@ namespace PandaShoppingAPI.Services
 	{
         public bool Send(Notification noti);
         public bool Send(int notiId);
-        NotificationReceiver DetermineSuitableReceiver(IEnumerable<NotificationReceiver> receivers);
-        NotificationReceiver DetermineSuitableReceiver(int userId);
+        List<NotificationReceiver> DetermineSuitableReceivers(IEnumerable<NotificationReceiver> receivers);
+        List<NotificationReceiver> DetermineSuitableReceiver(int userId);
     }
 }
 
