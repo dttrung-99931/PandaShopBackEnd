@@ -25,11 +25,9 @@ namespace PandaShoppingAPI.Services
         public List<NotificationReceiver> DetermineSuitableReceivers(IEnumerable<NotificationReceiver> userReceivers)
         {
             NotificationReceiver signalRReceiver = userReceivers.First(receiver => receiver.senderType == NotificationSenderType.SignalR);
-            // TODO: Uncomment after testing fcm
-            //if (SignalRNotificationHub.IsUserConnecting(signalRReceiver.userId)){
-            //    return signalRReceiver;
-            //}
-            // FIXME:
+            if (SignalRNotificationHub.IsUserConnecting(signalRReceiver.userId)){
+               return new List<NotificationReceiver> { signalRReceiver };
+            }
             return userReceivers.Where(receiver => receiver.senderType == NotificationSenderType.FCM).ToList();
         }
 
