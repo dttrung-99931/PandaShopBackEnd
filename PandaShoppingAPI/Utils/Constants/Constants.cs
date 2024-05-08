@@ -58,7 +58,8 @@ namespace PandaShoppingAPI.Utils
     {
         user = 1,
         shop = 2,
-        admin = 3
+        admin = 3,
+        driver = 4,
     }
 
     public class RoleNames

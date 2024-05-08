@@ -21,6 +21,7 @@ namespace PandaShoppingAPI.Services
         IUserService
     {
         private readonly IShopRepo _shopRepo;
+        private readonly IUserRoleRepo _userRoleRepo;
         private readonly INotificationReceiverRepo _notiReceiverRepo;
         private readonly IConfiguration _config;
 
@@ -85,6 +86,16 @@ namespace PandaShoppingAPI.Services
             return shop;
         }
 
+        public User_ InsertDriver(DriverModel model)
+        {
+            User_ user = Insert(model);
+            _userRoleRepo.Insert(new UserRole
+            {
+                userId = user.id,
+                roleId = (int) Roles.driver,
+            })
+        }
+
         public LoginResponse Login(LoginModel loginModel)
         {
             var user = _repo.Where(u => u.phone == loginModel.phone)
@@ -137,6 +148,9 @@ namespace PandaShoppingAPI.Services
                     return expires.AddDays(5);
 
                 if (userRole.roleId == (int)Roles.shop)
+                    return expires.AddDays(10);
+
+                if (userRole.roleId == (int)Roles.driver)
                     return expires.AddDays(10);
 
                 if (userRole.roleId == (int)Roles.user)
