@@ -22,7 +22,7 @@ namespace PandaShoppingAPI.Services
             _notiReceiverRepo = receiverRepo;
         }
 
-        public NotificationReceiver DetermineSuitableReceiver(IEnumerable<NotificationReceiver> userReceivers)
+        public List<NotificationReceiver> DetermineSuitableReceivers(IEnumerable<NotificationReceiver> userReceivers)
         {
             NotificationReceiver signalRReceiver = userReceivers.First(receiver => receiver.senderType == NotificationSenderType.SignalR);
             // TODO: Uncomment after testing fcm
@@ -30,12 +30,12 @@ namespace PandaShoppingAPI.Services
             //    return signalRReceiver;
             //}
             // FIXME:
-            return userReceivers.FirstOrDefault(receiver => receiver.id != signalRReceiver.id);
+            return userReceivers.Where(receiver => receiver.senderType == NotificationSenderType.FCM).ToList();
         }
 
-        public NotificationReceiver DetermineSuitableReceiver(int userId)
+        public List<NotificationReceiver> DetermineSuitableReceiver(int userId)
         {
-            return DetermineSuitableReceiver(_notiReceiverRepo.Where(receiver => receiver.userId == userId));
+            return DetermineSuitableReceivers(_notiReceiverRepo.Where(receiver => receiver.userId == userId));
         }
 
         public bool Send(Notification noti)
