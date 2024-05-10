@@ -40,8 +40,9 @@ namespace PandaShoppingAPI.Controllers
             });
         }
 
-        [HttpPost("{id}/Drivers")]
-        public ActionResult<ResponseWrapper> InsertDriver(int id, [FromBody] DriverModel driver)
+        [AllowAnonymous]
+        [HttpPost("Drivers")]
+        public ActionResult<ResponseWrapper> InsertDriver([FromBody] DriverModel driver)
         {
             return Handle(() =>
             {
