@@ -855,6 +855,11 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasConstraintName("FK_User_Shop")
                     .OnDelete(DeleteBehavior.NoAction);
 
+                entity.HasOne(d => d.driver)
+                    .WithOne(p => p.user)
+                    .HasForeignKey<User_>(d => d.driverId)
+                    .HasConstraintName("FK_User_Driver")
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.Property(e => e.isDeleted)
                     .HasDefaultValue(false);

@@ -14,10 +14,12 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public DateTime? updatedAt { get; set; }
         public int cartId { get; set; }
         public int? shopId { get; set; }
+        public int? driverId { get; set; }
         
 
         public virtual Cart cart { get; set; }
         public virtual Shop shop { get; set; }
+        public virtual Driver driver { get; set; }
         public virtual ICollection<Address> Address { get; set; }
         public virtual ICollection<Feedback> Feedback { get; set; }
         public virtual ICollection<Order> Order { get; set; }

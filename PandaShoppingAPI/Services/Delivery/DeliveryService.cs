@@ -14,5 +14,10 @@ namespace PandaShoppingAPI.Services
         public DeliveryService(IDeliveryRepo repo) : base(repo)
         {
         }
+
+        public override IQueryable<Delivery> Fill(DeliveryFilter filter)
+        {
+            return base.Fill(filter);
+        }
     }
 }
