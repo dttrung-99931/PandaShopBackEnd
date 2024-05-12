@@ -21,7 +21,7 @@ namespace PandaShoppingAPI.Services
         IUserService
     {
         private readonly IShopRepo _shopRepo;
-        // private readonly  _userRoleRepo;
+        private readonly IUserRoleRepo _userRoleRepo;
         private readonly INotificationReceiverRepo _notiReceiverRepo;
         private readonly IConfiguration _config;
 
@@ -29,11 +29,13 @@ namespace PandaShoppingAPI.Services
             IUserRepo repo,
             IShopRepo shopRepo,
             INotificationReceiverRepo notiReceiverRepo,
-            IConfiguration config) : base(repo)
+            IConfiguration config,
+            IUserRoleRepo userRoleRepo) : base(repo)
         {
             _shopRepo = shopRepo;
             _notiReceiverRepo = notiReceiverRepo;
             _config = config;
+            _userRoleRepo = userRoleRepo;
         }
 
         protected override void ValidateInsert(UserModel requestModel)
@@ -89,11 +91,11 @@ namespace PandaShoppingAPI.Services
         public User_ InsertDriver(DriverModel model)
         {
             User_ user = Insert(model);
-            // _userRoleRepo.Insert(new UserRole
-            // {
-            //     userId = user.id,
-            //     roleId = (int) Roles.driver,
-            // });
+            _userRoleRepo.Insert(new UserRole
+            {
+                userId = user.id,
+                roleId = (int) Roles.driver,
+            });
             return user;
         }
 

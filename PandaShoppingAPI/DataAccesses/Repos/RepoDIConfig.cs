@@ -47,6 +47,7 @@ namespace PandaShoppingAPI.DataAccesses.Repos
             services.AddScoped<INotificationDataRepo, NotificationDataRepo>();
             services.AddScoped<INotificationReceiverRepo, NotificationReceiverRepo>();
             services.AddScoped<IUserNotificationRepo, UserNotificationRepo>();
+            services.AddScoped<IUserRoleRepo, UserRoleRepo>();
         }
     }
 }
