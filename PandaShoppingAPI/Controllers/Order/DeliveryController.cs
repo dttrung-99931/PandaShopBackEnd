@@ -10,7 +10,7 @@ using PandaShoppingAPI.Utils;
 namespace PandaShoppingAPI.Controllers
 {
     [Route("v1/[controller]")]
-    [Authorize(Roles = RoleNames.admin)]
+    [Authorize(Roles = RoleNames.admin + "," + RoleNames.shop + "," + RoleNames.driver)]
     public class DeliveryController : CrudApiController2<Delivery, DeliveryModel,
             DeliveryResponse, IDeliveryService, DeliveryFilter>
     {
