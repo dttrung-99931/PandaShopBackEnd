@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 
 namespace PandaShoppingAPI.DataAccesses.EF
@@ -21,6 +22,10 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public string streetAndHouseNum { get; set; }
         public int? userId { get; set; }
         public string name { get; set; }
+        [Precision(12, 9)]
+        public decimal lat { get; set; }
+        [Precision(12, 9)]
+        public decimal long_ { get; set; }
 
         public virtual User_ user { get; set; }
         public virtual ICollection<Delivery> Delivery { get; set; }
