@@ -90,7 +90,7 @@ namespace PandaShoppingAPI.Services
 
         public User_ InsertDriver(DriverModel model)
         {
-            User_ user = Insert(model);
+            User_ user = Insert(model.ToUserModel());
             _userRoleRepo.Insert(new UserRole
             {
                 userId = user.id,

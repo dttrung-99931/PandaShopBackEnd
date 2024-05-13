@@ -31,6 +31,8 @@ namespace PandaShoppingAPI.Services
             services.AddScoped<FCMNotificationSender>();
             services.AddScoped<SignalRNotificationSender>();
             services.AddScoped<NotificationSenderFactory>();
+            //
+            services.AddScoped<IDriverService, DriverService>();
         }
     }
 }

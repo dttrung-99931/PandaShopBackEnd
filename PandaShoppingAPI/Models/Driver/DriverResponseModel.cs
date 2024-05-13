@@ -1,19 +1,22 @@
 ﻿using AutoMapper;
+using AutoMapper.Configuration.Conventions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.Models.Base;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Models
 {
-    public class DriverModel: UserModel
+    public class DriverResponseModel : BaseModel<Driver, DriverResponseModel>
     {
-        public string licensePlates { get; set; } // Biển số xe
-        public int addressId { get; set; } // Biển số xe
+        public decimal lat { get; set; }
+        [JsonProperty("long")]
+        public decimal long_ { get; set; }
     }
 }
