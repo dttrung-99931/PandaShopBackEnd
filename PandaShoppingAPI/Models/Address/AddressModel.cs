@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.Models.Base;
 using System;
@@ -20,7 +21,7 @@ namespace PandaShoppingAPI.Models
         public string streetAndHouseNum { get; set; }
         public string name { get; set; }
         public decimal lat { get; set; }
-        [JsonPropertyName("long")]
+        [JsonProperty("long")]
         public decimal long_ { get; set; }
 
     }
