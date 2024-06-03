@@ -6,9 +6,8 @@ using System.Collections.Generic;
 
 namespace PandaShoppingAPI.Services
 {
-    public interface IDriverService : IBaseService<Driver, DriverModel, DriverFilter>
+    public interface IDriverService : IBaseService<Driver, DriverModel, DriverFilter>, IDriverManagerService
     {
-        List<DeliveryResponse> GetUpcomingDeliveries(UpcomingDeliveriesFilter filter, out Meta meta);
         void UpdateDriverLocation(DriverLocationModel location);
     }
 }

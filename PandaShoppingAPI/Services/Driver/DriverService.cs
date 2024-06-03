@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Services
 {
-    public class DriverService : BaseService<IDriverRepo, Driver, DriverModel, DriverFilter>, 
+    public partial class DriverService : BaseService<IDriverRepo, Driver, DriverModel, DriverFilter>, 
         IDriverService
     {
         private readonly IUserRepo _userRepo;
@@ -21,16 +21,6 @@ namespace PandaShoppingAPI.Services
         {
             _userRepo = userRepo;
             _deliveryRepo = deliveryRepo;
-        }
-
-        public List<DeliveryResponse> GetUpcomingDeliveries(UpcomingDeliveriesFilter filter, out Meta meta)
-        {
-            //Driver driver = GetDriver(); 
-            // TODO: Hanlde get nearby deliveries for driver
-            IQueryable<Delivery> deliveries = _deliveryRepo.GetIQueryable();
-            meta = Meta.ProcessAndCreate(deliveries.Count(), filter);
-            List<Delivery> page = MyUtil.Page(deliveries, filter);
-            return Mapper.Map<List<DeliveryResponse>>(page);
         }
 
         public void UpdateDriverLocation(DriverLocationModel location)
