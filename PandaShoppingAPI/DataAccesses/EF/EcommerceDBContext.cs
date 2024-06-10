@@ -172,19 +172,11 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<Delivery>(entity =>
             {
-                entity.HasIndex(e => e.addressId, "IX_Delivery_addressId");
-
                 entity.HasIndex(e => e.deliveryMethodId, "IX_Delivery_deliveryMethodId");
 
                 entity.Property(e => e.finishedAt).HasColumnType("datetime");
 
                 entity.Property(e => e.startedAt).HasColumnType("datetime");
-
-                entity.HasOne(d => d.address)
-                    .WithMany(p => p.Delivery)
-                    .HasForeignKey(d => d.addressId)
-                    .HasConstraintName("FK_Delivery_Address")
-                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(d => d.deliveryMethod)
                     .WithMany(p => p.Delivery)
@@ -196,6 +188,31 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .WithOne(p => p.delivery)
                     .HasForeignKey<Delivery>(d => d.orderId)
                     .HasConstraintName("FK_Delivery_Order")
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
+            });
+
+            modelBuilder
+                .Entity<DeliveryLocation>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
+            modelBuilder.Entity<DeliveryLocation>(entity =>
+            {
+                entity.HasIndex(e => e.addressId, "IX_DeliveryLocation_addressId");
+
+                entity.HasIndex(e => e.deliveryId, "IX_DeliveryLocation_deliveryId");
+
+                entity.HasOne(d => d.address)
+                    .WithMany(p => p.DeliveryLocation)
+                    .HasForeignKey(d => d.addressId)
+                    .HasConstraintName("FK_DeliveryLocation_Address")
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasOne(d => d.delivery)
+                    .WithMany(p => p.DeliveryLocation)
+                    .HasForeignKey(d => d.deliveryId)
+                    .HasConstraintName("FK_DeliveryLocation_Delivery")
                     .OnDelete(DeleteBehavior.NoAction);
 
                 entity.Property(e => e.isDeleted)
