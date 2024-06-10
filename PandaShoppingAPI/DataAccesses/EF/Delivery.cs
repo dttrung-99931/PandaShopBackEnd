@@ -9,13 +9,12 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public DateTime? startedAt { get; set; }
         public DateTime? finishedAt { get; set; }
         public int deliveryMethodId { get; set; }
-        public int addressId { get; set; }
         public DeliveryStatus status { get; set; }
         public int orderId { get; set; }
 
 
-        public virtual Address address { get; set; }
         public virtual DeliveryMethod deliveryMethod { get; set; }
         public virtual Order order { get; set; }
+        public virtual ICollection<DeliveryLocation> DeliveryLocation { get; set; }
     }
 }

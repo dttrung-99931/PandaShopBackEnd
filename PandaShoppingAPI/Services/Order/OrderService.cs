@@ -135,9 +135,14 @@ namespace PandaShoppingAPI.Services
                         }).ToList(),
                     delivery = new Delivery
                     {
-                        addressId = requestModel.addressId,
                         deliveryMethodId = requestModel.deliveryMethodId,
                         status = DeliveryStatus.Created,
+                        DeliveryLocation = new List<DeliveryLocation> {
+                            new DeliveryLocation {
+                                addressId = requestModel.addressId,
+                                locationType = LocationType.DeliveryPartner,
+                            }
+                        }
                     }
                 };
             
