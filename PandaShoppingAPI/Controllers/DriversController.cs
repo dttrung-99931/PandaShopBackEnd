@@ -36,7 +36,8 @@ namespace PandaShoppingAPI.Controllers
         {
             return notFound();
         }
-
+        
+        /// Update current driver location 
         [HttpPut("UpdateLocation")]
         public ActionResult<ResponseWrapper> UpdateLocation([FromBody] DriverLocationModel location)
         {
@@ -56,6 +57,16 @@ namespace PandaShoppingAPI.Controllers
                 return ok_get(deliveries, meta);
             });
         }
+
+        // [HttpPut("StartDelivery")]
+        // public ActionResult<ResponseWrapper> GetUpcomingDeliveries([FromQuery] UpcomingDeliveriesFilter filter)
+        // {
+        //     return Handle(() =>
+        //     {
+        //         List<DeliveryResponse> deliveries =  _service.GetUpcomingDeliveries(filter, out Meta meta);
+        //         return ok_get(deliveries, meta);
+        //     });
+        // }
 
 
     }
