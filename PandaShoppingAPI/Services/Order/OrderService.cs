@@ -1,4 +1,5 @@
-﻿using PandaShoppingAPI.DataAccesses.EF;
+﻿using Microsoft.EntityFrameworkCore;
+using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
 using PandaShoppingAPI.Models;
 using PandaShoppingAPI.Utils;
