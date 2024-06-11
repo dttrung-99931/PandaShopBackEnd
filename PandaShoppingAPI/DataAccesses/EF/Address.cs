@@ -31,5 +31,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public virtual ICollection<Delivery> Delivery { get; set; }
         public virtual ICollection<Product> Product { get; set; }
         public virtual ICollection<Warehouse> Warehouse { get; set; }
+        public virtual ICollection<DeliveryLocation> DeliveryLocation { get; set; }
     }
 }
