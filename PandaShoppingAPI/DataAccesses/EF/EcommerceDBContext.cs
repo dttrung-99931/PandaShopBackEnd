@@ -185,8 +185,8 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(d => d.order)
-                    .WithOne(p => p.delivery)
-                    .HasForeignKey<Delivery>(d => d.orderId)
+                    .WithMany(p => p.Delivery)
+                    .HasForeignKey(d => d.orderId)
                     .HasConstraintName("FK_Delivery_Order")
                     .OnDelete(DeleteBehavior.NoAction);
 
