@@ -15,10 +15,20 @@ namespace PandaShoppingAPI.Controllers
     public class OrdersController : CrudApiController2<Order, OrderModel,
             OrderResponseModel, IOrderService, OrderFilter>
     {
-        public OrdersController(IOrderService service, IHttpContextAccessor httpContextAccessor) : base(service, httpContextAccessor)
+        private readonly IDeliveryService _deliveryService;
+        public OrdersController(IOrderService service, IHttpContextAccessor httpContextAccessor, IDeliveryService deliveryService) : base(service, httpContextAccessor)
         {
+            _deliveryService = deliveryService;
         }
 
+        protected override void HandleResponseModel(OrderResponseModel response)
+        {
+            // Because maspping DeliveryREsponse.customerAddress by AutoMappng  got error. 
+            // So We need map customerAddress manually 
+            // FIXME: Map by AutoMapper
+            _deliveryService.SetCustomerAddresses(response.Delivery);
+            base.HandleResponseModel(response);
+        }
 
         [Authorize(Roles = "user")]
         [HttpPost(Order = -1)] // Mark -1 to override default insert api route
