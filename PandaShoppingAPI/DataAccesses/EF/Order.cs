@@ -14,9 +14,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public int invoiceId { get; set; }
 
         public virtual User_ user { get; set; }
-        public virtual Delivery delivery { get; set; }
         public virtual Invoice invoice { get; set; }
         public virtual ICollection<OrderDetail> OrderDetail { get; set; }
         public virtual ICollection<NotificationData> NotificationData { get; set; }
+        public virtual ICollection<Delivery> Delivery { get; set; }
     }
 }

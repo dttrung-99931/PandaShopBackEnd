@@ -17,7 +17,8 @@ namespace PandaShoppingAPI.Models
 
         public UserShortResponseModel user { get; set; }
 
-        public virtual DeliveryResponse delivery { get; set; }
+        [JsonProperty("deliveries")]
+        public DeliveryResponse Delivery { get; set; }
 
         [JsonProperty("orderDetails")]
         public virtual List<OrderDetailResponse> OrderDetail { get; set; }

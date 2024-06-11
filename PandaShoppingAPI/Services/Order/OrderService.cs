@@ -133,14 +133,17 @@ namespace PandaShoppingAPI.Services
                                 price = productOption.price,
                             };
                         }).ToList(),
-                    delivery = new Delivery
-                    {
-                        deliveryMethodId = requestModel.deliveryMethodId,
-                        status = DeliveryStatus.Created,
-                        DeliveryLocation = new List<DeliveryLocation> {
-                            new DeliveryLocation {
-                                addressId = requestModel.addressId,
-                                locationType = LocationType.DeliveryPartner,
+                    Delivery = new List<Delivery> {
+                        // Pre-create delivery order for end-customer
+                        new Delivery
+                        {
+                            deliveryMethodId = requestModel.deliveryMethodId,
+                            status = DeliveryStatus.Created,
+                            DeliveryLocation = new List<DeliveryLocation> {
+                                new DeliveryLocation {
+                                    addressId = requestModel.addressId,
+                                    locationType = LocationType.Delivery,
+                                }
                             }
                         }
                     }
