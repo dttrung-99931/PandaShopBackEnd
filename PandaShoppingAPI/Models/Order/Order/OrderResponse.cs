@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -16,12 +17,28 @@ namespace PandaShoppingAPI.Models
         public OrderStatus status { get; set; }
 
         public UserShortResponseModel user { get; set; }
-
+        public AddressResponseModel deliveryAddress { get; set; }
+    
         [JsonProperty("deliveries")]
         public List<DeliveryResponse> Delivery { get; set; }
 
         [JsonProperty("orderDetails")]
         public List<OrderDetailResponse> OrderDetail { get; set; }
+
+        protected override void CustomMapping(IMappingExpression<Order, OrderResponseModel> mappingExpression, IConfiguration config)
+        {
+            mappingExpression
+                .ForMember(order => order.deliveryAddress, 
+                    (opt) => opt.MapFrom(
+                        order => Mapper.Map<AddressResponseModel>(
+                            order.Delivery
+                                .FirstOrDefault(deli => 
+                                    deli.DeliveryLocation.Any(loca => loca.locationType == LocationType.Delivery))
+                                .DeliveryLocation
+                                .First(location => location.locationType == LocationType.Delivery).address
+                        ))
+            );
+        }
     }
 
     public class OrderDetailResponse : BaseModel<OrderDetail, OrderDetailResponse>

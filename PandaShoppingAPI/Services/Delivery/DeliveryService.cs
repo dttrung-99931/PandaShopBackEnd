@@ -31,9 +31,9 @@ namespace PandaShoppingAPI.Services
                     delivery => delivery.id,
                     delivery => delivery.DeliveryLocation.First(location => location.locationType == LocationType.Delivery).address);
         
-            foreach (DeliveryResponse delivery in deliveries){
-                delivery.customerAddress = Mapper.Map<AddressResponseModel>(customerAddresses[delivery.id]);
-            }
+            // foreach (DeliveryResponse delivery in deliveries){
+            //     delivery.customerAddress = Mapper.Map<AddressResponseModel>(customerAddresses[delivery.id]);
+            // }
         }
     }
 }

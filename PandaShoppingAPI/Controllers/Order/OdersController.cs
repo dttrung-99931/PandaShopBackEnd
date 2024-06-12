@@ -26,8 +26,8 @@ namespace PandaShoppingAPI.Controllers
             // Because maspping DeliveryREsponse.customerAddress by AutoMappng  got error. 
             // So We need map customerAddress manually 
             // FIXME: Map by AutoMapper
-            _deliveryService.SetCustomerAddresses(response.Delivery);
-            base.HandleResponseModel(response);
+            // _deliveryService.SetCustomerAddresses(response.Delivery);
+            // base.HandleResponseModel(response);
         }
 
         [Authorize(Roles = "user")]
