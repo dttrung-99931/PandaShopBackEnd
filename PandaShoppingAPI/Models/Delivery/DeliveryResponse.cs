@@ -16,21 +16,5 @@ namespace PandaShoppingAPI.Models
         public DateTime? finishedAt { get; set; }
         public DeliveryStatus status { get; set; }
         public DeliveryMethodResponse deliveryMethod { get; set; }
-        // Will be map in DeliveryService
-        public AddressResponseModel customerAddress { get; set; }
-        
-        // FIXME: Mapping customerAddress not working
-        // protected override void CustomMapping(IMappingExpression<Delivery, DeliveryResponse> mappingExpression, IConfiguration config)
-        // {
-        //     mappingExpression.ForMember
-        //     (
-        //         delivery => delivery.customerAddress,
-        //         option => option.MapFrom(delivery => Mapper.Map<AddressResponseModel>(
-        //                     delivery.DeliveryLocation.FirstOrDefault()
-        //                 )
-        //             )
-        //         );
-
-        // }
     }
 }
