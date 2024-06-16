@@ -21,6 +21,8 @@ namespace PandaShoppingAPI.Services
         private readonly ICartDetailRepo _cartDetailRepo;
         private readonly IProductOptionRepo _productOptionRepo;
         private readonly IInvoiceRepo _invoiceRepo;
+        private readonly IDeliveryRepo _deliveryRepo;
+        private readonly IWarehouseRepo _warehouseRepo;
 
         public OrderService(IOrderRepo repo,
             IOrderDetailRepo orderdetailRepo,
@@ -28,7 +30,9 @@ namespace PandaShoppingAPI.Services
             IWarehouseOutputRepo warehouseOutputRepo,
             ICartDetailRepo cartDetailRepo,
             IProductOptionRepo productOptionRepo,
-            IInvoiceRepo invoiceRepo) : base(repo)
+            IInvoiceRepo invoiceRepo,
+            IDeliveryRepo deliveryRepo,
+            IWarehouseRepo warehouseRepo) : base(repo)
         {
             _orderDetailRepo = orderdetailRepo;
             _productBatchInvRepo = productBatchInvRepo;
@@ -36,6 +40,8 @@ namespace PandaShoppingAPI.Services
             _cartDetailRepo = cartDetailRepo;
             _productOptionRepo = productOptionRepo;
             _invoiceRepo = invoiceRepo;
+            _deliveryRepo = deliveryRepo;
+            _warehouseRepo = warehouseRepo;
         }
 
         public override IQueryable<Order> Fill(OrderFilter filter)
