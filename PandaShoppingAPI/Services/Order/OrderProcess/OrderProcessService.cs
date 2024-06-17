@@ -53,7 +53,15 @@ namespace PandaShoppingAPI.Services
                     {
                         addressId = pickupAddressId,
                         locationType = LocationType.Pickup,
-                    }
+                        locationOrder = 1,
+                    },
+                    // TODO:  add delivery partner locations, set lcationOrder = 2 
+                    // new DeliveryLocation 
+                    // {
+                    //     locationOrder = 2,
+                    //     addressId = pickupAddressId,
+                    //     locationType = LocationType.DeliveryPartner,
+                    // },
                 }
             };
             _deliveryRepo.Insert(pickUpDelivery);
