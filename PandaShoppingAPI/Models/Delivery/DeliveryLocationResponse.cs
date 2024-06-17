@@ -7,6 +7,7 @@ namespace PandaShoppingAPI.Models
 {
     public partial class DeliveryLocationResponse: BaseModel<DeliveryLocation, DeliveryLocationResponse>
     {
+        public int locationOrder { get; set; }
         public LocationType locationType { get; set; }
         public virtual AddressResponseModel address { get; set; }
     }

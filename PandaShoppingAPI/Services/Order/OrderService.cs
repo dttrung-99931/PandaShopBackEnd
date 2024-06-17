@@ -150,6 +150,7 @@ namespace PandaShoppingAPI.Services
                                 new DeliveryLocation {
                                     addressId = requestModel.addressId,
                                     locationType = LocationType.Delivery,
+                                    locationOrder = 1,
                                 }
                             }
                         }
