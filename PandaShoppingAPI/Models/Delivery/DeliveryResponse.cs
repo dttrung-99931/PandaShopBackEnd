@@ -19,5 +19,18 @@ namespace PandaShoppingAPI.Models
         public DeliveryMethodResponse deliveryMethod { get; set; }
         [JsonProperty("deliveryLocations")]
         public List<DeliveryLocationResponse> DeliveryLocation { get; set; }
+
+        protected override void CustomMapping(IMappingExpression<Delivery, DeliveryResponse> mappingExpression, IConfiguration config)
+        {
+            // Sort delivery locations by order
+
+            mappingExpression
+                .ForMember(
+                    delivery => delivery.DeliveryLocation,
+                    option => option.MapFrom(
+                        delivery => delivery.DeliveryLocation.OrderBy(location => location.locationOrder))
+                );
+
+        }
     }
 }
