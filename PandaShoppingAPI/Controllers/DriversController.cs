@@ -58,16 +58,25 @@ namespace PandaShoppingAPI.Controllers
             });
         }
 
-        // [HttpPut("StartDelivery")]
-        // public ActionResult<ResponseWrapper> GetUpcomingDeliveries([FromQuery] UpcomingDeliveriesFilter filter)
-        // {
-        //     return Handle(() =>
-        //     {
-        //         List<DeliveryResponse> deliveries =  _service.GetUpcomingDeliveries(filter, out Meta meta);
-        //         return ok_get(deliveries, meta);
-        //     });
-        // }
+        [HttpPut("StartDelivery/{id}")]
+        public ActionResult<ResponseWrapper> StartDelivery(int id)
+        {
+            return Handle(() =>
+            {
+                _service.StartDelivery(id, GetUserIdFromToken());
+                return ok_update();
+            });
+        }
 
+        [HttpGet("CurrentDelivery")]
+        public ActionResult<ResponseWrapper> GetCurrentDelivery()
+        {
+            return Handle(() =>
+            {
+                _service.GetCurrentDelivery(GetUserIdFromToken());
+                return ok_update();
+            });
+        }
 
     }
 }

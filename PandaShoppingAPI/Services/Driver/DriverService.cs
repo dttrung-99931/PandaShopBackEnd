@@ -16,11 +16,38 @@ namespace PandaShoppingAPI.Services
     {
         private readonly IUserRepo _userRepo;
         private readonly IDeliveryRepo _deliveryRepo;
+        private readonly IDeliveryDriverRepo _deliveryDriverRepo;
 
-        public DriverService(IDriverRepo repo, IUserRepo userRepo, IDeliveryRepo deliveryRepo) : base(repo)
+        public DriverService(IDriverRepo repo, IUserRepo userRepo, IDeliveryRepo deliveryRepo, IDeliveryDriverRepo deliveryDriverRepo) : base(repo)
         {
             _userRepo = userRepo;
             _deliveryRepo = deliveryRepo;
+            _deliveryDriverRepo = deliveryDriverRepo;
+        }
+
+        public void StartDelivery(int deliveryId, int driverId)
+        {
+            Delivery delivery = _deliveryRepo.GetById(deliveryId);
+            ValidateStartDelivery(delivery, driverId);
+            delivery.status = DeliveryStatus.Delivering;
+            delivery.deliveryDriver = new DeliveryDriver 
+            {
+                driverId = driverId,
+            };
+            _deliveryRepo.Update(delivery, deliveryId);
+        }
+
+        private void ValidateStartDelivery(Delivery delivery, int driverId)
+        {
+            if (_deliveryDriverRepo.GetCurrentDeliveryOf(driverId) != null)
+            {
+                throw new ConflictException(ErrorCode.driverIsNotFreeToDeliver);
+            }
+            
+            if (delivery.status == DeliveryStatus.Delivering)
+            {
+                throw new ConflictException(ErrorCode.deliveryWasStarted);
+            }
         }
 
         public void UpdateDriverLocation(DriverLocationModel location)
@@ -39,6 +66,12 @@ namespace PandaShoppingAPI.Services
                 throw new NotFoundException("Driver");
             }
             return driver;
+        }
+
+        public CurrentDeliveryResponse GetCurrentDelivery(int driverId)
+        {
+            Delivery current = _deliveryDriverRepo.GetCurrentDeliveryOf(driverId);
+            return Mapper.Map<CurrentDeliveryResponse>(current);
         }
     }
 }

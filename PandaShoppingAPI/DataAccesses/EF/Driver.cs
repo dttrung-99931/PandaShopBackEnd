@@ -12,5 +12,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
         [Precision(12, 9)]
         public decimal long_ { get; set; }
         public virtual User_ user { get; set; }
+        public virtual ICollection<DeliveryDriver> DeliveryDriver { get; set; }
     }
 }

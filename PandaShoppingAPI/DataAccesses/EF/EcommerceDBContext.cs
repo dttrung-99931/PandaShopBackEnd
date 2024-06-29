@@ -250,6 +250,27 @@ namespace PandaShoppingAPI.DataAccesses.EF
             });
 
             modelBuilder
+                .Entity<DeliveryDriver>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
+            modelBuilder.Entity<DeliveryDriver>(entity =>
+            {
+                entity.HasOne(d => d.delivery)
+                    .WithOne(p => p.deliveryDriver)
+                    .HasForeignKey<DeliveryDriver>(d => d.deliveryId)
+                    .HasConstraintName("FK_DeliveryDriver_Delivery")
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasOne(d => d.driver)
+                    .WithMany(p => p.DeliveryDriver)
+                    .HasForeignKey(d => d.driverId)
+                    .HasConstraintName("FK_DeliveryDriver_Driver")
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
+            });
+
+            modelBuilder
                 .Entity<Feedback>()
                 .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<Feedback>(entity =>
