@@ -16,5 +16,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public virtual DeliveryMethod deliveryMethod { get; set; }
         public virtual Order order { get; set; }
         public virtual ICollection<DeliveryLocation> DeliveryLocation { get; set; }
+        public virtual DeliveryDriver deliveryDriver { get; set; }
     }
 }

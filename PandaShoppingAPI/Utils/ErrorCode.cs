@@ -10,5 +10,7 @@
         shopExisted,
         unregisterdShop,
         notEnoughAvaialableProducts,
+        deliveryWasStarted,
+        driverIsNotFreeToDeliver,
     }
 }
