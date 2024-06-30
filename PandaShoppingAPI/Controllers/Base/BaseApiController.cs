@@ -27,72 +27,88 @@ namespace PandaShoppingAPI.Controllers
             _service = service;
         }
 
-        protected ResponseWrapper error(HttpStatusCode code, string msg)
+        protected ActionResult<ResponseWrapper> error(HttpStatusCode code, string msg)
         {
-            Response.StatusCode = (int)code;
-            return new ResponseWrapper(code, msg);
+            return StatusCode
+            (
+                (int)code,
+                new ResponseWrapper(code, msg)
+            );
         }
 
-        protected ResponseWrapper unknownError(string msg)
+        protected ActionResult<ResponseWrapper> unknownError(string msg)
         {
             return error(HttpStatusCode.InternalServerError, msg);
         }
 
-        protected ResponseWrapper conflict(String msg, ErrorCode errorCode)
+        protected ActionResult<ResponseWrapper> conflict(string msg, ErrorCode errorCode)
         {
-            Response.StatusCode = (int)HttpStatusCode.Conflict;
-            return new ResponseWrapper(HttpStatusCode.Conflict, msg, errorCode.ToString());
+            return StatusCode
+            (
+                (int)HttpStatusCode.Conflict,
+                new ResponseWrapper(HttpStatusCode.Conflict, msg, errorCode.ToString())
+            );
         }
 
-        protected ResponseWrapper ok_get(object data, Meta meta = null)
+        protected ActionResult<ResponseWrapper> ok_get(object data, Meta meta = null)
         {
-            Response.StatusCode = (int)HttpStatusCode.OK;
-            return new ResponseWrapper(HttpStatusCode.OK, data, meta);
+            return StatusCode
+            (
+                (int)HttpStatusCode.OK,
+                new ResponseWrapper(HttpStatusCode.OK, data, meta)
+            );
         }
 
-        protected ResponseWrapper ok_get()
+        protected ActionResult<ResponseWrapper> ok_get()
         {
-            Response.StatusCode = (int)HttpStatusCode.OK;
-            return new ResponseWrapper(HttpStatusCode.OK, "Successfully", null);
+            return StatusCode
+            (
+                (int)HttpStatusCode.OK,
+                new ResponseWrapper(HttpStatusCode.OK, "Successfully", null)
+            );
         }
 
 
         /// [createdId] is id/ids of inseted entity/ entiteis 
-        protected ResponseWrapper ok_create(object data, IEnumerable<int> createdIds)
+        protected ActionResult<ResponseWrapper> ok_create(object data, IEnumerable<int> createdIds)
         {
             if (createdIds != null){
                 HeaderUtils.SetCreatedIdsToHeader(Response.Headers, createdIds);
             }
-            Response.StatusCode = (int)HttpStatusCode.Created;
-            return new ResponseWrapper(HttpStatusCode.Created, data);
+            return StatusCode
+            (
+                (int)HttpStatusCode.Created,
+                new ResponseWrapper(HttpStatusCode.Created, data)
+            );
         }
 
-        protected ResponseWrapper ok_update()
+        protected ActionResult<ResponseWrapper> ok_update()
         {
             return ok_get(null);
         }
 
-        protected ResponseWrapper ok_delete()
+        protected ActionResult<ResponseWrapper> ok_delete()
         {
             return ok_get();
         }
 
-        protected ResponseWrapper notFound()
+        protected ActionResult<ResponseWrapper> notFound(string msg = "Not found")
         {
-            Response.StatusCode = (int)HttpStatusCode.NotFound;
-            return new ResponseWrapper(HttpStatusCode.NotFound, "Not found");
-        }
-        
-        protected ResponseWrapper notFound(string msg)
-        {
-            Response.StatusCode = (int)HttpStatusCode.NotFound;
-            return new ResponseWrapper(HttpStatusCode.NotFound, msg);
+            return StatusCode
+            (
+                (int)HttpStatusCode.NotFound,
+                new ResponseWrapper(HttpStatusCode.NotFound, msg)
+            );
         }
 
-        protected ResponseWrapper badRequest(string msg)
+        protected ActionResult<ResponseWrapper> badRequest(string msg)
         {
-            Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            return new ResponseWrapper(HttpStatusCode.BadRequest, msg);
+            return StatusCode
+            (
+                (int)HttpStatusCode.BadRequest,
+                new ResponseWrapper(HttpStatusCode.BadRequest, msg)
+            );
+
         }
 
         protected string GetModelStateErrMsg()
@@ -140,7 +156,8 @@ namespace PandaShoppingAPI.Controllers
                 GetUserIdFromToken(user), 
                 GetCartIdFromToken(user),
                 GetShopIdFromToken(user), 
-                GetRoleNamesFromToken(user)
+                GetRoleNamesFromToken(user),
+                GetDriverIdFromToken(user)
             );
         }
 
@@ -182,6 +199,26 @@ namespace PandaShoppingAPI.Controllers
             catch (Exception e)
             {
                 Debug.WriteLine("GetUserIdFromToken " + e.Message);
+                return -1;
+            }
+        }
+        
+        protected int GetDriverIdFromToken()
+        {
+            return GetUserIdFromToken(User);
+        }
+
+        protected int GetDriverIdFromToken(ClaimsPrincipal user)
+        {
+            try
+            {
+                return int.Parse(
+                    user?.FindFirst(Constants.CLAIM_DRIVER_ID)?.Value
+                );
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("GetDriverIdFromToken " + e.Message);
                 return -1;
             }
         }

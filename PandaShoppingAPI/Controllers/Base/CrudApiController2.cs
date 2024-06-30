@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PandaShoppingAPI.DataAccesses.EF;
+using PandaShoppingAPI.Models;
 using PandaShoppingAPI.Models.Base;
 using PandaShoppingAPI.Services;
 using PandaShoppingAPI.Utils;
@@ -21,13 +22,15 @@ namespace PandaShoppingAPI.Controllers.Base
         where TFilter: Filter
         where TService: IBaseService<TEntity, TRequestModel, TFilter>        
     {
+        protected UserIdentifier UserIdentifier;
         public CrudApiController2(TService service, IHttpContextAccessor httpContextAccessor) 
             : base(service)
         {
             var user = httpContextAccessor.HttpContext.User;
             if (UserCallAPIWithToken(user))
             {
-                service.SetUserIdentifier(GetUserIdentifier(user));
+                UserIdentifier = GetUserIdentifier(user);
+                service.SetUserIdentifier(UserIdentifier);
             }
         }
 
