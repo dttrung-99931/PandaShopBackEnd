@@ -20,6 +20,9 @@ namespace PandaShoppingAPI.Models
         public string districtCode { get; set; }
         public string communeOrWard { get; set; }
         public string streetAndHouseNum { get; set; }
+        public decimal lat { get; set; }
+        [JsonProperty("long")]
+        public decimal long_ { get; set; }
     }
 
 
