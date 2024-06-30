@@ -12,6 +12,7 @@ namespace PandaShoppingAPI.Utils
         public const string CLAIM_USER_ID = "user_id";
         public const string CLAIM_CART_ID = "cart_id";
         public const string CLAIM_ACCOUNT_ID = "account_id";
+        public const string CLAIM_DRIVER_ID = "driver_id";
         public const string CLAIM_SHOP_ID = "shop_id";
         public const string POLICY_CORS_ALL = "PolicyAll";
         public const string POLICY_UPLOAD_FILE = "PolicyUpdateFile";

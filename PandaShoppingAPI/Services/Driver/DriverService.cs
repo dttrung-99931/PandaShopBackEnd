@@ -41,12 +41,12 @@ namespace PandaShoppingAPI.Services
         {
             if (_deliveryDriverRepo.GetCurrentDeliveryOf(driverId) != null)
             {
-                throw new ConflictException(ErrorCode.driverIsNotFreeToDeliver);
+                throw new ConflictException(ErrorCode.driverIsNotFreeToDeliver, "Driver is being busy");
             }
-            
+
             if (delivery.status == DeliveryStatus.Delivering)
             {
-                throw new ConflictException(ErrorCode.deliveryWasStarted);
+                throw new ConflictException(ErrorCode.deliveryWasStarted, "Delivery was started");
             }
         }
 

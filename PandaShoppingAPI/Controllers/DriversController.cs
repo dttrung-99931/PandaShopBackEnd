@@ -63,7 +63,7 @@ namespace PandaShoppingAPI.Controllers
         {
             return Handle(() =>
             {
-                _service.StartDelivery(id, GetUserIdFromToken());
+                _service.StartDelivery(id, UserIdentifier.DriverId);
                 return ok_update();
             });
         }
@@ -73,8 +73,8 @@ namespace PandaShoppingAPI.Controllers
         {
             return Handle(() =>
             {
-                _service.GetCurrentDelivery(GetUserIdFromToken());
-                return ok_update();
+                CurrentDeliveryResponse current = _service.GetCurrentDelivery(UserIdentifier.DriverId);
+                return ok_get(current);
             });
         }
 

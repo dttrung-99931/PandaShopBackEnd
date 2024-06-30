@@ -14,19 +14,22 @@ namespace PandaShoppingAPI.Models
         public int UserId { get; set; }
         public int CartId { get; set; }
         public int ShopId { get; set; }
+        public int DriverId { get; set; }
         public List<string> RoleNames { get; set; }
 
         public UserIdentifier(
             int userId,
             int cartId,
             int shopId,
-            List<string> roleNames
+            List<string> roleNames,
+            int driverId
          )
         {
             UserId = userId;
             CartId = cartId;
             ShopId = shopId;
             RoleNames = roleNames;
+            DriverId = driverId;
         }
 
         public bool IsShop

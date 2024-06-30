@@ -22,7 +22,7 @@ namespace PandaShoppingAPI.Services
     {
         private readonly IShopRepo _shopRepo;
         private readonly IUserRoleRepo _userRoleRepo;
-        private readonly INotificationReceiverRepo _notiReceiverRepo;
+        private readonly IDriverRepo _driverRepo;
         private readonly IConfiguration _config;
 
         public UserService(
@@ -30,12 +30,13 @@ namespace PandaShoppingAPI.Services
             IShopRepo shopRepo,
             INotificationReceiverRepo notiReceiverRepo,
             IConfiguration config,
-            IUserRoleRepo userRoleRepo) : base(repo)
+            IUserRoleRepo userRoleRepo,
+            IDriverRepo driverRepo) : base(repo)
         {
             _shopRepo = shopRepo;
-            _notiReceiverRepo = notiReceiverRepo;
             _config = config;
             _userRoleRepo = userRoleRepo;
+            _driverRepo = driverRepo;
         }
 
         protected override void ValidateInsert(UserModel requestModel)
@@ -96,6 +97,9 @@ namespace PandaShoppingAPI.Services
                 userId = user.id,
                 roleId = (int) Roles.driver,
             });
+            _driverRepo.Insert(
+                new Driver { user = user } 
+            );
             return user;
         }
 
@@ -121,6 +125,7 @@ namespace PandaShoppingAPI.Services
                 new Claim(Constants.CLAIM_USER_ID, user.id.ToString()),
                 new Claim(Constants.CLAIM_CART_ID, user.cartId.ToString()),
                 new Claim(Constants.CLAIM_SHOP_ID, user.shopId.ToString()),
+                new Claim(Constants.CLAIM_DRIVER_ID, user.driverId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, user.phone)
             };
 
