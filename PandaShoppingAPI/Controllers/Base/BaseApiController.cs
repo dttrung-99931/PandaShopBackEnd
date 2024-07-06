@@ -13,6 +13,7 @@ using PandaShoppingAPI.Models;
 using System.Collections.Generic;
 using PandaShoppingAPI.Utils.Exceptions;
 using System.Linq;
+using Castle.Core.Internal;
 
 namespace PandaShoppingAPI.Controllers
 {
@@ -268,11 +269,6 @@ namespace PandaShoppingAPI.Controllers
         {
             return error(HttpStatusCode.Forbidden, "Invalid user. " +
                 "Make sure that you have valid access token");
-        }
-
-        protected bool UserCallAPIWithToken()
-        {
-            return GetUserIdFromToken() != -1;
         }
 
         protected bool UserCallAPIWithToken(ClaimsPrincipal user)
