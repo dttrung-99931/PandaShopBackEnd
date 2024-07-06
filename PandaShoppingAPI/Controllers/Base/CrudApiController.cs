@@ -23,10 +23,6 @@ namespace PandaShoppingAPI.Controllers.Base
     {
         public CrudApiController(TService service) : base(service)
         {
-            if (UserCallAPIWithToken())
-            {
-                service.SetUserIdentifier(GetUserIdentifier());
-            }
         }
 
         [HttpGet]

@@ -23,6 +23,7 @@ namespace PandaShoppingAPI.Controllers.Base
         where TService: IBaseService<TEntity, TRequestModel, TFilter>        
     {
         protected UserIdentifier UserIdentifier;
+        protected IHttpContextAccessor httpContextAccessor;
         public CrudApiController2(TService service, IHttpContextAccessor httpContextAccessor) 
             : base(service)
         {
