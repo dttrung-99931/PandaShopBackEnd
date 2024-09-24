@@ -11,7 +11,8 @@ namespace PandaShoppingAPI.Models
     public class ShortOrderResponseModel : BaseModel<Order, ShortOrderResponseModel>
     {
         public OrderStatus status { get; set; }
-        public ShortDeliveryResponse delivery { get; set; }
+        [JsonProperty("deliveries")]
+        public List<ShortDeliveryResponse> Delivery { get; set; }
         [JsonProperty("orderDetails")]
         public virtual List<ShortOrderDetailResponse> OrderDetail { get; set; }
     }
