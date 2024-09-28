@@ -11,7 +11,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
         Processing = 12, // When shop comfirmed order and processing
         CancelledByBuyer = 16,
         CancelledByShop = 20,
-        WaitingForDelivering = 24, // Processes and waiting for delivering
+        CompleteProcessing = 22, // Shopper complete processing, but have been not requested to delivery
+        WaitingForDelivering = 24, // Shopper requested delivery and waiting for delivering
+                                    // at this time, a pick up delivery will be created for the order
         Delivering = 28, // Delivering
         Delivered = 32, // Deliveried, buyer received the product
         CompletedByUser = 36, // User comfirm completed order 

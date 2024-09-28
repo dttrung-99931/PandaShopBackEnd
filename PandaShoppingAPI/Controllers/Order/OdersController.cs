@@ -54,7 +54,7 @@ namespace PandaShoppingAPI.Controllers
         {
             return Handle(() =>
             {
-                _service.StartProcessingOrder(id);
+                _service.StartProcessing(id);
                 return ok_update();
             });
         }
@@ -65,7 +65,7 @@ namespace PandaShoppingAPI.Controllers
         {
             return Handle(() =>
             {
-                _service.CompleteProcessingOrder(id);
+                _service.CompleteProcessing(id);
                 return ok_update();
             });
         }

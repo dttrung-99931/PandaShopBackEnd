@@ -184,10 +184,30 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasConstraintName("FK_Delivery_DeliveryPartner")
                     .OnDelete(DeleteBehavior.NoAction);
 
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
+            });
+
+            modelBuilder
+                .Entity<OrderDelivery>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
+            modelBuilder.Entity<OrderDelivery>(entity =>
+            {
+                entity.HasIndex(e => e.orderId, "IX_OrderDelivery_orderId");
+
+                entity.HasIndex(e => e.deliveryId, "IX_OrderDelivery_deliveryId");
+
                 entity.HasOne(d => d.order)
-                    .WithMany(p => p.Delivery)
+                    .WithMany(p => p.OrderDelivery)
                     .HasForeignKey(d => d.orderId)
-                    .HasConstraintName("FK_Delivery_Order")
+                    .HasConstraintName("FK_OrderDelivery_Order")
+                    .OnDelete(DeleteBehavior.NoAction);
+
+
+                entity.HasOne(d => d.delivery)
+                    .WithMany(p => p.OrderDelivery)
+                    .HasForeignKey(d => d.deliveryId)
+                    .HasConstraintName("FK_OrderDelivery_Delivery")
                     .OnDelete(DeleteBehavior.NoAction);
 
                 entity.Property(e => e.isDeleted)
@@ -781,6 +801,13 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .WithMany(p => p.Order)
                     .HasForeignKey(d => d.invoiceId)
                     .HasConstraintName("FK_Order_Invoice")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
+
+                entity.HasOne(d => d.deliveryAddress)
+                    .WithMany(p => p.Order)
+                    .HasForeignKey(d => d.deliveryAddressId)
+                    .HasConstraintName("FK_Order_Address")
                     .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();
 
