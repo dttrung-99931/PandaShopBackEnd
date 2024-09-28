@@ -128,6 +128,7 @@ namespace PandaShoppingAPI.Services
                     invoiceId = invoiceId,
                     createdAt = DateTime.UtcNow,
                     status = OrderStatus.Created,
+                    deliveryAddressId = requestModel.addressId,
                     OrderDetail = requestModel.OrderDetails.Select(
                         (detail) =>
                         {
@@ -140,21 +141,6 @@ namespace PandaShoppingAPI.Services
                                 price = productOption.price,
                             };
                         }).ToList(),
-                    Delivery = new List<Delivery> {
-                        // Pre-create delivery order for end-customer
-                        new Delivery
-                        {
-                            deliveryMethodId = requestModel.deliveryMethodId,
-                            status = DeliveryStatus.Created,
-                            DeliveryLocation = new List<DeliveryLocation> {
-                                new DeliveryLocation {
-                                    addressId = requestModel.addressId,
-                                    locationType = LocationType.Delivery,
-                                    locationOrder = 1,
-                                }
-                            }
-                        }
-                    }
                 };
             
             return order;

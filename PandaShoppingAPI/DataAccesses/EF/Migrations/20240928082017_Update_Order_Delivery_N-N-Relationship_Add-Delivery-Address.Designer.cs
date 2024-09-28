@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PandaShoppingAPI.DataAccesses.EF;
 
@@ -11,9 +12,10 @@ using PandaShoppingAPI.DataAccesses.EF;
 namespace PandaShoppingAPI.DataAccesses.EF.Migrations
 {
     [DbContext(typeof(EcommerceDBContext))]
-    partial class EcommerceDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240928082017_Update_Order_Delivery_N-N-Relationship_Add-Delivery-Address")]
+    partial class Update_Order_Delivery_NNRelationship_AddDeliveryAddress
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -570,7 +572,9 @@ namespace PandaShoppingAPI.DataAccesses.EF.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("deliveryAddressId")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(20);
 
                     b.Property<int>("invoiceId")
                         .HasColumnType("int");

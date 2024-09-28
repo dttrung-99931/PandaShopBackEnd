@@ -12,11 +12,13 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public OrderStatus status { get; set; }
         public int userId { get; set; }
         public int invoiceId { get; set; }
+        public int deliveryAddressId { get; set; }
 
         public virtual User_ user { get; set; }
         public virtual Invoice invoice { get; set; }
+        public virtual Address deliveryAddress { get; set; }
         public virtual ICollection<OrderDetail> OrderDetail { get; set; }
         public virtual ICollection<NotificationData> NotificationData { get; set; }
-        public virtual ICollection<Delivery> Delivery { get; set; }
+        public virtual ICollection<OrderDelivery> OrderDelivery { get; set; }
     }
 }
