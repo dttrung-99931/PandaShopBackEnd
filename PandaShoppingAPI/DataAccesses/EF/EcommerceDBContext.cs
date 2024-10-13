@@ -831,6 +831,13 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();
 
+                entity.HasOne(d => d.deliveryMethod)
+                    .WithMany(p => p.Order)
+                    .HasForeignKey(d => d.deliveryMethodId)
+                    .HasConstraintName("FK_Order_DeliveryMethod")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
+
                 entity.Property(e => e.isDeleted)
                     .HasDefaultValue(false);
             });

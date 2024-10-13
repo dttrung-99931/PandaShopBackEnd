@@ -139,6 +139,7 @@ namespace PandaShoppingAPI.Services
                 createdAt = DateTime.UtcNow,
                 status = OrderStatus.Created,
                 deliveryAddressId = requestModel.addressId,
+                deliveryMethodId = requestModel.deliveryMethodId,
                 OrderDetail = requestModel.OrderDetails.Select(
                         (detail) =>
                         {
@@ -151,64 +152,11 @@ namespace PandaShoppingAPI.Services
                                 price = productOption.price,
                             };
                         }).ToList(),
-                OrderDelivery = new List<OrderDelivery>
-                {
-                    // Pre-created delivery to customer
-                    BuildPreCustomerDelivery(requestModel),
-                    // Pre-created delivery to the delivery partner
-                    BuildPrePartnerDelivery(requestModel),
-                }
             };
 
             return order;
         }
 
-        private OrderDelivery BuildPrePartnerDelivery(OrderModel requestModel)
-        {
-            // DeliveryMethod deliveryMethod = _deliveryMethodRepo.GetById(requestModel.deliveryMethodId);
-            // Currently, use example delivery partner unit
-            // TODO: impl select delivery partner unit base on product of orders
-            DeliveryPartnerUnit exampleUnit = _deliveryPartnerUnitRepo.GetIQueryable().First();
-            return new OrderDelivery
-            {
-                delivery = new Delivery
-                {
-                    deliveryMethodId = requestModel.deliveryMethodId,
-                    DeliveryLocation = new List<DeliveryLocation>
-                    {
-                        new DeliveryLocation
-                        {
-                            addressId = exampleUnit.addressId,
-                            locationType = LocationType.Pickup
-                        },
-                        new DeliveryLocation
-                        {
-                            addressId = exampleUnit.addressId,
-                            locationType = LocationType.DeliveryPartner // ship the package to the delivery partner unit
-                        },
-                    }
-                }
-            };
-        }
-
-        private static OrderDelivery BuildPreCustomerDelivery(OrderModel requestModel)
-        {
-            return new OrderDelivery
-            {
-                delivery = new Delivery
-                {
-                    deliveryMethodId = requestModel.deliveryMethodId,
-                    DeliveryLocation = new List<DeliveryLocation>
-                    {
-                        new DeliveryLocation
-                        {
-                            addressId = requestModel.addressId,
-                            locationType = LocationType.Delivery // final delvery to customer
-                        }
-                    }
-                }
-            };
-        }
 
         private void ValidateAvailableInventory(List<OrderModel> orderModels)
         {

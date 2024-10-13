@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PandaShoppingAPI.DataAccesses.EF;
 
@@ -11,9 +12,10 @@ using PandaShoppingAPI.DataAccesses.EF;
 namespace PandaShoppingAPI.DataAccesses.EF.Migrations
 {
     [DbContext(typeof(EcommerceDBContext))]
-    partial class EcommerceDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241013152518_Update_Order_Add-deliveryMethodId")]
+    partial class Update_Order_AdddeliveryMethodId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -606,7 +608,9 @@ namespace PandaShoppingAPI.DataAccesses.EF.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("deliveryMethodId")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(3);
 
                     b.Property<int>("invoiceId")
                         .HasColumnType("int");
