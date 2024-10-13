@@ -70,5 +70,16 @@ namespace PandaShoppingAPI.Controllers
             });
         }
 
+        [Authorize(Roles = "shop")]
+        [HttpGet(APIPaths.Orders.getCompleteProcessingOrders)]
+        public ActionResult<ResponseWrapper> GetOrderDeliveries()
+        {
+            return Handle(() =>
+            {
+                List<TempDeliveryResponse> tempDeliveries = _service.GetCompleteProcessingOrders();
+                return ok_get(tempDeliveries);
+            });
+        }
+
     }
 }

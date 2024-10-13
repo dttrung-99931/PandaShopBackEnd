@@ -8,6 +8,11 @@ namespace PandaShoppingAPI.Services
 {
     public interface IOrderService : IBaseService<Order, OrderModel, OrderFilter>, IOrderProcessService
     {
+        // Return list of tmp delivery containing completeProcessing orders 
+        // each delivery contains maximum Constants..DELIVERY_ORDER_SIZE orders
+        List<TempDeliveryResponse> GetCompleteProcessingOrders();
+
+        // List<TempDeliveryResponse> GetWaitingForDelevringOrders();
         List<Order> Insert(CreateOrdersModel model);
     }
 }

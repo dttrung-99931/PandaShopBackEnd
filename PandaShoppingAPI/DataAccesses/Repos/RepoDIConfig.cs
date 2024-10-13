@@ -50,6 +50,8 @@ namespace PandaShoppingAPI.DataAccesses.Repos
             services.AddScoped<IUserRoleRepo, UserRoleRepo>();
             services.AddScoped<IDriverRepo, DriverRepo>();
             services.AddScoped<IDeliveryDriverRepo, DeliveryDriverRepo>();
+            services.AddScoped<IDeliveryPartnerUnitRepo, DeliveryPartnerUnitRepo>();
+            services.AddScoped<IDeliveryLocationRepo, DeliveryLocationRepo>();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
 using PandaShoppingAPI.Models;
@@ -12,8 +13,8 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Services
 {
-    public partial class OrderService : BaseService<IOrderRepo, Order, OrderModel, OrderFilter>, 
-        IOrderService   
+    public partial class OrderService : BaseService<IOrderRepo, Order, OrderModel, OrderFilter>,
+        IOrderService
     {
         private readonly IOrderDetailRepo _orderDetailRepo;
         private readonly IProductBatchInventoryRepo _productBatchInvRepo;
@@ -23,6 +24,9 @@ namespace PandaShoppingAPI.Services
         private readonly IInvoiceRepo _invoiceRepo;
         private readonly IDeliveryRepo _deliveryRepo;
         private readonly IWarehouseRepo _warehouseRepo;
+        private readonly IDeliveryMethodRepo _deliveryMethodRepo;
+        private readonly IDeliveryPartnerUnitRepo _deliveryPartnerUnitRepo;
+        private readonly IDeliveryLocationRepo _deliveryLocationRepo;
 
         public OrderService(IOrderRepo repo,
             IOrderDetailRepo orderdetailRepo,
@@ -32,7 +36,10 @@ namespace PandaShoppingAPI.Services
             IProductOptionRepo productOptionRepo,
             IInvoiceRepo invoiceRepo,
             IDeliveryRepo deliveryRepo,
-            IWarehouseRepo warehouseRepo) : base(repo)
+            IWarehouseRepo warehouseRepo,
+            IDeliveryMethodRepo deliveryMethodRepo,
+            IDeliveryPartnerUnitRepo deliveryPartnerUnitRepo,
+            IDeliveryLocationRepo deliveryLocationRepo) : base(repo)
         {
             _orderDetailRepo = orderdetailRepo;
             _productBatchInvRepo = productBatchInvRepo;
@@ -42,6 +49,9 @@ namespace PandaShoppingAPI.Services
             _invoiceRepo = invoiceRepo;
             _deliveryRepo = deliveryRepo;
             _warehouseRepo = warehouseRepo;
+            _deliveryMethodRepo = deliveryMethodRepo;
+            _deliveryPartnerUnitRepo = deliveryPartnerUnitRepo;
+            _deliveryLocationRepo = deliveryLocationRepo;
         }
 
         public override IQueryable<Order> Fill(OrderFilter filter)
@@ -123,13 +133,13 @@ namespace PandaShoppingAPI.Services
         private Order BuildOrder(OrderModel requestModel, int invoiceId)
         {
             Order order = new Order()
-                {
-                    userId = User.UserId,
-                    invoiceId = invoiceId,
-                    createdAt = DateTime.UtcNow,
-                    status = OrderStatus.Created,
-                    deliveryAddressId = requestModel.addressId,
-                    OrderDetail = requestModel.OrderDetails.Select(
+            {
+                userId = User.UserId,
+                invoiceId = invoiceId,
+                createdAt = DateTime.UtcNow,
+                status = OrderStatus.Created,
+                deliveryAddressId = requestModel.addressId,
+                OrderDetail = requestModel.OrderDetails.Select(
                         (detail) =>
                         {
                             ProductOption productOption = _productOptionRepo.GetById(detail.productOptionId);
@@ -137,13 +147,67 @@ namespace PandaShoppingAPI.Services
                             {
                                 productOptionId = detail.productOptionId,
                                 productNum = detail.productNum,
-                                discountPercent = 0, 
+                                discountPercent = 0,
                                 price = productOption.price,
                             };
                         }).ToList(),
-                };
-            
+                OrderDelivery = new List<OrderDelivery>
+                {
+                    // Pre-created delivery to customer
+                    BuildPreCustomerDelivery(requestModel),
+                    // Pre-created delivery to the delivery partner
+                    BuildPrePartnerDelivery(requestModel),
+                }
+            };
+
             return order;
+        }
+
+        private OrderDelivery BuildPrePartnerDelivery(OrderModel requestModel)
+        {
+            // DeliveryMethod deliveryMethod = _deliveryMethodRepo.GetById(requestModel.deliveryMethodId);
+            // Currently, use example delivery partner unit
+            // TODO: impl select delivery partner unit base on product of orders
+            DeliveryPartnerUnit exampleUnit = _deliveryPartnerUnitRepo.GetIQueryable().First();
+            return new OrderDelivery
+            {
+                delivery = new Delivery
+                {
+                    deliveryMethodId = requestModel.deliveryMethodId,
+                    DeliveryLocation = new List<DeliveryLocation>
+                    {
+                        new DeliveryLocation
+                        {
+                            addressId = exampleUnit.addressId,
+                            locationType = LocationType.Pickup
+                        },
+                        new DeliveryLocation
+                        {
+                            addressId = exampleUnit.addressId,
+                            locationType = LocationType.DeliveryPartner // ship the package to the delivery partner unit
+                        },
+                    }
+                }
+            };
+        }
+
+        private static OrderDelivery BuildPreCustomerDelivery(OrderModel requestModel)
+        {
+            return new OrderDelivery
+            {
+                delivery = new Delivery
+                {
+                    deliveryMethodId = requestModel.deliveryMethodId,
+                    DeliveryLocation = new List<DeliveryLocation>
+                    {
+                        new DeliveryLocation
+                        {
+                            addressId = requestModel.addressId,
+                            locationType = LocationType.Delivery // final delvery to customer
+                        }
+                    }
+                }
+            };
         }
 
         private void ValidateAvailableInventory(List<OrderModel> orderModels)
@@ -201,27 +265,27 @@ namespace PandaShoppingAPI.Services
 
             foreach (OrderDetailModel detail in requestModel.OrderDetails)
             {
-                    IGrouping<int, ProductBatchInventory> group = optionInvenGroups.First(
-                        (group) => group.Key == detail.productOptionId);
-                    List<ProductBatchInventory> batches = group.OrderByDescending(
-                        (batch) => batch.productBatch.warehouseInput.date).ToList();
-                    int outputNum = 0, i = 0;
-                    while (outputNum < detail.productNum && i < batches.Count)
+                IGrouping<int, ProductBatchInventory> group = optionInvenGroups.First(
+                    (group) => group.Key == detail.productOptionId);
+                List<ProductBatchInventory> batches = group.OrderByDescending(
+                    (batch) => batch.productBatch.warehouseInput.date).ToList();
+                int outputNum = 0, i = 0;
+                while (outputNum < detail.productNum && i < batches.Count)
+                {
+                    ProductBatchInventory batch = batches[i];
+                    int needNumber = detail.productNum - outputNum;
+                    int takeFromBatchNum = batch.remainingNumber >= needNumber ? needNumber : batch.remainingNumber;
+                    batch.remainingNumber = batch.remainingNumber - takeFromBatchNum;
+                    outputNum += takeFromBatchNum;
+                    updatedBatchInvens.Add(batch);
+                    WarehouseOutputDetail output = new WarehouseOutputDetail
                     {
-                        ProductBatchInventory batch = batches[i];
-                        int needNumber = detail.productNum - outputNum;
-                        int takeFromBatchNum = batch.remainingNumber >= needNumber ? needNumber : batch.remainingNumber;
-                        batch.remainingNumber = batch.remainingNumber - takeFromBatchNum;
-                        outputNum += takeFromBatchNum;
-                        updatedBatchInvens.Add(batch);
-                        WarehouseOutputDetail output = new WarehouseOutputDetail
-                        {
-                            number = takeFromBatchNum,
-                            productBatchId = batch.id,
-                        };
-                        outputDetails.Add(output);
-                        i++;
-                    }
+                        number = takeFromBatchNum,
+                        productBatchId = batch.id,
+                    };
+                    outputDetails.Add(output);
+                    i++;
+                }
             }
 
             _warehouseOutputRepo.Insert(new WarehouseOutput
@@ -230,6 +294,34 @@ namespace PandaShoppingAPI.Services
                 WarehouseOutputDetail = outputDetails,
             });
             _productBatchInvRepo.UpdateRange(updatedBatchInvens);
+        }
+
+        public List<TempDeliveryResponse> GetCompleteProcessingOrders()
+        {
+            IQueryable<Order> completeProcessingOrders =
+                Fill(new OrderFilter { status = OrderStatus.CompleteProcessing, shopId = User.ShopId, });
+                
+            var ordersGroupByPartnerAddr = completeProcessingOrders
+                .SelectMany((order) => order.OrderDelivery.Where(orderDeli => 
+                        orderDeli.delivery.DeliveryLocation.Any(location => 
+                            location.locationType == LocationType.DeliveryPartner)))
+                .Select((orderDeli) => new {
+                    orderDeli.order,
+                    partnerDeliveryAddress = orderDeli.delivery.DeliveryLocation.First((location) =>
+                            location.locationType == LocationType.DeliveryPartner).address 
+                    }
+                )
+                .ToList() // TODO: Optimize
+                .GroupBy((item) => item.partnerDeliveryAddress);
+
+            List<TempDeliveryResponse> tempDeliveries = ordersGroupByPartnerAddr
+                .ToList()
+                .Select((group) => new TempDeliveryResponse {
+                    deliveryPartnerUnitAddress = Mapper.Map<AddressModel>(group.Key),
+                    orders = Mapper.Map<List<OrderResponseModel>>(group.Select(item => item.order))
+                })
+                .ToList();
+            return tempDeliveries;
         }
     }
 }

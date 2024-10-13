@@ -270,6 +270,27 @@ namespace PandaShoppingAPI.DataAccesses.EF
             });
 
             modelBuilder
+                .Entity<DeliveryPartnerUnit>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
+            modelBuilder.Entity<DeliveryPartnerUnit>(entity =>
+            {
+                entity.HasIndex(e => e.deliveryPartnerId, "IX_DeliveryPartnerUnit_deliveryPartnerId");
+
+                entity.HasOne(d => d.DeliveryPartner)
+                    .WithMany(p => p.DeliveryPartnerUnit)
+                    .HasForeignKey(d => d.deliveryPartnerId)
+                    .HasConstraintName("FK_DeliveryPartnerUnit_DeliveryPartner")
+                    .OnDelete(DeleteBehavior.NoAction);
+                
+                entity.Property(e => e.name)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
+            });
+
+            modelBuilder
                 .Entity<DeliveryDriver>()
                 .HasQueryFilter((entity) => !entity.isDeleted);
             modelBuilder.Entity<DeliveryDriver>(entity =>
@@ -513,6 +534,8 @@ namespace PandaShoppingAPI.DataAccesses.EF
                 entity.HasIndex(e => e.deliveryMethodId, "IX_ProductDeliveryMethod_deliveryMethodId");
 
                 entity.HasIndex(e => e.productId, "IX_ProductDeliveryMethod_productId");
+                
+                entity.HasIndex(e => e.deliveryPartnerUnitId, "IX_ProductDeliveryMethod_deliveryPartnerUnitId");
 
                 entity.HasOne(d => d.deliveryMethod)
                     .WithMany(p => p.ProductDeliveryMethod)
@@ -524,6 +547,12 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .WithMany(p => p.ProductDeliveryMethod)
                     .HasForeignKey(d => d.productId)
                     .HasConstraintName("FK_ProductDeliveryMethod_Product")
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                 entity.HasOne(d => d.deliveryPartnerUnit)
+                    .WithMany(p => p.ProductDeliveryMethod)
+                    .HasForeignKey(d => d.deliveryPartnerUnitId)
+                    .HasConstraintName("FK_ProductDeliveryMethod_DeliveryPartnerUnit")
                     .OnDelete(DeleteBehavior.NoAction);
 
 
