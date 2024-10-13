@@ -34,6 +34,9 @@ namespace PandaShoppingAPI.Models
 
         public List<DeliveryMethodResponse> deliveryMethods { get; set; }
 
+        // TODO: Hanlde when products have diff deliveryPartnerUnitId of same delivery method
+        // public List<ProductDeliveryMethodResponse> productDeliveryMethods { get; set; }
+
         protected override void CustomMapping(IMappingExpression<Product, ProductDetailResponse> mappingExpression, IConfiguration config)
         {
             mappingExpression.ForMember(

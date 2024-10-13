@@ -8,5 +8,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public int id { get; set; }
         public string name { get; set; }
         
+        public virtual ICollection<DeliveryPartnerUnit> DeliveryPartnerUnit { get; set; }
     }
 }

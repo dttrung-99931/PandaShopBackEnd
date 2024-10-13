@@ -14,6 +14,7 @@ namespace PandaShoppingAPI.Utils
             public const string endpoint = "/v1/Orders";
             public const string startProcessing = $"{endpoint}/{{id}}/StartProcessing";
             public const string completeProcessing = $"{endpoint}/{{id}}/CompleteProcessing";
+            public const string getCompleteProcessingOrders = $"{endpoint}/CompleteProcessing";
             public static List<string> processingPaths = new List<string>() {
                 startProcessing,
                 completeProcessing
