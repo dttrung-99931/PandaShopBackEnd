@@ -95,7 +95,6 @@ namespace PandaShoppingAPI.Services
             {
                 productId = product.id,
                 deliveryMethodId = method.id,
-                deliveryPartnerUnitId = 1, // static set partner unit 1 for fast developemnt, TODO: get from request model
             }).ToList());
 
             return product;

@@ -535,8 +535,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
                 entity.HasIndex(e => e.productId, "IX_ProductDeliveryMethod_productId");
                 
-                entity.HasIndex(e => e.deliveryPartnerUnitId, "IX_ProductDeliveryMethod_deliveryPartnerUnitId");
-
                 entity.HasOne(d => d.deliveryMethod)
                     .WithMany(p => p.ProductDeliveryMethod)
                     .HasForeignKey(d => d.deliveryMethodId)
@@ -548,13 +546,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasForeignKey(d => d.productId)
                     .HasConstraintName("FK_ProductDeliveryMethod_Product")
                     .OnDelete(DeleteBehavior.NoAction);
-
-                 entity.HasOne(d => d.deliveryPartnerUnit)
-                    .WithMany(p => p.ProductDeliveryMethod)
-                    .HasForeignKey(d => d.deliveryPartnerUnitId)
-                    .HasConstraintName("FK_ProductDeliveryMethod_DeliveryPartnerUnit")
-                    .OnDelete(DeleteBehavior.NoAction);
-
 
                 entity.Property(e => e.isDeleted)
                     .HasDefaultValue(false);

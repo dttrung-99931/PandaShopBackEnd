@@ -8,11 +8,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public int id { get; set; }
         public int productId { get; set; }
         public int deliveryMethodId { get; set; }
-        public int deliveryPartnerUnitId { get; set; }
         
 
         public virtual DeliveryMethod deliveryMethod { get; set; }
         public virtual Product product { get; set; }
-        public virtual DeliveryPartnerUnit deliveryPartnerUnit { get; set; }
     }
 }
