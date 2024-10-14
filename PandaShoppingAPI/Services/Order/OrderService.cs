@@ -248,28 +248,35 @@ namespace PandaShoppingAPI.Services
         {
             IQueryable<Order> completeProcessingOrders =
                 Fill(new OrderFilter { status = OrderStatus.CompleteProcessing, shopId = User.ShopId, });
-                
-            var ordersGroupByPartnerAddr = completeProcessingOrders
-                .SelectMany((order) => order.OrderDelivery.Where(orderDeli => 
-                        orderDeli.delivery.DeliveryLocation.Any(location => 
-                            location.locationType == LocationType.DeliveryPartner)))
-                .Select((orderDeli) => new {
-                    orderDeli.order,
-                    partnerDeliveryAddress = orderDeli.delivery.DeliveryLocation.First((location) =>
-                            location.locationType == LocationType.DeliveryPartner).address 
-                    }
-                )
-                .ToList() // TODO: Optimize
-                .GroupBy((item) => item.partnerDeliveryAddress);
 
-            List<TempDeliveryResponse> tempDeliveries = ordersGroupByPartnerAddr
-                .ToList()
-                .Select((group) => new TempDeliveryResponse {
-                    deliveryPartnerUnitAddress = Mapper.Map<AddressModel>(group.Key),
-                    orders = Mapper.Map<List<OrderResponseModel>>(group.Select(item => item.order))
-                })
+            List<IGrouping<DeliveryMethod, Order>> groupsByDeliMethod = completeProcessingOrders
+                .ToList() // TODO: Optimize
+                .GroupBy(order => order.deliveryMethod)
                 .ToList();
+
+            List<TempDeliveryResponse> tempDeliveries = new List<TempDeliveryResponse>();
+            
+            // Create temp delivery by take 10 orders from order group of same delivery method
+            groupsByDeliMethod
+                .ForEach(group => {
+                    group.Chunk(Constants.DELIVERY_ORDER_SIZE)
+                        .ToList()
+                        .ForEach(orders => {
+                            DeliveryPartnerUnit deliPartnerUnit = GetDeliveryPartnerUnit(group.Key, orders.ToList());
+                            tempDeliveries.Add(new TempDeliveryResponse {
+                                orders = Mapper.Map<List<OrderResponseModel>>(orders),
+                                deliveryPartnerUnitAddress = Mapper.Map<AddressModel>(deliPartnerUnit.address)
+                            });
+                        });
+                });
+
             return tempDeliveries;
+        }
+
+        private DeliveryPartnerUnit GetDeliveryPartnerUnit(DeliveryMethod method, List<Order> orders)
+        {
+            // TODO: impl get delivery partner unit based on method & orders
+            return _deliveryPartnerUnitRepo.GetIQueryable().First();
         }
     }
 }
