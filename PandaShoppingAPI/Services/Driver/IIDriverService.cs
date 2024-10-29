@@ -8,6 +8,7 @@ namespace PandaShoppingAPI.Services
 {
     public interface IDriverService : IBaseService<Driver, DriverModel, DriverFilter>, IDriverManagerService
     {
+        void CreateDeliveryTracking(int deliveryId, DeliveryDriverTrackingModel trackingModel);
         CurrentDeliveryResponse GetCurrentDelivery(int driverId);
         void StartDelivery(int deliveryId, int driverId);
         void UpdateDriverLocation(DriverLocationModel location);

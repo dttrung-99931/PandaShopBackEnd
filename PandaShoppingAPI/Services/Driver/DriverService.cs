@@ -17,12 +17,14 @@ namespace PandaShoppingAPI.Services
         private readonly IUserRepo _userRepo;
         private readonly IDeliveryRepo _deliveryRepo;
         private readonly IDeliveryDriverRepo _deliveryDriverRepo;
+        private readonly IDeliveryDriverTrackingRepo _deliveryDriverTrkRepo;
 
-        public DriverService(IDriverRepo repo, IUserRepo userRepo, IDeliveryRepo deliveryRepo, IDeliveryDriverRepo deliveryDriverRepo) : base(repo)
+        public DriverService(IDriverRepo repo, IUserRepo userRepo, IDeliveryRepo deliveryRepo, IDeliveryDriverRepo deliveryDriverRepo, IDeliveryDriverTrackingRepo deliveryDriverTrkRepo) : base(repo)
         {
             _userRepo = userRepo;
             _deliveryRepo = deliveryRepo;
             _deliveryDriverRepo = deliveryDriverRepo;
+            _deliveryDriverTrkRepo = deliveryDriverTrkRepo;
         }
 
         public void StartDelivery(int deliveryId, int driverId)
@@ -72,6 +74,20 @@ namespace PandaShoppingAPI.Services
         {
             Delivery current = _deliveryDriverRepo.GetCurrentDeliveryOf(driverId);
             return Mapper.Map<CurrentDeliveryResponse>(current);
+        }
+
+        public void CreateDeliveryTracking(int deliveryId, DeliveryDriverTrackingModel trackingModel)
+        {
+            Delivery delivery = _deliveryRepo.GetById(deliveryId);
+            DeliveryDriverTracking tracking = new DeliveryDriverTracking 
+            {
+                deliveryDriverId = delivery.deliveryDriver.id,
+                bearingInDegree = trackingModel.bearingInDegree,
+                lat = trackingModel.lat,
+                long_ = trackingModel.long_,
+                createdAt = DateTime.UtcNow,
+            };
+            _deliveryDriverTrkRepo.Insert(tracking);
         }
     }
 }

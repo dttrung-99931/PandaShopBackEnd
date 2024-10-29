@@ -11,5 +11,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public int driverId { get; set; }
         public virtual Delivery delivery { get; set; }
         public virtual Driver driver { get; set; }
+        public virtual ICollection<DeliveryDriverTracking> DeliveryDriverTracking { get; set; }
     }
 }
