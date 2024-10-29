@@ -265,7 +265,9 @@ namespace PandaShoppingAPI.Services
                             DeliveryPartnerUnit deliPartnerUnit = GetDeliveryPartnerUnit(group.Key, orders.ToList());
                             tempDeliveries.Add(new TempDeliveryResponse {
                                 orders = Mapper.Map<List<OrderResponseModel>>(orders),
-                                deliveryPartnerUnitAddress = Mapper.Map<AddressModel>(deliPartnerUnit.address)
+                                deliveryPartnerUnitAddress = Mapper.Map<AddressModel>(deliPartnerUnit.address),
+                                deliveryPartnerUnitId = deliPartnerUnit.id,
+                                deliveryMethodId = group.Key.id,
                             });
                         });
                 });

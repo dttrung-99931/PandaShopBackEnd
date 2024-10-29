@@ -52,6 +52,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public virtual DbSet<WarehouseInput> WarehouseInput { get; set; }
         public virtual DbSet<WarehouseOutput> WarehouseOutput { get; set; }
         public virtual DbSet<WarehouseOutputDetail> WarehouseOutputDetail { get; set; }
+        public virtual DbSet<OrderDelivery> OrderDelivery { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -305,6 +306,21 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .WithMany(p => p.DeliveryDriver)
                     .HasForeignKey(d => d.driverId)
                     .HasConstraintName("FK_DeliveryDriver_Driver")
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
+            });
+
+            modelBuilder
+                .Entity<DeliveryDriverTracking>()
+                .HasQueryFilter((entity) => !entity.isDeleted);
+            modelBuilder.Entity<DeliveryDriverTracking>(entity =>
+            {
+                entity.HasOne(d => d.deliveryDriver)
+                    .WithMany(p => p.DeliveryDriverTracking)
+                    .HasForeignKey(d => d.deliveryDriverId)
+                    .HasConstraintName("FK_DeliveryDriverTracking_DeliveryDriver")
                     .OnDelete(DeleteBehavior.NoAction);
 
                 entity.Property(e => e.isDeleted)

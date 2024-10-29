@@ -10,5 +10,6 @@ namespace PandaShoppingAPI.Services
         void StartProcessing(int orderId);
         void CompleteProcessing(int orderId);
         void RequestDelivery(int deliveryId);
+        void RequestPartnerDelivery(RequestPartnerDeliveryModel requestModel);
     }
 }

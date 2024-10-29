@@ -68,6 +68,18 @@ namespace PandaShoppingAPI.Controllers
             });
         }
 
+        [HttpPost("Delivery/{deliveryId}/Tracking")]
+        public ActionResult<ResponseWrapper> CreateDeliveryTracking(
+            [FromRoute] int deliveryId,
+            [FromBody] DeliveryDriverTrackingModel trackingModel)
+        {
+            return Handle(() =>
+            {
+                _service.CreateDeliveryTracking(deliveryId, trackingModel);
+                return ok_update();
+            });
+        }
+
         [HttpGet("CurrentDelivery")]
         public ActionResult<ResponseWrapper> GetCurrentDelivery()
         {

@@ -81,5 +81,16 @@ namespace PandaShoppingAPI.Controllers
             });
         }
 
+        [Authorize(Roles = "shop")]
+        [HttpPost(APIPaths.Orders.requestPartnerDelivery)]
+        public ActionResult<ResponseWrapper> RequestPartnerDelivery([FromBody] RequestPartnerDeliveryModel requestModel)
+        {
+            return Handle(() =>
+            {
+                _service.RequestPartnerDelivery(requestModel);
+                return ok_update();
+            });
+        }
+
     }
 }
