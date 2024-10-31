@@ -8,7 +8,7 @@ namespace PandaShoppingAPI.Models
     public class DeliveryDriverTrackingModel
     {
         public decimal lat { get; set; }
-        [JsonPropertyName("long")]
+        [JsonProperty("long")]
         public decimal long_ { get; set; }
         public double bearingInDegree { get; set; }
     }
