@@ -36,7 +36,7 @@ namespace PandaShoppingAPI.DataAccesses.Repos
         public virtual T GetById(object id, bool includeDeleted = false)
         {
             T entity = _dbSet.Find(id);
-            if (includeDeleted || !entity.isDeleted)
+            if (entity != null && includeDeleted || !entity.isDeleted)
             {
                 return entity;
             }
