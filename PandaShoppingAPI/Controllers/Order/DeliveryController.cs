@@ -17,5 +17,15 @@ namespace PandaShoppingAPI.Controllers
         public DeliveryController(IDeliveryService service, IHttpContextAccessor httpContextAccessor) : base(service, httpContextAccessor)
         {
         }
+
+        [HttpGet("{id}/Progress")]
+        public ActionResult<ResponseWrapper> GetDeliveryProgress(int id)
+        {
+            return Handle(() =>
+            {
+                DeliveryProgressModel current = _service.GetDeliveryProgress(id);
+                return ok_get(current);
+            });
+        }
     }
 }

@@ -89,5 +89,17 @@ namespace PandaShoppingAPI.Services
             };
             _deliveryDriverTrkRepo.Insert(tracking);
         }
+
+        public void UpdateDeliveryProgress(int deliveryId, DeliveryProgressModel model)
+        {
+            DeliveryDriver deliveryDriver = _deliveryDriverRepo.GetIQueryable().First(dd => dd.deliveryId == deliveryId);
+            deliveryDriver.distanceInMetter = model.distanceInMetter;   
+            deliveryDriver.durationInMinute = model.durationInMinute;   
+            deliveryDriver.driverLat = model.driverLat;   
+            deliveryDriver.driverLong = model.driverLong;   
+            deliveryDriver.driverBearingInDegree = model.driverBearingInDegree;
+            _deliveryDriverRepo.Update(deliveryDriver, deliveryDriver.id);
+
+        }
     }
 }

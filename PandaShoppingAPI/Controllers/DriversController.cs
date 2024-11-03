@@ -90,5 +90,19 @@ namespace PandaShoppingAPI.Controllers
             });
         }
 
+        [HttpPut("Delivery/{deliveryId}/Progress")]
+        public ActionResult<ResponseWrapper> UpdateDeliveryProgress(
+            [FromRoute] int deliveryId,
+            [FromBody] DeliveryProgressModel model)
+        {
+            return Handle(() =>
+            {
+                _service.UpdateDeliveryProgress(deliveryId, model);
+                return ok_update();
+            });
+        }
+
+
+
     }
 }

@@ -12,5 +12,8 @@
         notEnoughAvaialableProducts,
         deliveryWasStarted,
         driverIsNotFreeToDeliver,
+        // Delivery
+        deliveryNotStarted,
+
     }
 }
