@@ -20,10 +20,10 @@
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger/index.html",
-      // "applicationUrl": "https://localhost:5001;http://localhost:5000",
-      "applicationUrl": "https://192.168.1.31:5001;http://localhost:5000",
+      "applicationUrl": "https://localhost:5001;http://localhost:5000",
+      // "applicationUrl": "https://192.168.1.31:5001;http://localhost:5000",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "WifiHomeDevelopment"
+        "ASPNETCORE_ENVIRONMENT": "HomeDevelopment"
       }
     }
   }
