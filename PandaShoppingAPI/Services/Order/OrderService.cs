@@ -246,8 +246,15 @@ namespace PandaShoppingAPI.Services
 
         public List<TempDeliveryResponse> GetCompleteProcessingOrders()
         {
+            return GetOrderGroupsByStatus(OrderStatus.CompleteProcessing);
+        }
+
+
+        // Return orders group by status. Each group contains maximum [Constants.DELIVERY_ORDER_SIZE] orders
+        private List<TempDeliveryResponse> GetOrderGroupsByStatus(OrderStatus status)
+        {
             IQueryable<Order> completeProcessingOrders =
-                Fill(new OrderFilter { status = OrderStatus.CompleteProcessing, shopId = User.ShopId, });
+                Fill(new OrderFilter { status = status, shopId = User.ShopId, });
 
             List<IGrouping<DeliveryMethod, Order>> groupsByDeliMethod = completeProcessingOrders
                 .ToList() // TODO: Optimize
@@ -255,15 +262,18 @@ namespace PandaShoppingAPI.Services
                 .ToList();
 
             List<TempDeliveryResponse> tempDeliveries = new List<TempDeliveryResponse>();
-            
+
             // Create temp delivery by take 10 orders from order group of same delivery method
             groupsByDeliMethod
-                .ForEach(group => {
+                .ForEach(group =>
+                {
                     group.Chunk(Constants.DELIVERY_ORDER_SIZE)
                         .ToList()
-                        .ForEach(orders => {
+                        .ForEach(orders =>
+                        {
                             DeliveryPartnerUnit deliPartnerUnit = GetDeliveryPartnerUnit(group.Key, orders.ToList());
-                            tempDeliveries.Add(new TempDeliveryResponse {
+                            tempDeliveries.Add(new TempDeliveryResponse
+                            {
                                 orders = Mapper.Map<List<OrderResponseModel>>(orders),
                                 deliveryPartnerUnitAddress = Mapper.Map<AddressModel>(deliPartnerUnit.address),
                                 deliveryPartnerUnitId = deliPartnerUnit.id,
@@ -279,6 +289,32 @@ namespace PandaShoppingAPI.Services
         {
             // TODO: impl get delivery partner unit based on method & orders
             return _deliveryPartnerUnitRepo.GetIQueryable().First();
+        }
+
+        public List<DeliveryWithOrdersResponse>  GetWaitingPartnerDeliveryOrders()
+        {
+            int warehouseAddrId = GetDefaultWarehouseAddrId();
+            List<Delivery> waitingDeliveries = _deliveryRepo.GetIQueryable()
+                .Where((deli) => deli.status == DeliveryStatus.Created && deli.DeliveryLocation.Any(location => location.addressId == warehouseAddrId))
+                .ToList();
+            return waitingDeliveries.Select(
+                delivery =>
+                {
+                    AddressModel deliPartnerAddress = Mapper.Map<AddressModel>
+                    (
+                        delivery.DeliveryLocation
+                        .Where(location => location.locationType == LocationType.DeliveryPartner)
+                        .First().address
+                    );
+                    return new DeliveryWithOrdersResponse
+                    {
+                        deliveryPartnerUnitAddress = deliPartnerAddress,
+                        orders = delivery.OrderDelivery
+                            .Select(orderDeli => Mapper.Map<OrderResponseModel>(orderDeli.order))
+                            .ToList()
+                    };
+                }
+            ).ToList();
         }
     }
 }

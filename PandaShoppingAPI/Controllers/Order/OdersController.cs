@@ -81,6 +81,18 @@ namespace PandaShoppingAPI.Controllers
             });
         }
 
+
+        [Authorize(Roles = "shop")]
+        [HttpGet(APIPaths.Orders.getWaitingPartnerDeliveryOrders)]
+        public ActionResult<ResponseWrapper> GetWaitingPartnerDeliveryOrders()
+        {
+            return Handle(() =>
+            {
+                List<DeliveryWithOrdersResponse> tempDeliveries = _service.GetWaitingPartnerDeliveryOrders();
+                return ok_get(tempDeliveries);
+            });
+        }
+
         [Authorize(Roles = "shop")]
         [HttpPost(APIPaths.Orders.requestPartnerDelivery)]
         public ActionResult<ResponseWrapper> RequestPartnerDelivery([FromBody] RequestPartnerDeliveryModel requestModel)

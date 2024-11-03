@@ -95,39 +95,28 @@ namespace PandaShoppingAPI.Services
 
         public void RequestPartnerDelivery(RequestPartnerDeliveryModel requestModel)
         {
-            // Currently, all pickup deliveries will have address = the first shop's warehouse address for build PandaDriver faterer
-            // TODO: in the fututure, impl feature of selecting driver pick up address for shop when complete a processing order  
-            Warehouse defaultWareHourse = _warehouseRepo
-                .Where(warehouse => warehouse.shopId == User.ShopId)
-                .FirstOrDefault();
-            
-            if (defaultWareHourse == null)
-            {
-                throw new Exception($"Shop {User.ShopId} has no warehouse");
-            }
-           
-            int pickupAddressId = defaultWareHourse.addressId; 
-            Delivery pickUpDelivery = new Delivery 
+            int pickupAddressId = GetDefaultWarehouseAddrId();
+            Delivery pickUpDelivery = new Delivery
             {
                 status = DeliveryStatus.Created,
                 OrderDelivery = requestModel.orderIds
                     .Select(
-                        orderId => new OrderDelivery 
+                        orderId => new OrderDelivery
                         {
                             orderId = orderId,
                         }
                     ).ToList(),
                 deliveryMethodId = requestModel.deliveryMethodId,
-                DeliveryLocation = new List<DeliveryLocation> 
-                {   
-                    new DeliveryLocation 
+                DeliveryLocation = new List<DeliveryLocation>
+                {
+                    new DeliveryLocation
                     {
                         addressId = pickupAddressId,
                         locationType = LocationType.Pickup,
                         locationOrder = 1,
                     },
                     // Fake location partner where shiper will take the package to 
-                    new DeliveryLocation 
+                    new DeliveryLocation
                     {
                         addressId = requestModel.deliveryPartnerUnitAddressId,
                         locationType = LocationType.DeliveryPartner,
@@ -139,5 +128,21 @@ namespace PandaShoppingAPI.Services
             UpdateOrdersStatus(requestModel.orderIds, OrderStatus.WaitingForDelivering);
         }
 
+        private int GetDefaultWarehouseAddrId()
+        {
+            // Currently, all pickup deliveries will have address = the first shop's warehouse address for build PandaDriver faterer
+            // TODO: in the fututure, impl feature of selecting driver pick up address for shop when complete a processing order  
+            Warehouse defaultWareHourse = _warehouseRepo
+                .Where(warehouse => warehouse.shopId == User.ShopId)
+                .FirstOrDefault();
+
+            if (defaultWareHourse == null)
+            {
+                throw new Exception($"Shop {User.ShopId} has no warehouse");
+            }
+
+            int pickupAddressId = defaultWareHourse.addressId;
+            return pickupAddressId;
+        }
     }
 }
