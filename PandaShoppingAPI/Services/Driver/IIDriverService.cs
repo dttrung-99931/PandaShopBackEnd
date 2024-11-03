@@ -12,5 +12,6 @@ namespace PandaShoppingAPI.Services
         CurrentDeliveryResponse GetCurrentDelivery(int driverId);
         void StartDelivery(int deliveryId, int driverId);
         void UpdateDriverLocation(DriverLocationModel location);
+        void UpdateDeliveryProgress(int deliveryId, DeliveryProgressModel model);
     }
 }

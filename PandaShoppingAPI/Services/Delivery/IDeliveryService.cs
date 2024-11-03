@@ -6,6 +6,7 @@ namespace PandaShoppingAPI.Services
 {
     public interface IDeliveryService: IBaseService<Delivery, DeliveryModel, DeliveryFilter>
     {
+        DeliveryProgressModel GetDeliveryProgress(int deliveryId);
         void SetCustomerAddresses(List<DeliveryResponse> deliveries);
     }
 }

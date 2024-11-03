@@ -2,6 +2,7 @@
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
 using PandaShoppingAPI.Models;
+using PandaShoppingAPI.Utils.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,16 @@ namespace PandaShoppingAPI.Services
             // foreach (DeliveryResponse delivery in deliveries){
             //     delivery.customerAddress = Mapper.Map<AddressResponseModel>(customerAddresses[delivery.id]);
             // }
+        }
+
+        public DeliveryProgressModel GetDeliveryProgress(int deliveryId)
+        {
+            Delivery delivery =  GetById(deliveryId);
+            if (delivery.deliveryDriver == null)
+            {
+                throw new ConflictException(Utils.ErrorCode.deliveryNotStarted);
+            }   
+            return Mapper.Map<DeliveryProgressModel>(delivery.deliveryDriver);
         }
     }
 }
