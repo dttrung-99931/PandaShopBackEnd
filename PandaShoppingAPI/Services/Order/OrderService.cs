@@ -27,6 +27,7 @@ namespace PandaShoppingAPI.Services
         private readonly IDeliveryMethodRepo _deliveryMethodRepo;
         private readonly IDeliveryPartnerUnitRepo _deliveryPartnerUnitRepo;
         private readonly IDeliveryLocationRepo _deliveryLocationRepo;
+        private readonly IProductRepo _productRepo;
 
         public OrderService(IOrderRepo repo,
             IOrderDetailRepo orderdetailRepo,
@@ -39,7 +40,8 @@ namespace PandaShoppingAPI.Services
             IWarehouseRepo warehouseRepo,
             IDeliveryMethodRepo deliveryMethodRepo,
             IDeliveryPartnerUnitRepo deliveryPartnerUnitRepo,
-            IDeliveryLocationRepo deliveryLocationRepo) : base(repo)
+            IDeliveryLocationRepo deliveryLocationRepo,
+            IProductRepo productRepo) : base(repo)
         {
             _orderDetailRepo = orderdetailRepo;
             _productBatchInvRepo = productBatchInvRepo;
@@ -52,6 +54,7 @@ namespace PandaShoppingAPI.Services
             _deliveryMethodRepo = deliveryMethodRepo;
             _deliveryPartnerUnitRepo = deliveryPartnerUnitRepo;
             _deliveryLocationRepo = deliveryLocationRepo;
+            _productRepo = productRepo;
         }
 
         public override IQueryable<Order> Fill(OrderFilter filter)
@@ -132,6 +135,12 @@ namespace PandaShoppingAPI.Services
 
         private Order BuildOrder(OrderModel requestModel, int invoiceId)
         {
+            // TODO: get shopId from request instaed of query db
+            int shopId = _productOptionRepo.GetIQueryable()
+                .Where((opt) => opt.id == requestModel.OrderDetails.First().productOptionId)
+                .Select(opt => opt.product.shopId)
+                .Single();
+
             Order order = new Order()
             {
                 userId = User.UserId,
@@ -140,6 +149,7 @@ namespace PandaShoppingAPI.Services
                 status = OrderStatus.Created,
                 deliveryAddressId = requestModel.addressId,
                 deliveryMethodId = requestModel.deliveryMethodId,
+                shopId = shopId,
                 OrderDetail = requestModel.OrderDetails.Select(
                         (detail) =>
                         {
@@ -308,6 +318,9 @@ namespace PandaShoppingAPI.Services
                     );
                     return new DeliveryWithOrdersResponse
                     {
+                        id = delivery.id,
+                        status = delivery.status,
+                        progress = Mapper.Map<DeliveryProgressModel>(delivery.deliveryDriver),
                         deliveryPartnerUnitAddress = deliPartnerAddress,
                         orders = delivery.OrderDelivery
                             .Select(orderDeli => Mapper.Map<OrderResponseModel>(orderDeli.order))
