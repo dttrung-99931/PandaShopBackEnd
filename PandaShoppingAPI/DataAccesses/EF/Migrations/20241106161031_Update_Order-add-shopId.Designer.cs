@@ -12,8 +12,8 @@ using PandaShoppingAPI.DataAccesses.EF;
 namespace PandaShoppingAPI.DataAccesses.EF.Migrations
 {
     [DbContext(typeof(EcommerceDBContext))]
-    [Migration("20241105155307_Update_Order_Add-shopId")]
-    partial class Update_Order_AddshopId
+    [Migration("20241106161031_Update_Order-add-shopId")]
+    partial class Update_OrderaddshopId
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -678,6 +678,11 @@ namespace PandaShoppingAPI.DataAccesses.EF.Migrations
                     b.Property<string>("note")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("shopId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
                     b.Property<int>("status")
                         .HasColumnType("int");
 
@@ -694,6 +699,8 @@ namespace PandaShoppingAPI.DataAccesses.EF.Migrations
                     b.HasIndex("deliveryMethodId");
 
                     b.HasIndex("invoiceId");
+
+                    b.HasIndex("shopId");
 
                     b.HasIndex("userId");
 
@@ -1804,6 +1811,13 @@ namespace PandaShoppingAPI.DataAccesses.EF.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_Order_Invoice");
 
+                    b.HasOne("PandaShoppingAPI.DataAccesses.EF.Shop", "shop")
+                        .WithMany("Order")
+                        .HasForeignKey("shopId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_Order_Shop");
+
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.User_", "user")
                         .WithMany("Order")
                         .HasForeignKey("userId")
@@ -1816,6 +1830,8 @@ namespace PandaShoppingAPI.DataAccesses.EF.Migrations
                     b.Navigation("deliveryMethod");
 
                     b.Navigation("invoice");
+
+                    b.Navigation("shop");
 
                     b.Navigation("user");
                 });
@@ -2386,6 +2402,8 @@ namespace PandaShoppingAPI.DataAccesses.EF.Migrations
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Shop", b =>
                 {
+                    b.Navigation("Order");
+
                     b.Navigation("Product");
 
                     b.Navigation("User_");

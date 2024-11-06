@@ -676,6 +676,9 @@ namespace PandaShoppingAPI.DataAccesses.EF.Migrations
                     b.Property<string>("note")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("shopId")
+                        .HasColumnType("int");
+
                     b.Property<int>("status")
                         .HasColumnType("int");
 
@@ -692,6 +695,8 @@ namespace PandaShoppingAPI.DataAccesses.EF.Migrations
                     b.HasIndex("deliveryMethodId");
 
                     b.HasIndex("invoiceId");
+
+                    b.HasIndex("shopId");
 
                     b.HasIndex("userId");
 
@@ -1802,6 +1807,13 @@ namespace PandaShoppingAPI.DataAccesses.EF.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_Order_Invoice");
 
+                    b.HasOne("PandaShoppingAPI.DataAccesses.EF.Shop", "shop")
+                        .WithMany("Order")
+                        .HasForeignKey("shopId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_Order_Shop");
+
                     b.HasOne("PandaShoppingAPI.DataAccesses.EF.User_", "user")
                         .WithMany("Order")
                         .HasForeignKey("userId")
@@ -1814,6 +1826,8 @@ namespace PandaShoppingAPI.DataAccesses.EF.Migrations
                     b.Navigation("deliveryMethod");
 
                     b.Navigation("invoice");
+
+                    b.Navigation("shop");
 
                     b.Navigation("user");
                 });
@@ -2384,6 +2398,8 @@ namespace PandaShoppingAPI.DataAccesses.EF.Migrations
 
             modelBuilder.Entity("PandaShoppingAPI.DataAccesses.EF.Shop", b =>
                 {
+                    b.Navigation("Order");
+
                     b.Navigation("Product");
 
                     b.Navigation("User_");
