@@ -25,14 +25,20 @@ namespace PandaShoppingAPI.Services
             services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IDeliveryService, DeliveryService>();
             services.AddScoped<IDeliveryMethodService, DeliveryMethodService>();
+
             // Notification
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<INotificationSenderService, NotificationSenderService>();
             services.AddScoped<FCMNotificationSender>();
             services.AddScoped<SignalRNotificationSender>();
             services.AddScoped<NotificationSenderFactory>();
+
             // Driver
             services.AddScoped<IDriverService, DriverService>();
+
+            // Realtime
+            services.AddScoped<SignalRService>();
+            services.AddScoped<RealtimeServiceFactory>();
         }
     }
 }

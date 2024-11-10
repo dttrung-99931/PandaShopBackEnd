@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
 using PandaShoppingAPI.Models;
@@ -18,13 +19,17 @@ namespace PandaShoppingAPI.Services
         private readonly IDeliveryRepo _deliveryRepo;
         private readonly IDeliveryDriverRepo _deliveryDriverRepo;
         private readonly IDeliveryDriverTrackingRepo _deliveryDriverTrkRepo;
+        private readonly RealtimeServiceFactory _realtimeFactory;
+        private readonly IOrderDeliveryRepo _orderDeliRepo;
 
-        public DriverService(IDriverRepo repo, IUserRepo userRepo, IDeliveryRepo deliveryRepo, IDeliveryDriverRepo deliveryDriverRepo, IDeliveryDriverTrackingRepo deliveryDriverTrkRepo) : base(repo)
+        public DriverService(IDriverRepo repo, IUserRepo userRepo, IDeliveryRepo deliveryRepo, IDeliveryDriverRepo deliveryDriverRepo, IDeliveryDriverTrackingRepo deliveryDriverTrkRepo, RealtimeServiceFactory realtimeFactory, IOrderDeliveryRepo orderDeliRepo) : base(repo)
         {
             _userRepo = userRepo;
             _deliveryRepo = deliveryRepo;
             _deliveryDriverRepo = deliveryDriverRepo;
             _deliveryDriverTrkRepo = deliveryDriverTrkRepo;
+            _realtimeFactory = realtimeFactory;
+            _orderDeliRepo = orderDeliRepo;
         }
 
         public void StartDelivery(int deliveryId, int driverId)
@@ -100,6 +105,36 @@ namespace PandaShoppingAPI.Services
             deliveryDriver.driverBearingInDegree = model.driverBearingInDegree;
             _deliveryDriverRepo.Update(deliveryDriver, deliveryDriver.id);
 
+            List<int> receiveUserIDs = GetDeliveryProgressReceiverUserIDs(deliveryId)
+                .Distinct()
+                .ToList();
+                
+            foreach (int userId in receiveUserIDs){
+                var progressUpdate = new DeliveryProgressUpdateModel 
+                {
+                    id = deliveryDriver.deliveryId,
+                    progress = Mapper.Map<DeliveryProgressModel>(deliveryDriver),
+                    status = deliveryDriver.delivery.status,
+                };
+                _realtimeFactory.Emit
+                (
+                    userId,
+                    RelatimeChannels.onDeliveryProgress, 
+                    progressUpdate.ToJson()
+                );
+            }
+
+        }
+
+        private List<int> GetDeliveryProgressReceiverUserIDs(int deliveryId)
+        {
+            List<int> userIDs = _orderDeliRepo.GetIQueryable()
+                .Where((orderDeli) => orderDeli.deliveryId == deliveryId)
+                // There will a fiew orderDeli so use ToList to make below ...User_.First() working
+                .ToList() 
+                .SelectMany(orderDeli => new List<int> {orderDeli.order.userId, orderDeli.order.shop.User_.First().id })
+                .ToList();
+            return userIDs;
         }
     }
 }
