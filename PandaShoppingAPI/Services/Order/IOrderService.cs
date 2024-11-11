@@ -12,9 +12,13 @@ namespace PandaShoppingAPI.Services
         // each delivery contains maximum Constants..DELIVERY_ORDER_SIZE orders
         List<TempDeliveryResponse> GetCompleteProcessingOrders();
 
+        // Return list of tmp delivery containing delivering orders 
+        // each delivery contains maximum Constants..DELIVERY_ORDER_SIZE orders
+        List<DeliveryWithOrdersResponse> GetDeliveringDeliveryWithOrders();
+
         // Return list of waiting partner delivery orders 
         // each delivery contains maximum Constants..DELIVERY_ORDER_SIZE orders
-        List<DeliveryWithOrdersResponse> GetWaitingPartnerDeliveryOrders();
+        List<DeliveryWithOrdersResponse> GetWaitingDeliveryWithOrders();
 
         // List<TempDeliveryResponse> GetWaitingForDelevringOrders();
         List<Order> Insert(CreateOrdersModel model);

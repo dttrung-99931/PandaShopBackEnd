@@ -24,6 +24,19 @@ namespace PandaShoppingAPI.Services
             return CreateOrderNoti(orderId, OrderMessages.titleCreated, NotificationType.ShopOrderNoti);
         }
 
+        public Notification CreateDriverTakeDeliveryNoti(int shopUserId, int deliveryId, string driverLicencePlate)
+        {
+            return CreateNoti
+            (
+                NotificationType.DriverTakeDelivery, 
+                DeliveryMessages.titleDeliveryUpdate, 
+                DeliveryMessages.GetDriverTakeDeliveryMsg(deliveryId, driverLicencePlate),
+                null,
+                shopUserId
+            );
+            
+        }
+
         private Notification CreateOrderNoti(int orderId, string title, NotificationType type)
         {
             Order order = _orderRepo.GetById(orderId);

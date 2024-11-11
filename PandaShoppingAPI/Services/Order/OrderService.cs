@@ -301,11 +301,24 @@ namespace PandaShoppingAPI.Services
             return _deliveryPartnerUnitRepo.GetIQueryable().First();
         }
 
-        public List<DeliveryWithOrdersResponse>  GetWaitingPartnerDeliveryOrders()
+        public List<DeliveryWithOrdersResponse>  GetWaitingDeliveryWithOrders()
+        {
+            return GetDeliveryWithOrders(false);
+        }
+            
+
+        public List<DeliveryWithOrdersResponse> GetDeliveringDeliveryWithOrders()
+        {
+            return GetDeliveryWithOrders(true);
+        }
+
+        /// Get waitingForDelivering or delivery order groups
+        private List<DeliveryWithOrdersResponse> GetDeliveryWithOrders(bool isDelivering)
         {
             int warehouseAddrId = GetDefaultWarehouseAddrId();
             List<Delivery> waitingDeliveries = _deliveryRepo.GetIQueryable()
-                .Where((deli) => deli.status == DeliveryStatus.Created && deli.DeliveryLocation.Any(location => location.addressId == warehouseAddrId))
+                .Where((deli) => deli.status == (isDelivering ? DeliveryStatus.Delivering : DeliveryStatus.Created) 
+                    && deli.DeliveryLocation.Any(location => location.addressId == warehouseAddrId))
                 .ToList();
             return waitingDeliveries.Select(
                 delivery =>

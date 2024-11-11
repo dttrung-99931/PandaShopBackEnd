@@ -21,8 +21,9 @@ namespace PandaShoppingAPI.Services
         private readonly IDeliveryDriverTrackingRepo _deliveryDriverTrkRepo;
         private readonly RealtimeServiceFactory _realtimeFactory;
         private readonly IOrderDeliveryRepo _orderDeliRepo;
+        private readonly INotificationService _notiService;
 
-        public DriverService(IDriverRepo repo, IUserRepo userRepo, IDeliveryRepo deliveryRepo, IDeliveryDriverRepo deliveryDriverRepo, IDeliveryDriverTrackingRepo deliveryDriverTrkRepo, RealtimeServiceFactory realtimeFactory, IOrderDeliveryRepo orderDeliRepo) : base(repo)
+        public DriverService(IDriverRepo repo, IUserRepo userRepo, IDeliveryRepo deliveryRepo, IDeliveryDriverRepo deliveryDriverRepo, IDeliveryDriverTrackingRepo deliveryDriverTrkRepo, RealtimeServiceFactory realtimeFactory, IOrderDeliveryRepo orderDeliRepo, INotificationService notiService) : base(repo)
         {
             _userRepo = userRepo;
             _deliveryRepo = deliveryRepo;
@@ -30,6 +31,7 @@ namespace PandaShoppingAPI.Services
             _deliveryDriverTrkRepo = deliveryDriverTrkRepo;
             _realtimeFactory = realtimeFactory;
             _orderDeliRepo = orderDeliRepo;
+            _notiService = notiService;
         }
 
         public void StartDelivery(int deliveryId, int driverId)
@@ -37,11 +39,20 @@ namespace PandaShoppingAPI.Services
             Delivery delivery = _deliveryRepo.GetById(deliveryId);
             ValidateStartDelivery(delivery, driverId);
             delivery.status = DeliveryStatus.Delivering;
-            delivery.deliveryDriver = new DeliveryDriver 
+            delivery.deliveryDriver = new DeliveryDriver
             {
                 driverId = driverId,
             };
             _deliveryRepo.Update(delivery, deliveryId);
+            SendDriverTakeDeliveryNoti(deliveryId, delivery);
+        }
+
+        private void SendDriverTakeDeliveryNoti(int deliveryId, Delivery delivery)
+        {
+            string licensePlate = "48-D1 377,07";
+            // TODO: fixed
+            int shopUserId = delivery.OrderDelivery.First().order.shop.User_.First().id;
+            _notiService.CreateDriverTakeDeliveryNoti(shopUserId, deliveryId, licensePlate);
         }
 
         private void ValidateStartDelivery(Delivery delivery, int driverId)
@@ -108,7 +119,7 @@ namespace PandaShoppingAPI.Services
             List<int> receiveUserIDs = GetDeliveryProgressReceiverUserIDs(deliveryId)
                 .Distinct()
                 .ToList();
-                
+
             foreach (int userId in receiveUserIDs){
                 var progressUpdate = new DeliveryProgressUpdateModel 
                 {

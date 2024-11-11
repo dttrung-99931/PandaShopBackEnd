@@ -14,5 +14,6 @@ namespace PandaShoppingAPI.Services
         List<NotificationResponse> Get(NotificationFilter filter, out Meta meta);
         void UpdateNotificationStatusToSeen(List<int> notificaitonIds);
         void CreateNotificationReceiver(NotificationReceiverModel model);
+        public Notification CreateDriverTakeDeliveryNoti(int shopUserId, int deliveryId, string driverLicencePlate);
     }
 }

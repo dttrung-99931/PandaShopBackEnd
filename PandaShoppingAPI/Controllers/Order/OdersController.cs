@@ -88,8 +88,19 @@ namespace PandaShoppingAPI.Controllers
         {
             return Handle(() =>
             {
-                List<DeliveryWithOrdersResponse> tempDeliveries = _service.GetWaitingPartnerDeliveryOrders();
+                List<DeliveryWithOrdersResponse> tempDeliveries = _service.GetWaitingDeliveryWithOrders();
                 return ok_get(tempDeliveries);
+            });
+        }
+
+        [Authorize(Roles = "shop")]
+        [HttpGet(APIPaths.Orders.getDeliveringOrders)]
+        public ActionResult<ResponseWrapper> GetDeliveringOrders()
+        {
+            return Handle(() =>
+            {
+                List<DeliveryWithOrdersResponse> delivering = _service.GetDeliveringDeliveryWithOrders();
+                return ok_get(delivering);
             });
         }
 
