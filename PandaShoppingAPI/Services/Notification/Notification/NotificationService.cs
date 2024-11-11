@@ -19,18 +19,21 @@ namespace PandaShoppingAPI.Services
         private readonly INotificationReceiverRepo _notiReceiverRepo;
         private readonly IOrderRepo _orderRepo;
         private readonly INotificationSenderService _notiSenderService;
+        private readonly IDeliveryRepo _deliveryRepo;
 
         public NotificationService(
             INotificationRepo repo,
             IUserNotificationRepo userNotiRepo,
             INotificationReceiverRepo notiReceiverRepo,
             IOrderRepo orderRepo,
-            INotificationSenderService notiSenderService) : base(repo)
+            INotificationSenderService notiSenderService,
+            IDeliveryRepo deliveryRepo) : base(repo)
         {
             _userNotiRepo = userNotiRepo;
             _notiReceiverRepo = notiReceiverRepo;
             _orderRepo = orderRepo;
             _notiSenderService = notiSenderService;
+            _deliveryRepo = deliveryRepo;
         }
     }
 }

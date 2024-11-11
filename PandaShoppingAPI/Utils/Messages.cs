@@ -40,5 +40,15 @@ namespace PandaShoppingAPI.Configs.Messages
         }
     }
 
+    public static class DeliveryMessages 
+    {
+        public const string titleDeliveryUpdate = "[Vận chuyển]";
+
+        public static string GetDriverTakeDeliveryMsg(int deliveryId, string driverLicensePlate)
+        {
+            return $"Tài xế {driverLicensePlate} nhận vận chuyển đơn #{deliveryId}";
+        }
+
+    }
 }
 
