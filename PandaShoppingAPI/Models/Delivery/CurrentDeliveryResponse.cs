@@ -17,8 +17,12 @@ namespace PandaShoppingAPI.Models
         public DateTime? finishedAt { get; set; }
         public DeliveryStatus status { get; set; }
         public DeliveryMethodResponse deliveryMethod { get; set; }
+        
         [JsonProperty("deliveryLocations")]
         public List<DeliveryLocationResponse> DeliveryLocation { get; set; }
+        
+        [JsonProperty("progress")]
+        public DeliveryProgressModel deliveryDriver { get; set; }
 
         protected override void CustomMapping(IMappingExpression<Delivery, CurrentDeliveryResponse> mappingExpression, IConfiguration config)
         {
