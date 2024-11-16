@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace PandaShoppingAPI.Models
 {
-    public class PushNotification : BaseModel<Notification, PushNotification>
+    public class PushNotification : JsonBaseModel<Notification, PushNotification>
     {
         public string title { get; set; }
         public string description { get; set; }
@@ -16,18 +16,6 @@ namespace PandaShoppingAPI.Models
         public DateTime createdDate { get; set; } = DateTime.UtcNow;
         public PushNotificationData data { get; set; }
 
-        public string ToJson()
-        {
-            string json = JsonConvert.SerializeObject(this);
-            return json;
-        }
-        public Dictionary<string, object> ToDictionary()
-        {
-            string json = JsonConvert.SerializeObject(this);
-            Dictionary<string, object> dict =
-                JsonConvert.DeserializeObject<Dictionary<string, object>>(Uri.UnescapeDataString(json));
-            return dict;
-        }
     }
 
     public class PushNotificationData : BaseModel<NotificationData, NotificationDataModel>

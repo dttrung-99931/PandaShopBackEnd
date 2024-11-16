@@ -29,6 +29,10 @@ namespace PandaShoppingAPI.Services
         {
             _serviceProvider = serviceProvider;
         }
+        public void EmitEvent(int userId, string channelName, RealtimeEvent realtimeEvent)
+        {
+            Emit(userId, channelName, realtimeEvent.ToJson(), RealtimeType.SignalR);
+        }
 
         public void Emit(int userId, string channelName, object data, RealtimeType type = RealtimeType.SignalR)
         {

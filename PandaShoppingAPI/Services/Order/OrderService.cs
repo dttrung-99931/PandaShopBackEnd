@@ -321,25 +321,7 @@ namespace PandaShoppingAPI.Services
                     && deli.DeliveryLocation.Any(location => location.addressId == warehouseAddrId))
                 .ToList();
             return waitingDeliveries.Select(
-                delivery =>
-                {
-                    AddressModel deliPartnerAddress = Mapper.Map<AddressModel>
-                    (
-                        delivery.DeliveryLocation
-                        .Where(location => location.locationType == LocationType.DeliveryPartner)
-                        .First().address
-                    );
-                    return new DeliveryWithOrdersResponse
-                    {
-                        id = delivery.id,
-                        status = delivery.status,
-                        progress = Mapper.Map<DeliveryProgressModel>(delivery.deliveryDriver),
-                        deliveryPartnerUnitAddress = deliPartnerAddress,
-                        orders = delivery.OrderDelivery
-                            .Select(orderDeli => Mapper.Map<OrderResponseModel>(orderDeli.order))
-                            .ToList()
-                    };
-                }
+                delivery => DeliveryWithOrdersResponse.FromDelivery(delivery)
             ).ToList();
         }
     }

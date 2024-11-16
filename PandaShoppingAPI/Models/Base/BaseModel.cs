@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using PandaShoppingAPI.Configs;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,23 @@ namespace PandaShoppingAPI.Models.Base
     public abstract class BaseModel<TEntity, TModel> : BaseModel<TEntity, TModel, int>
     {
     }
+    
+    public abstract class JsonBaseModel<TEntity, TModel> : BaseModel<TEntity, TModel, int>
+    {
+        public string ToJson()
+        {
+            string json = JsonConvert.SerializeObject(this);
+            return json;
+        }
+        public Dictionary<string, object> ToDictionary()
+        {
+            string json = JsonConvert.SerializeObject(this);
+            Dictionary<string, object> dict =
+                JsonConvert.DeserializeObject<Dictionary<string, object>>(Uri.UnescapeDataString(json));
+            return dict;
+        }
+    }
+
 
     public abstract class BaseModel<TEntity, TModel, TId> : IMapperProfile
     {

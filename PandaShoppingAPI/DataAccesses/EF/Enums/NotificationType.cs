@@ -6,7 +6,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
         UserOrderNoti = 1, 
         ShopOrderNoti = 2, 
         Ads = 4, // ...
-        DriverTakeDelivery = 8,
     }
 }
 

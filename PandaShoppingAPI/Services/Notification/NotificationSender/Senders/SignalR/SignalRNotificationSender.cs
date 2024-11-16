@@ -9,27 +9,24 @@ namespace PandaShoppingAPI.Services
 {
     public class SignalRNotificationSender : INotificationSender
     {
-        public const string onNotification = "onNotification";
-        private readonly IHubContext<SignalRNotificationHub> _hubContext;
+        private readonly RealtimeServiceFactory _realtime;
 
-        public SignalRNotificationSender(IHubContext<SignalRNotificationHub> hubContext)
+        public SignalRNotificationSender(RealtimeServiceFactory realtime)
         {
-            _hubContext = hubContext;
+            _realtime = realtime;
         }
 
         public bool Send(PushNotificationSend noti)
         {
             try
             {
-                List<string> connectingSinalRIds = SignalRNotificationHub
-                    .GetConnectingSignalRIdsOfUser(noti.receiver.userId);
-
-                connectingSinalRIds.ForEach(signalRId =>
-                {
-                    IClientProxy userHub = _hubContext.Clients.User(signalRId);
-
-                    userHub.SendAsync(onNotification, noti.data.ToJson());
-                });
+                _realtime.Emit
+                (
+                    noti.receiver.userId, 
+                    RelatimeChannels.onNotification, 
+                    noti.data.ToJson(), 
+                    RealtimeType.SignalR
+                );
             }
             catch (Exception)
             {
