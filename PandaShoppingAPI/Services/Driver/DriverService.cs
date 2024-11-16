@@ -12,24 +12,24 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Services
 {
-    public partial class DriverService : BaseService<IDriverRepo, Driver, DriverModel, DriverFilter>, 
+    public partial class DriverService : BaseService<IDriverRepo, Driver, DriverModel, DriverFilter>,
         IDriverService
     {
         private readonly IUserRepo _userRepo;
         private readonly IDeliveryRepo _deliveryRepo;
         private readonly IDeliveryDriverRepo _deliveryDriverRepo;
         private readonly IDeliveryDriverTrackingRepo _deliveryDriverTrkRepo;
-        private readonly RealtimeServiceFactory _realtimeFactory;
+        private readonly RealtimeServiceFactory _realtime;
         private readonly IOrderDeliveryRepo _orderDeliRepo;
         private readonly INotificationService _notiService;
 
-        public DriverService(IDriverRepo repo, IUserRepo userRepo, IDeliveryRepo deliveryRepo, IDeliveryDriverRepo deliveryDriverRepo, IDeliveryDriverTrackingRepo deliveryDriverTrkRepo, RealtimeServiceFactory realtimeFactory, IOrderDeliveryRepo orderDeliRepo, INotificationService notiService) : base(repo)
+        public DriverService(IDriverRepo repo, IUserRepo userRepo, IDeliveryRepo deliveryRepo, IDeliveryDriverRepo deliveryDriverRepo, IDeliveryDriverTrackingRepo deliveryDriverTrkRepo, RealtimeServiceFactory realtimeFactory, IOrderDeliveryRepo orderDeliRepo, INotificationService notiService, RealtimeServiceFactory realtime) : base(repo)
         {
             _userRepo = userRepo;
             _deliveryRepo = deliveryRepo;
             _deliveryDriverRepo = deliveryDriverRepo;
             _deliveryDriverTrkRepo = deliveryDriverTrkRepo;
-            _realtimeFactory = realtimeFactory;
+            _realtime = realtimeFactory;
             _orderDeliRepo = orderDeliRepo;
             _notiService = notiService;
         }
@@ -44,15 +44,7 @@ namespace PandaShoppingAPI.Services
                 driverId = driverId,
             };
             _deliveryRepo.Update(delivery, deliveryId);
-            SendDriverTakeDeliveryNoti(deliveryId, delivery);
-        }
-
-        private void SendDriverTakeDeliveryNoti(int deliveryId, Delivery delivery)
-        {
-            string licensePlate = "48-D1 377,07";
-            // TODO: fixed
-            int shopUserId = delivery.OrderDelivery.First().order.shop.User_.First().id;
-            _notiService.CreateDriverTakeDeliveryNoti(shopUserId, deliveryId, licensePlate);
+            NotifyDriverTakeDelivery(deliveryId, delivery);
         }
 
         private void ValidateStartDelivery(Delivery delivery, int driverId)
@@ -95,7 +87,7 @@ namespace PandaShoppingAPI.Services
         public void CreateDeliveryTracking(int deliveryId, DeliveryDriverTrackingModel trackingModel)
         {
             Delivery delivery = _deliveryRepo.GetById(deliveryId);
-            DeliveryDriverTracking tracking = new DeliveryDriverTracking 
+            DeliveryDriverTracking tracking = new DeliveryDriverTracking
             {
                 deliveryDriverId = delivery.deliveryDriver.id,
                 bearingInDegree = trackingModel.bearingInDegree,
@@ -109,10 +101,11 @@ namespace PandaShoppingAPI.Services
         public void UpdateDeliveryProgress(int deliveryId, DeliveryProgressModel model)
         {
             DeliveryDriver deliveryDriver = _deliveryDriverRepo.GetIQueryable().First(dd => dd.deliveryId == deliveryId);
-            deliveryDriver.distanceInMetter = model.distanceInMetter;   
-            deliveryDriver.durationInMinute = model.durationInMinute;   
-            deliveryDriver.driverLat = model.driverLat;   
-            deliveryDriver.driverLong = model.driverLong;   
+            deliveryDriver.distanceInMetter = model.distanceInMetter;
+            deliveryDriver.durationInMinute = model.durationInMinute;
+            deliveryDriver.remainingDistance = model.remainingDistance;
+            deliveryDriver.driverLat = model.driverLat;
+            deliveryDriver.driverLong = model.driverLong;
             deliveryDriver.driverBearingInDegree = model.driverBearingInDegree;
             _deliveryDriverRepo.Update(deliveryDriver, deliveryDriver.id);
 
@@ -120,19 +113,15 @@ namespace PandaShoppingAPI.Services
                 .Distinct()
                 .ToList();
 
-            foreach (int userId in receiveUserIDs){
-                var progressUpdate = new DeliveryProgressUpdateModel 
+            foreach (int userId in receiveUserIDs)
+            {
+                var progressUpdate = new DeliveryProgressUpdateModel
                 {
                     id = deliveryDriver.deliveryId,
                     progress = Mapper.Map<DeliveryProgressModel>(deliveryDriver),
                     status = deliveryDriver.delivery.status,
                 };
-                _realtimeFactory.Emit
-                (
-                    userId,
-                    RelatimeChannels.onDeliveryProgress, 
-                    progressUpdate.ToJson()
-                );
+                NotifyDelvieryProvgressUpdate(userId, progressUpdate);
             }
 
         }
@@ -142,8 +131,8 @@ namespace PandaShoppingAPI.Services
             List<int> userIDs = _orderDeliRepo.GetIQueryable()
                 .Where((orderDeli) => orderDeli.deliveryId == deliveryId)
                 // There will a fiew orderDeli so use ToList to make below ...User_.First() working
-                .ToList() 
-                .SelectMany(orderDeli => new List<int> {orderDeli.order.userId, orderDeli.order.shop.User_.First().id })
+                .ToList()
+                .SelectMany(orderDeli => new List<int> { orderDeli.order.userId, orderDeli.order.shop.User_.First().id })
                 .ToList();
             return userIDs;
         }

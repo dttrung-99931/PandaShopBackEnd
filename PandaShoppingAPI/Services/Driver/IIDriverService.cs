@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace PandaShoppingAPI.Services
 {
-    public interface IDriverService : IBaseService<Driver, DriverModel, DriverFilter>, IDriverManagerService
+    public interface IDriverService : IBaseService<Driver, DriverModel, DriverFilter>, IDriverManagerService, IDriverRealtimeService
     {
         void CreateDeliveryTracking(int deliveryId, DeliveryDriverTrackingModel trackingModel);
         CurrentDeliveryResponse GetCurrentDelivery(int driverId);

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Services
 {
-    public partial class DriverService
+    public partial class DriverService: IDriverManagerService
     {
         public List<DeliveryResponse> GetUpcomingDeliveries(UpcomingDeliveriesFilter filter, out Meta meta)
         {

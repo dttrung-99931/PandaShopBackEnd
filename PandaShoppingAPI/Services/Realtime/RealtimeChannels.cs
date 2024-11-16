@@ -22,5 +22,7 @@ namespace PandaShoppingAPI.Services
     public class RelatimeChannels
     {
         public static string onDeliveryProgress = "onDeliveryProgress";
+        public static string onDriverTakeDelivery = "onDriverTakeDelivery";
+        public const string onNotification = "onNotification";
     }
 }
