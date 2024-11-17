@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Newtonsoft.Json;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.Models;
 using PandaShoppingAPI.Models.Base;
@@ -9,11 +10,13 @@ namespace PandaShoppingAPI.Models
 {
     public class DeliveryWithOrdersResponse
     {
+        
         public int id { get; set; }
         public DeliveryStatus status { get; set; }
         public DeliveryProgressModel progress { get; set; }
         public AddressModel deliveryPartnerUnitAddress { get; set; }
         public List<OrderResponseModel> orders;
+        public List<DeliveryLocationResponse> deliveryLocations { get; set; }
 
         public static DeliveryWithOrdersResponse FromDelivery(Delivery delivery)
         {
@@ -31,9 +34,13 @@ namespace PandaShoppingAPI.Models
                 deliveryPartnerUnitAddress = deliPartnerAddress,
                 orders = delivery.OrderDelivery
                     .Select(orderDeli => Mapper.Map<OrderResponseModel>(orderDeli.order))
-                    .ToList()
+                    .ToList(),
+                deliveryLocations = delivery.DeliveryLocation
+                    .Select(deliLocation => Mapper.Map<DeliveryLocationResponse>(deliLocation))
+                    .ToList(),
             };
 
         }
+
     }
 }
