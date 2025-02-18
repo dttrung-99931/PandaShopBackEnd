@@ -1,0 +1,1 @@
+docker exec [container_id_or_name] /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '0988202071aA@' -Q "BACKUP DATABASE PandaShopDB TO DISK = N'/var/opt/mssql/backup/PandaShopDB_4d18_2024.bak' WITH NOFORMAT, NOINIT, NAME = 'Full Backup of YourDatabaseName', SKIP, NOREWIND, NOUNLOAD, STATS = 10"
