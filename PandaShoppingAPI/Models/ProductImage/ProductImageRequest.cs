@@ -13,5 +13,6 @@ namespace PandaShoppingAPI.Models
         public string based64Img { get; set; }
         public int orderIndex { get; set; }
         public string description { get; set; }
+        public int avgColor { get; set; }
     }
 }

@@ -15,6 +15,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public int id { get; set; }
         public string description { get; set; }
         public string fileName { get; set; }
+        public int? avgColor { get; set; }
         
 
         public virtual ICollection<Category> Category { get; set; }

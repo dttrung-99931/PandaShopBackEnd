@@ -37,7 +37,7 @@ namespace PandaShoppingAPI.Services
             return InsertImg(based64Img, "", _configUtil.GetCategoryImgDirPath());
         }
 
-        public Image InsertImg(string based64Img, string description, string storeDirPath)
+        public Image InsertImg(string based64Img, string description, string storeDirPath, int? avgColor = null)
         {
             var imgFileName = UploadBase64.UploadBased64Img(
                     based64Img, storeDirPath
@@ -45,7 +45,9 @@ namespace PandaShoppingAPI.Services
 
             Image image = new Image()
             {
-                fileName = imgFileName
+                fileName = imgFileName,
+                description = description,
+                avgColor = avgColor 
             };
 
             return _repo.Insert(image);
@@ -135,7 +137,9 @@ namespace PandaShoppingAPI.Services
             {
                 var imgId = InsertImg(img.based64Img, 
                     img.description, 
-                    _configUtil.GetProductImgDirPath()).id;
+                    _configUtil.GetProductImgDirPath(),
+                    img.avgColor
+                ).id;
                 
                 productImages.Add
                 (
