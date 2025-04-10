@@ -37,10 +37,15 @@ namespace PandaShoppingAPI.Services
                 .OrderBy((product) => product.starNum)
                 .Take(10)
                 .ToList();
-            return bannerProducts.Select((product) => new BannerResponse
+            return bannerProducts.Select((product) =>
+            {
+                var firstProImage = product.ProductImage.First();
+                return new BannerResponse
                 {
-                    imageLink = ImageUtils.BuildProductImageLink(_config, product.ProductImage.First())
-                })
+                    imageLink = ImageUtils.BuildProductImageLink(_config, firstProImage),
+                    avgColor = firstProImage.image.avgColor ?? 0,
+                };
+            })
                 .ToList();
         }
     }
