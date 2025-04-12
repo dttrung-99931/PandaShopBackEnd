@@ -1156,6 +1156,23 @@ namespace PandaShoppingAPI.DataAccesses.EF
 
             });
 
+
+            modelBuilder
+               .Entity<PanVideo>()
+               .HasQueryFilter((entity) => !entity.isDeleted);
+            modelBuilder.Entity<PanVideo>(entity =>
+            {
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.PanVideo)
+                    .HasForeignKey(d => d.userId)
+                    .HasConstraintName("FK_PanVideo_User")
+                    .OnDelete(DeleteBehavior.NoAction);
+
+            });
+
             OnModelCreatingPartial(modelBuilder);
         }
 

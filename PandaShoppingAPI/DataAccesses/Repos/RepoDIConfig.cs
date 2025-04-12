@@ -54,6 +54,11 @@ namespace PandaShoppingAPI.DataAccesses.Repos
             services.AddScoped<IDeliveryLocationRepo, DeliveryLocationRepo>();
             services.AddScoped<IDeliveryDriverTrackingRepo, DeliveryDriverTrackingRepo>();
             services.AddScoped<IOrderDeliveryRepo, OrderDeliveryRepo>();
+            services.AddScoped<IPanVideoRepo, PanVideoRepo>();
+
+            // Store file at local service. In the future, we can use cloud storage
+            // by implementing IFileRepo interface and replacing LocalFileRepo
+            services.AddScoped<IFileRepo, LocalFileRepo>();
         }
     }
 }

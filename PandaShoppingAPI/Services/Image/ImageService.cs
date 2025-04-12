@@ -16,13 +16,13 @@ namespace PandaShoppingAPI.Services
     public class ImageService : BaseService<IImageRepo, Image, ImageModel, ImageFilter>, 
         IImageService
     {
-        private readonly ConfigUtil _configUtil;
+        private readonly FileConfig _configUtil;
         private readonly IProductImageRepo _productImageRepo;
         private readonly IConfiguration _config;
         
         public ImageService(
             IImageRepo repo, 
-            ConfigUtil configUtil,
+            FileConfig configUtil,
             IProductImageRepo productImageRepo,
             IConfiguration config
             ) : base(repo)
