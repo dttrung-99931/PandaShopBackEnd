@@ -9,6 +9,7 @@ using GarageSystem.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Connections;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -47,7 +48,7 @@ namespace PandaShoppingAPI
 
             DbConfig.Config(services, Configuration);
 
-            services.AddSingleton<ConfigUtil>();
+            services.AddSingleton<FileConfig>();
 
             services.AddControllers()
                 // Make [DataContract] working in asp.net core
@@ -59,14 +60,15 @@ namespace PandaShoppingAPI
 
             FirebaseAdminConfig.Config(services, Configuration);
 
-            services.AddHttpContextAccessor();
+            FileConfig.ConfigFileMaxSize(services);
 
+            services.AddHttpContextAccessor();
             //services.AddAuthentication().AddOAuth();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, 
-            IWebHostEnvironment env, ConfigUtil configUtil)
+            IWebHostEnvironment env, FileConfig configUtil)
         {
             if (env.IsDevelopment())
             {
@@ -106,8 +108,8 @@ namespace PandaShoppingAPI
             });
 
             // Config image storing folder, base request image url 
-            configUtil.ConfigStaticCategoryImages(app);
-            configUtil.ConfigStaticProductImages(app);
+            configUtil.ConfigFiles(app);
+            
 
             // Config file access for App_Data folder
             string baseDir = env.ContentRootPath;

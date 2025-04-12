@@ -39,6 +39,9 @@ namespace PandaShoppingAPI.Services
             // Realtime
             services.AddScoped<SignalRService>();
             services.AddScoped<RealtimeServiceFactory>();
+
+            // PanVideo
+            services.AddScoped<IPanVideoService, PanVideoService>();
         }
     }
 }
