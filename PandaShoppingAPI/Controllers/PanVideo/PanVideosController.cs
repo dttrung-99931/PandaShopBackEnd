@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.Models;
 using PandaShoppingAPI.Services;
 using PandaShoppingAPI.Utils;
@@ -10,7 +11,6 @@ namespace PandaShoppingAPI.Controllers
 {
 
     [Route("v1/[controller]")]
-    [Authorize]
     public class PanVideosController : BaseApiController<IPanVideoService>
     {
 
@@ -18,20 +18,45 @@ namespace PandaShoppingAPI.Controllers
         public PanVideosController(IPanVideoService service, IHttpContextAccessor httpContextAccessor) : base(service)
         {
             var user = httpContextAccessor.HttpContext.User;
-            service.SetUser(GetUserIdentifier(user));
+            if (UserCallAPIWithToken(user)){
+                service.SetUser(GetUserIdentifier(user));
+            }
         }
 
-        [HttpPost]
-        public ActionResult<ResponseWrapper> CreatePanVideo([FromForm] PanVideoRequest request)
+        [HttpGet("my")]
+        [Authorize]
+        public ActionResult<ResponseWrapper> GetMyPanvideos([FromQuery] PanvideoFilter filter)
         {
             return Handle(() => 
             {
-                PanVideoResponse panvideo = _service.CreatePanVideo(request);
+                List<PanVideoResposne> panvideos = _service.GetMyPanvideos(filter, out Meta meta);
+                return ok_get(panvideos, meta);
+            });
+        }        
+
+        [HttpGet("feed")]
+        public ActionResult<ResponseWrapper> GetPanvideos([FromQuery] PanvideoFilter filter)
+        {
+            return Handle(() => 
+            {
+                List<PanVideoResposne> panvideos = _service.GetPanvideos(filter, out Meta meta);
+                return ok_get(panvideos, meta);
+            });
+        }        
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult<ResponseWrapper> CreatePanVideo([FromForm] CreatePanVideoRequest request)
+        {
+            return Handle(() => 
+            {
+                CreatePanVideoResponse panvideo = _service.CreatePanVideo(request);
                 return ok_create(panvideo, new List<int> { panvideo.id });
             });
         }        
 
         [HttpDelete("{id}")]
+        [Authorize]
         public ActionResult<ResponseWrapper> DeletePanVideo(int id)
         {
             return Handle(() =>

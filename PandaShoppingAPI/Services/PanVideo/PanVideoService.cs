@@ -1,20 +1,24 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
 using PandaShoppingAPI.Models;
+using PandaShoppingAPI.Utils;
 
 namespace PandaShoppingAPI.Services 
 {
     public class PanVideoService : IPanVideoService
     {
-        private readonly IPanVideoRepo _panVideoRepo;
+        private readonly IPanVideoRepo _repo;
         private readonly IFileRepo _fileRepo;
         private UserIdentifier _user;
 
         public PanVideoService(IPanVideoRepo panVideoRepo, IFileRepo fileRepo)
         {
-            _panVideoRepo = panVideoRepo;
+            _repo = panVideoRepo;
             _fileRepo = fileRepo;
         }
         
@@ -23,7 +27,7 @@ namespace PandaShoppingAPI.Services
             _user = user;
         }
 
-        public PanVideoResponse CreatePanVideo(PanVideoRequest request)
+        public CreatePanVideoResponse CreatePanVideo(CreatePanVideoRequest request)
         {
             if (request == null)
             {
@@ -43,7 +47,7 @@ namespace PandaShoppingAPI.Services
                     thumbImageFileName = _fileRepo.UploadFile(request.thumbnailImage, FileType.PanVideoThumbImage),
                     fileName = _fileRepo.UploadFile(request.video, FileType.PanVideo),
                 };
-                _panVideoRepo.Insert(panVideo);
+                _repo.Insert(panVideo);
             }
             catch (Exception)
             {
@@ -59,7 +63,7 @@ namespace PandaShoppingAPI.Services
             }
 
             
-            return new PanVideoResponse
+            return new CreatePanVideoResponse
             {
                 id = panVideo.id,
             };               
@@ -67,10 +71,43 @@ namespace PandaShoppingAPI.Services
 
         public void DeletePanVideo(int id)
         {
-            var panVideo = _panVideoRepo.GetById(id);
-            _panVideoRepo.Delete(id);
+            var panVideo = _repo.GetById(id);
+            _repo.Delete(id);
             _fileRepo.RemoveFile(FileType.PanVideoThumbImage, panVideo.thumbImageFileName);
             _fileRepo.RemoveFile(FileType.PanVideo, panVideo.fileName);
+        }
+
+        public List<PanVideoResposne> GetMyPanvideos(PanvideoFilter filter, out Meta meta)
+        {
+            var panvideos = Fill(filter, out meta)
+                .Where(panvideo => panvideo.userId == _user.UserId)
+                .ToList();
+            return Mapper.Map<List<PanVideoResposne>>(panvideos);
+        }
+
+
+        public List<PanVideoResposne> GetPanvideos(PanvideoFilter filter, out Meta meta)
+        {
+            // TODO: get related panvidoes 
+            var panvideos = Fill(filter, out meta)
+                .ToList();
+            return Mapper.Map<List<PanVideoResposne>>(panvideos);
+        }
+
+
+        public List<PanVideo> Fill(PanvideoFilter filter, out Meta meta)
+        {
+            var filledEntities = Fill(filter);
+            
+            meta = Meta.ProcessAndCreate(filledEntities.Count(), filter);
+
+            return MyUtil.Page(filledEntities, filter);
+        }
+
+        public virtual IQueryable<PanVideo> Fill(PanvideoFilter filter)
+        {
+            return _repo.GetIQueryable()
+                .Where((entity) => !entity.isDeleted);
         }
     }
 }
