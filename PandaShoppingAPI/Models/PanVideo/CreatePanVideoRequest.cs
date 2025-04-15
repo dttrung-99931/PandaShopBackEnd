@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace PandaShoppingAPI.Models 
 {
-    public class PanVideoRequest
+    public class CreatePanVideoRequest
     {
         [Required]
         public IFormFile video { get; set; }

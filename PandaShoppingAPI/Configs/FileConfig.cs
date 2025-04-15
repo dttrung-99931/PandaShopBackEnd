@@ -44,6 +44,7 @@ namespace PandaShoppingAPI.Utils
         internal void ConfigFiles(IApplicationBuilder app)
         {
             ConfigStaticVideos(app);
+            ConfigStatisVideoThumbImage(app);
             ConfigStaticCategoryImages(app);
             ConfigStaticProductImages(app);
         }
