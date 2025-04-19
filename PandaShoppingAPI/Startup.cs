@@ -1,25 +1,16 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
 using GarageSystem.Config;
 using GarageSystem.Services;
+using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Connections;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
 using PandaShoppingAPI.Configs;
 using PandaShoppingAPI.Configs.Middlewares;
-using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
 using PandaShoppingAPI.Services;
 using PandaShoppingAPI.Utils;
@@ -62,6 +53,8 @@ namespace PandaShoppingAPI
 
             FileConfig.ConfigFileMaxSize(services);
 
+            HangfireConfig.Config(services, Configuration);
+
             services.AddHttpContextAccessor();
             //services.AddAuthentication().AddOAuth();
         }
@@ -91,6 +84,8 @@ namespace PandaShoppingAPI
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            app.UseHangfireDashboard();
 
             app.UseEndpoints(endpoints =>
             {
