@@ -12,6 +12,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public string thumbImageFileName { get; set; }
         public int durationInSecs { get; set; }
         public int userId { get; set; }
+        // Whether panvideo file was converted to streaming video file for effician loading
+        // If true, fileName will contains only name (uuid) wihout extension (mp4)
+        public bool supportStreaming { get; set; }
 
         public virtual User_ User { get; set; }
     }

@@ -55,6 +55,26 @@ namespace PandaShoppingAPI.Controllers
             });
         }        
 
+        [HttpPost("testConvertStreaming/{id}")]
+        public ActionResult<ResponseWrapper> TestConvertStreaming(int id)
+        {
+            return Handle(() => 
+            {
+                _service.ConvertPanvideoStreamingInBackground(id);
+                return ok_create("Task excuting in background", new List<int> {id});
+            });
+        }        
+
+        [HttpPost("testConvertAllToStreaming")]
+        public ActionResult<ResponseWrapper> TestConvertAllToStreaming()
+        {
+            return Handle(() => 
+            {
+                _service.ConvertAllPanvideosToStreamingInBackground();
+                return ok_create("Task excuting in background", new List<int> {});
+            });
+        }        
+
         [HttpDelete("{id}")]
         [Authorize]
         public ActionResult<ResponseWrapper> DeletePanVideo(int id)

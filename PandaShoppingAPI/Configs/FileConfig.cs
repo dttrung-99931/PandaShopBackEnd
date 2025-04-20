@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -72,7 +73,7 @@ namespace PandaShoppingAPI.Utils
 
         internal void ConfigStaticCategoryImages(IApplicationBuilder app)
         {
-            ConfigStaticImages(
+            ConfigStaticFiles(
                 Path.Combine(Directory.GetCurrentDirectory(), _config["Path:CategoryImgDir"]),
                 _config["Path:CategoryImgRequestPath"],
                 app
@@ -81,7 +82,7 @@ namespace PandaShoppingAPI.Utils
 
         internal void ConfigStaticProductImages(IApplicationBuilder app)
         {
-            ConfigStaticImages(
+            ConfigStaticFiles(
                 Path.Combine(Directory.GetCurrentDirectory(), _config["Path:ProductImgDir"]),
                 _config["Path:ProductImgRequestPath"],
                 app
@@ -90,16 +91,27 @@ namespace PandaShoppingAPI.Utils
 
         internal void ConfigStaticVideos(IApplicationBuilder app)
         {
-            ConfigStaticImages(
+            ConfigStaticFiles(
                 Path.Combine(Directory.GetCurrentDirectory(), _config["Path:PanVideoDir"]),
                 _config["Path:PanVideoRequestPath"],
-                app
+                app,
+                contentTypeProvider: new FileExtensionContentTypeProvider
+                {
+                    Mappings = 
+                    {
+                        [".mpd"] = "application/dash+xml",
+                        [".m3u8"] = "application/x-mpegURL",
+                        [".ts"] = "video/mp2t",
+                    }
+                },
+                serveUnknownFileTypes: true,
+                defaultContentType: "application/octet-stream"  
             );
         }
 
         internal void ConfigStatisVideoThumbImage(IApplicationBuilder app)
         {
-            ConfigStaticImages(
+            ConfigStaticFiles(
                 Path.Combine(Directory.GetCurrentDirectory(), _config["Path:PanVideoThumbImageDir"]),
                 _config["Path:PanVideoThumbImageRequestPath"],
                 app
@@ -110,10 +122,14 @@ namespace PandaShoppingAPI.Utils
          * Config file storing directory, file request path
          * if the directory path is not exists then create it 
          */
-        private void ConfigStaticImages(
+        private void ConfigStaticFiles(
             string dirPath, 
             string requestPath,
-            IApplicationBuilder app)
+            IApplicationBuilder app,
+            IContentTypeProvider contentTypeProvider = null,
+            bool serveUnknownFileTypes = false,
+            string defaultContentType = null
+        )
         {
             if (!Directory.Exists(dirPath))
             {
@@ -122,7 +138,10 @@ namespace PandaShoppingAPI.Utils
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(dirPath),
-                RequestPath = requestPath
+                RequestPath = requestPath,
+                ContentTypeProvider = contentTypeProvider,
+                ServeUnknownFileTypes = serveUnknownFileTypes,
+                DefaultContentType = defaultContentType,
             });
         }
 
