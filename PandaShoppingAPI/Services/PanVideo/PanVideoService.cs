@@ -127,14 +127,20 @@ namespace PandaShoppingAPI.Services
         public void ConvertPanvideoStreaming(int panvideoId)
         {
             PanVideo panvideo = _repo.GetById(panvideoId);
-            string dirPath = _fileConfig.GetPanVideoDirPath();
+            string outputDirPath = _fileConfig.GetPanVideoDirPath();
+            string originVideoPath = $"{outputDirPath}/{panvideo.fileName}";
+            if (!File.Exists(originVideoPath)){
+                Console.WriteLine($"Not found video to convert streaming at path = {originVideoPath}, panvideo id = {panvideoId}");
+                return;
+            }
+            
             string fileNameWithoutExt = panvideo.fileName.Split('.').First();
-            string originMp4File = $"{dirPath}/{panvideo.fileName}";
-            // Dash video converting
+            // DASH video converting
             bool successDASH = _videoEncoderFactory.GetEncoder(PanvieoEncoders.dash)
-                .Encode(originMp4File, dirPath, fileNameWithoutExt);
+                .Encode(originVideoPath, outputDirPath, fileNameWithoutExt);
+            // HLS video converting
             bool successHLS = _videoEncoderFactory.GetEncoder(PanvieoEncoders.hls)
-                .Encode(originMp4File, dirPath, fileNameWithoutExt);
+                .Encode(originVideoPath, outputDirPath, fileNameWithoutExt);
             if ((successDASH || successHLS) && !panvideo.supportStreaming)
             {
                 panvideo.fileName = fileNameWithoutExt;
@@ -143,7 +149,7 @@ namespace PandaShoppingAPI.Services
             }
             if (successDASH && successHLS)
             {
-                File.Delete(originMp4File);
+                File.Delete(originVideoPath);
             }
         }
 
