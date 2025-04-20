@@ -20,7 +20,7 @@ namespace PandaShoppingAPI.Services
             string args =
                 $"-i \"{inputVideoPath}\" -c:v libx264 -b:v 2000k -preset fast " +
                 "-c:a aac -b:a 128k " +
-                $"-f dash -seg_duration 2 \"{outputVideoPath}\"";
+                $"-f hls -hls_time 2 \"{outputVideoPath}\"";
             return RunFFMPEG(args);
         }
     }
