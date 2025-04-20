@@ -24,22 +24,31 @@ namespace PandaShoppingAPI.DataAccesses.EF
             (
                 panvideoRes => panvideoRes.videoUrl,
                 option => option.MapFrom(
-                    panvideo =>  Path.Combine(
-                            config["Path:PanVideoEndPoint"], 
-                            panvideo.fileName
-                        ) 
+                    panvideo => Path.Combine(
+                            config["Path:PanVideoEndPoint"],
+                            GetPanvideoFilePath(panvideo)
+                        )
                 )
             )
             .ForMember
             (
                panvideoRes => panvideoRes.thumbImageUrl,
                 option => option.MapFrom(
-                    panvideo =>  Path.Combine(
-                            config["Path:PanVideoThumbImageEndPoint"], 
+                    panvideo => Path.Combine(
+                            config["Path:PanVideoThumbImageEndPoint"],
                             panvideo.thumbImageFileName
-                        ) 
+                        )
                 )
             );
+        }
+
+        private static string GetPanvideoFilePath(PanVideo panvideo)
+        {
+            if (panvideo.supportStreaming)
+            {
+                return $"{panvideo.fileName}/dash/video.mpd";
+            }
+            return panvideo.fileName;
         }
     }
 }

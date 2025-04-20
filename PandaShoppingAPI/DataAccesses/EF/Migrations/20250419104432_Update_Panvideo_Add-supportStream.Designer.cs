@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PandaShoppingAPI.DataAccesses.EF;
 
@@ -11,9 +12,10 @@ using PandaShoppingAPI.DataAccesses.EF;
 namespace PandaShoppingAPI.DataAccesses.EF.Migrations
 {
     [DbContext(typeof(EcommerceDBContext))]
-    partial class EcommerceDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250419104432_Update_Panvideo_Add-supportStream")]
+    partial class Update_Panvideo_AddsupportStream
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -800,7 +802,7 @@ namespace PandaShoppingAPI.DataAccesses.EF.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<bool>("supportedStreaming")
+                    b.Property<bool>("supportStreaming")
                         .HasColumnType("bit");
 
                     b.Property<string>("thumbImageFileName")

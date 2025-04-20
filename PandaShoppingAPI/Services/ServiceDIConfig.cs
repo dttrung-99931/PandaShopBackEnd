@@ -42,6 +42,9 @@ namespace PandaShoppingAPI.Services
 
             // PanVideo
             services.AddScoped<IPanVideoService, PanVideoService>();
+            services.AddScoped<HlsPanvideoEncoder>();
+            services.AddScoped<DashPanvideoEncoder>();
+            services.AddScoped<PanvideoEncoderFactory>();
         }
     }
 }

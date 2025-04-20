@@ -12,5 +12,8 @@ namespace PandaShoppingAPI.Services
         List<PanVideoResposne> GetMyPanvideos(PanvideoFilter filter, out Meta meta);
         List<PanVideoResposne> GetPanvideos(PanvideoFilter filter, out Meta meta);
         void SetUser(UserIdentifier user);
+        void ConvertPanvideoStreamingInBackground(int panvideoId);
+        void ConvertPanvideoStreaming(int panvideoId);
+        void ConvertAllPanvideosToStreamingInBackground();
     }
 }

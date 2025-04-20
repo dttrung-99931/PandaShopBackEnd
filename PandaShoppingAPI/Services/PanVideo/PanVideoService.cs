@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using AutoMapper;
+using Hangfire;
 using Microsoft.AspNetCore.Http;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
@@ -15,13 +18,19 @@ namespace PandaShoppingAPI.Services
         private readonly IPanVideoRepo _repo;
         private readonly IFileRepo _fileRepo;
         private UserIdentifier _user;
+        private IBackgroundJobClient _backgroundJobClient;
+        private readonly FileConfig _fileConfig;
+        private readonly PanvideoEncoderFactory _videoEncoderFactory;
 
-        public PanVideoService(IPanVideoRepo panVideoRepo, IFileRepo fileRepo)
+        public PanVideoService(IPanVideoRepo panVideoRepo, IFileRepo fileRepo, IBackgroundJobClient backgroundJobClient, FileConfig fileConfig, PanvideoEncoderFactory videoEncoderFactory)
         {
             _repo = panVideoRepo;
             _fileRepo = fileRepo;
+            _backgroundJobClient = backgroundJobClient;
+            _fileConfig = fileConfig;
+            _videoEncoderFactory = videoEncoderFactory;
         }
-        
+
         public void SetUser(UserIdentifier user)
         {
             _user = user;
@@ -48,6 +57,9 @@ namespace PandaShoppingAPI.Services
                     fileName = _fileRepo.UploadFile(request.video, FileType.PanVideo),
                 };
                 _repo.Insert(panVideo);
+
+                // Enqueue job to convert panvideo to streaming video file for faster loading
+                ConvertPanvideoStreamingInBackground(panVideo.id);
             }
             catch (Exception)
             {
@@ -68,6 +80,7 @@ namespace PandaShoppingAPI.Services
                 id = panVideo.id,
             };               
         }
+
 
         public void DeletePanVideo(int id)
         {
@@ -108,6 +121,57 @@ namespace PandaShoppingAPI.Services
         {
             return _repo.GetIQueryable()
                 .Where((entity) => !entity.isDeleted);
+        }
+
+
+        public void ConvertPanvideoStreaming(int panvideoId)
+        {
+            PanVideo panvideo = _repo.GetById(panvideoId);
+            string dirPath = _fileConfig.GetPanVideoDirPath();
+            string fileNameWithoutExt = panvideo.fileName.Split('.').First();
+            string originMp4File = $"{dirPath}/{panvideo.fileName}";
+            // Dash video converting
+            bool successDASH = _videoEncoderFactory.GetEncoder(PanvieoEncoders.dash)
+                .Encode(originMp4File, dirPath, fileNameWithoutExt);
+            bool successHLS = _videoEncoderFactory.GetEncoder(PanvieoEncoders.hls)
+                .Encode(originMp4File, dirPath, fileNameWithoutExt);
+            if ((successDASH || successHLS) && !panvideo.supportStreaming)
+            {
+                panvideo.fileName = fileNameWithoutExt;
+                panvideo.supportStreaming = true;
+                _repo.Update(panvideo, panvideo.id);
+            }
+            if (successDASH && successHLS)
+            {
+                File.Delete(originMp4File);
+            }
+        }
+
+        public void ConvertPanvideoStreamingInBackground(int panvideoId)
+        {
+            _backgroundJobClient.Enqueue<IPanVideoService>
+            (
+                (service) => service.ConvertPanvideoStreaming(panvideoId)
+            );
+        }
+
+        public void ConvertAllPanvideosToStreamingInBackground()
+        {
+            _backgroundJobClient.Enqueue<PanVideoService>
+            (
+                (service) => service.ConvertAllPanvideosToStreaming()
+            );
+        }
+
+        public void ConvertAllPanvideosToStreaming()
+        {
+            List<int> unsupportSteamingIds = _repo.Where((panvideo) => !panvideo.supportStreaming)
+                .Select((panvideo) => panvideo.id)
+                .ToList();
+            unsupportSteamingIds.ForEach
+            (
+                (id) => ConvertPanvideoStreaming(id)
+            );
         }
     }
 }
