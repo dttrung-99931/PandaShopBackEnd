@@ -58,16 +58,24 @@ namespace PandaShoppingAPI.Controllers
         [HttpPost("testConvertStreaming/{id}")]
         public ActionResult<ResponseWrapper> TestConvertStreaming(int id)
         {
+            if (!System.Diagnostics.Debugger.IsAttached)
+            {
+                return BadRequest("Only execute this action while debugging.");
+            }
             return Handle(() => 
             {
-                _service.ConvertPanvideoStreamingInBackground(id);
-                return ok_create("Task excuting in background", new List<int> {id});
+            _service.ConvertPanvideoStreamingInBackground(id);
+            return ok_create("Task executing in background", new List<int> { id });
             });
         }        
 
         [HttpPost("testConvertAllToStreaming")]
         public ActionResult<ResponseWrapper> TestConvertAllToStreaming()
         {
+            if (!System.Diagnostics.Debugger.IsAttached)
+            {
+                return BadRequest("Only execute this action while debugging.");
+            }
             return Handle(() => 
             {
                 _service.ConvertAllPanvideosToStreamingInBackground();
