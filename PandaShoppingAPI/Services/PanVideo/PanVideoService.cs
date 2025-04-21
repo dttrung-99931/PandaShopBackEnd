@@ -22,7 +22,7 @@ namespace PandaShoppingAPI.Services
         private readonly FileConfig _fileConfig;
         private readonly PanvideoEncoderFactory _videoEncoderFactory;
 
-        public PanVideoService(IPanVideoRepo panVideoRepo, IFileRepo fileRepo, IBackgroundJobClient backgroundJobClient, FileConfig fileConfig, PanvideoEncoderFactory videoEncoderFactory)
+        public PanVideoService(IPanVideoRepo panVideoRepo, IFileRepo fileRepo, IBackgroundJobClient backgroundJobClient, FileConfig fileConfig, PanvideoEncoderFactory videoEncoderFactory, ThumbnailVideoService thumbnailVideoService)
         {
             _repo = panVideoRepo;
             _fileRepo = fileRepo;
@@ -147,7 +147,7 @@ namespace PandaShoppingAPI.Services
                 panvideo.supportStreaming = true;
                 _repo.Update(panvideo, panvideo.id);
             }
-            if (successDASH && successHLS)
+            if (!Debugger.IsAttached && successDASH && successHLS)
             {
                 File.Delete(originVideoPath);
             }
