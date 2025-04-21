@@ -9,7 +9,7 @@ namespace PandaShoppingAPI.Services
     {
 
         // Take animated wepb thumb image used for video preview
-        public bool TakeAnimatedThumbVideoImage(string inputVideoPath, string outputThumbImgPath)
+        public bool GenAnimatedThumbVideoImage(string inputVideoPath, string outputThumbImgPath)
         {
             // -q:v 1 (best quality from 1 - 3)
             // string thumbnailArgs = $"ss 00:00:00 -i {inputVideoPath}  -frames:v 1 -q:v 1 {outputThumbImgPath}";
@@ -19,11 +19,11 @@ namespace PandaShoppingAPI.Services
         }
 
         // Take wepb thumb image used for video preview
-        public bool TakeThumbVideoImage(string inputVideoPath, string outputThumbImgPath)
+        public bool GenThumbVideoImage(string inputVideoPath, string outputThumbImgPath)
         {
             // -q:v 1 (best quality from 1 - 3)
             // -y: overridding
-            string thumbnailArgs = $"ss 00:00:00 -i {inputVideoPath}  -frames:v 1 -c:v libwebp -q:v 92  -y {outputThumbImgPath}";
+            string thumbnailArgs = $"-ss 00:00:00 -i {inputVideoPath}  -frames:v 1 -c:v libwebp -q:v 92  -y {outputThumbImgPath}";
             return RunFFMPEG(thumbnailArgs);
         }
    }

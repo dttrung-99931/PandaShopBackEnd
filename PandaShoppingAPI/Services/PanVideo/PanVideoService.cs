@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using AutoMapper;
 using Hangfire;
-using Microsoft.AspNetCore.Http;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
 using PandaShoppingAPI.Models;
@@ -21,14 +20,16 @@ namespace PandaShoppingAPI.Services
         private IBackgroundJobClient _backgroundJobClient;
         private readonly FileConfig _fileConfig;
         private readonly PanvideoEncoderFactory _videoEncoderFactory;
+        private readonly ThumbnailVideoService _thumbPanvideoService;
 
-        public PanVideoService(IPanVideoRepo panVideoRepo, IFileRepo fileRepo, IBackgroundJobClient backgroundJobClient, FileConfig fileConfig, PanvideoEncoderFactory videoEncoderFactory, ThumbnailVideoService thumbnailVideoService)
+        public PanVideoService(IPanVideoRepo panVideoRepo, IFileRepo fileRepo, IBackgroundJobClient backgroundJobClient, FileConfig fileConfig, PanvideoEncoderFactory videoEncoderFactory, ThumbnailVideoService thumbPanvideoService)
         {
             _repo = panVideoRepo;
             _fileRepo = fileRepo;
             _backgroundJobClient = backgroundJobClient;
             _fileConfig = fileConfig;
             _videoEncoderFactory = videoEncoderFactory;
+            _thumbPanvideoService = thumbPanvideoService;
         }
 
         public void SetUser(UserIdentifier user)
@@ -129,6 +130,10 @@ namespace PandaShoppingAPI.Services
             PanVideo panvideo = _repo.GetById(panvideoId);
             string outputDirPath = _fileConfig.GetPanVideoDirPath();
             string originVideoPath = $"{outputDirPath}/{panvideo.fileName}";
+            if (!originVideoPath.Contains('.')) 
+            {
+                originVideoPath += ".mp4";
+            }
             if (!File.Exists(originVideoPath)){
                 Console.WriteLine($"Not found video to convert streaming at path = {originVideoPath}, panvideo id = {panvideoId}");
                 return;
@@ -141,11 +146,15 @@ namespace PandaShoppingAPI.Services
             // HLS video converting
             bool successHLS = _videoEncoderFactory.GetEncoder(PanvieoEncoders.hls)
                 .Encode(originVideoPath, outputDirPath, fileNameWithoutExt);
+
             if ((successDASH || successHLS) && !panvideo.supportStreaming)
             {
                 panvideo.fileName = fileNameWithoutExt;
                 panvideo.supportStreaming = true;
                 _repo.Update(panvideo, panvideo.id);
+                // Re-gen thumb image for matching with video at quality
+                string thumbImgPath = _fileConfig.GetPanVideoThumbImageDirPath() + "/" + panvideo.thumbImageFileName;
+                _thumbPanvideoService.GenThumbVideoImage(originVideoPath, thumbImgPath);
             }
             if (!Debugger.IsAttached && successDASH && successHLS)
             {
