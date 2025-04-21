@@ -17,7 +17,7 @@ namespace PandaShoppingAPI.Services
             if (Directory.Exists(dashDir))
             {
                 // DASH was covnerted before 
-                return true;
+                return false;
             } 
 
             Directory.CreateDirectory(dashDir);
