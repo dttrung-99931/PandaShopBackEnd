@@ -14,6 +14,8 @@
         driverIsNotFreeToDeliver,
         // Delivery
         deliveryNotStarted,
+        // FFmpeg codes
+        ffmpegVideoEncoding,
 
     }
 }
