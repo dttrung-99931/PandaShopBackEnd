@@ -8,15 +8,15 @@ namespace PandaShoppingAPI.Services
         
         public bool Encode(string inputVideoPath, string outputVideoDir, string outputVideoName)
         {
-            string dashDir = $"{outputVideoDir}/{outputVideoName}/dash";
-            if (Directory.Exists(dashDir))
+            string hlsDir = $"{outputVideoDir}/{outputVideoName}/hls";
+            if (Directory.Exists(hlsDir))
             {
                 // DASH was covnerted before 
                 return true;
             } 
             
-            Directory.CreateDirectory(dashDir);
-            string outputVideoPath = $"{dashDir}/video.mpd";
+            Directory.CreateDirectory(hlsDir);
+            string outputVideoPath = $"{hlsDir}/video.m3u8";
             string args =
                 $"-i \"{inputVideoPath}\" -c:v libx264 -b:v 2000k -preset fast " +
                 "-c:a aac -b:a 128k " +
