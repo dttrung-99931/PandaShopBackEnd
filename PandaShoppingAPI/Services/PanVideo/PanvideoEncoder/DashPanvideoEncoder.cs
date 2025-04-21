@@ -21,9 +21,9 @@ namespace PandaShoppingAPI.Services
             } 
 
             Directory.CreateDirectory(dashDir);
-            string dashFileName = $"{dashDir}/video.mdp";
+            string dashFileName = $"{dashDir}/video.mpd";
             string args =
-                $"-i \"{inputVideoPath}\" -c:v libx264 -b:v 2000k -preset fast " +
+                $"-i \"{inputVideoPath}\" -c:v libx264 -b:v 3500k -preset fast " +
                 "-c:a aac -b:a 128k " +
                 $"-f dash -seg_duration {segDuration} \"{dashFileName}\"";
             return RunFFMPEG(args);

@@ -18,7 +18,7 @@ namespace PandaShoppingAPI.Services
             Directory.CreateDirectory(hlsDir);
             string outputVideoPath = $"{hlsDir}/video.m3u8";
             string args =
-                $"-i \"{inputVideoPath}\" -c:v libx264 -b:v 2000k -preset fast " +
+                $"-i \"{inputVideoPath}\" -c:v libx264 -b:v 3500k -preset fast " +
                 "-c:a aac -b:a 128k " +
                 $"-f hls -hls_time 2 \"{outputVideoPath}\"";
             return RunFFMPEG(args);
