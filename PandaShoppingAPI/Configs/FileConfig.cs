@@ -44,6 +44,7 @@ namespace PandaShoppingAPI.Utils
         
         internal void ConfigFiles(IApplicationBuilder app)
         {
+            ConfigStaticPanMusic(app);
             ConfigStaticVideos(app);
             ConfigStatisVideoThumbImage(app);
             ConfigStaticCategoryImages(app);
@@ -58,6 +59,11 @@ namespace PandaShoppingAPI.Utils
         internal string GetPanVideoThumbImageDirPath()
         {
             return _config["Path:PanVideoThumbImageDir"];
+        }
+
+        internal string GetPanMusicDirPath()
+        {
+            return _config["Path:PanMusicDir"];
         }
 
 
@@ -118,6 +124,15 @@ namespace PandaShoppingAPI.Utils
             );
         }
 
+        internal void ConfigStaticPanMusic(IApplicationBuilder app)
+        {
+            ConfigStaticFiles(
+                Path.Combine(Directory.GetCurrentDirectory(), _config["Path:PanMusicDir"]),
+                _config["Path:PanMusicRequestPath"],
+                app
+            );
+        }
+
          /**
          * Config file storing directory, file request path
          * if the directory path is not exists then create it 
@@ -157,6 +172,8 @@ namespace PandaShoppingAPI.Utils
                     return GetPanVideoDirPath();
                 case FileType.PanVideoThumbImage:
                     return GetPanVideoThumbImageDirPath();
+                case FileType.PanMusic:
+                    return GetPanMusicDirPath();
                 default:
                     throw new Exception("File type not supported");
             }
@@ -174,6 +191,8 @@ namespace PandaShoppingAPI.Utils
                     return _config["Path:PanVideoRequestPath"];
                 case FileType.PanVideoThumbImage:
                     return _config["Path:PanVideoThumbImageRequestPath"];
+                case FileType.PanMusic:
+                    return _config["Path:PanMusicRequestPath"];
                 default:
                     throw new Exception("File type not supported");
             }
