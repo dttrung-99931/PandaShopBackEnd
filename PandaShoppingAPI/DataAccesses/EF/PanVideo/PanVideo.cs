@@ -15,7 +15,9 @@ namespace PandaShoppingAPI.DataAccesses.EF
         // Whether panvideo file was converted to streaming video file for effician loading
         // If true, fileName will contains only name (uuid) wihout extension (mp4)
         public bool supportStreaming { get; set; }
+        public int? panMusicId { get; set; }
 
         public virtual User_ User { get; set; }
+        public virtual PanMusic PanMusic { get; set; }
     }
 }

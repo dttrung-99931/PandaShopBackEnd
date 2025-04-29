@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using PandaShoppingAPI.DataAccesses.EF;
 
 namespace PandaShoppingAPI.Services
 {
@@ -46,6 +47,7 @@ namespace PandaShoppingAPI.Services
             services.AddScoped<DashPanvideoEncoder>();
             services.AddScoped<PanvideoEncoderFactory>();
             services.AddScoped<ThumbnailVideoService>();
+            services.AddScoped<IPanMusicService, PanMusicService>();
         }
     }
 }

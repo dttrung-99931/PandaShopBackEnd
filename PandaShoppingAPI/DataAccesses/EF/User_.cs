@@ -26,5 +26,6 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public virtual ICollection<UserRole> UserRole { get; set; }
         public virtual ICollection<NotificationReceiver> Receivers{ get; set; }
         public virtual ICollection<PanVideo> PanVideo{ get; set; }
+        public virtual ICollection<PanMusic> PanMusics { get; set; }
     }
 }

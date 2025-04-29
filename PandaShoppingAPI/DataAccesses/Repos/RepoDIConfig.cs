@@ -59,6 +59,9 @@ namespace PandaShoppingAPI.DataAccesses.Repos
             // Store file at local service. In the future, we can use cloud storage
             // by implementing IFileRepo interface and replacing LocalFileRepo
             services.AddScoped<IFileRepo, LocalFileRepo>();
+
+            services.AddScoped<IPanMusicRepo, PanMusicRepo>();
+
         }
     }
 }

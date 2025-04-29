@@ -4,4 +4,5 @@ public enum FileType
     ProductImage,
     PanVideo,
     PanVideoThumbImage,
+    PanMusic,
 }

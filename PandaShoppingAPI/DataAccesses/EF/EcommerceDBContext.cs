@@ -1171,6 +1171,27 @@ namespace PandaShoppingAPI.DataAccesses.EF
                     .HasConstraintName("FK_PanVideo_User")
                     .OnDelete(DeleteBehavior.NoAction);
 
+                entity.HasOne(d => d.PanMusic)
+                    .WithMany(p => p.PanVideos)
+                    .HasForeignKey(d => d.panMusicId)
+                    .HasConstraintName("FK_PanVideo_PanMusic")
+                    .OnDelete(DeleteBehavior.NoAction);
+
+            });
+
+            modelBuilder
+               .Entity<PanMusic>()
+               .HasQueryFilter((entity) => !entity.isDeleted);
+            modelBuilder.Entity<PanMusic>(entity =>
+            {
+                entity.Property(e => e.isDeleted)
+                    .HasDefaultValue(false);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.PanMusics)
+                    .HasForeignKey(d => d.userId)
+                    .HasConstraintName("FK_PanMusic_User")
+                    .OnDelete(DeleteBehavior.NoAction);
             });
 
             OnModelCreatingPartial(modelBuilder);
