@@ -53,6 +53,7 @@ namespace PandaShoppingAPI.DataAccesses.EF
         public virtual DbSet<WarehouseOutput> WarehouseOutput { get; set; }
         public virtual DbSet<WarehouseOutputDetail> WarehouseOutputDetail { get; set; }
         public virtual DbSet<OrderDelivery> OrderDelivery { get; set; }
+        public virtual DbSet<PanMusic> PanMusic { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
