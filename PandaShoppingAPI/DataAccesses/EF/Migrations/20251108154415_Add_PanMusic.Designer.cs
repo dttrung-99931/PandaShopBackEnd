@@ -12,8 +12,8 @@ using PandaShoppingAPI.DataAccesses.EF;
 namespace PandaShoppingAPI.DataAccesses.EF.Migrations
 {
     [DbContext(typeof(EcommerceDBContext))]
-    [Migration("20250429041420_Add_PanMusic_Table")]
-    partial class Add_PanMusic_Table
+    [Migration("20251108154415_Add_PanMusic")]
+    partial class Add_PanMusic
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
