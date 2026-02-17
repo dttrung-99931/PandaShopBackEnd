@@ -9,11 +9,12 @@
         "program": "${workspaceFolder}/bin/Debug/net6.0/PandaShoppingAPI.dll",
         "args": [],
         "cwd": "${workspaceFolder}",
+        "targetArchitecture": "arm64",
         "stopAtEntry": false,
         "serverReadyAction": {
           "action": "openExternally",
           "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
-          "uriFormat": "http://localhost:%s/swagger"
+          "uriFormat": "%s/swagger"
         },
         "env": {
           "ASPNETCORE_ENVIRONMENT": "HomeDevelopment"
