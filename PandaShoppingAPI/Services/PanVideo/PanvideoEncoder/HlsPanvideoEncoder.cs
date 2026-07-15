@@ -1,11 +1,14 @@
 using System.IO;
+using Microsoft.Extensions.Configuration;
 
-namespace PandaShoppingAPI.Services 
+namespace PandaShoppingAPI.Services
 {
     public class HlsPanvideoEncoder : BasePanvideoEncoder, IPanvideoEncoder
     {
-        public HlsPanvideoEncoder(){}
-        
+        public HlsPanvideoEncoder(IConfiguration config) : base(config)
+        {
+        }
+
         public bool Encode(string inputVideoPath, string outputVideoDir, string outputVideoName)
         {
             string hlsDir = $"{outputVideoDir}/{outputVideoName}/hls";
@@ -13,8 +16,8 @@ namespace PandaShoppingAPI.Services
             {
                 // DASH was covnerted before 
                 return false;
-            } 
-            
+            }
+
             Directory.CreateDirectory(hlsDir);
             string outputVideoPath = $"{hlsDir}/video.m3u8";
             string args =

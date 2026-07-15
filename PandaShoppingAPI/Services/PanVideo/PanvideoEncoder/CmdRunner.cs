@@ -1,25 +1,33 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using Microsoft.Extensions.Configuration;
 using PandaShoppingAPI.Utils.Exceptions;
 
-namespace PandaShoppingAPI.Services 
+namespace PandaShoppingAPI.Services
 {
     public class CmdRunner
     {
+        private readonly IConfiguration _config;
+
+        public CmdRunner(IConfiguration config)
+        {
+            _config = config;
+        }
+
         protected bool RunMp4Fragment(string args)
         {
-            return Run("/Users/msv/development/Bento4-SDK-1-6-0-641.universal-apple-macosx/bin/mp4fragment", args);
+            return Run(_config["Mp4FragmentToolPath"], args);
         }
 
         protected bool RunMp4Dash(string args)
         {
-            return Run("/Users/msv/development/Bento4-SDK-1-6-0-641.universal-apple-macosx/bin/mp4dash", args);
+            return Run(_config["Mp4DashToolPath"], args);
         }
 
         protected bool RunFFMPEG(string args)
         {
-            return Run("ffmpeg", args);
+            return Run(_config["FfmpegToolPath"], args);
         }
 
         protected void ValidateFileExist(string filePath)
@@ -51,8 +59,8 @@ namespace PandaShoppingAPI.Services
                 {
                     Console.WriteLine($"{processName} completed without errors");
                     return true;
-                } 
-                else 
+                }
+                else
                 {
                     throw new Exception(process.StandardError.ReadToEnd());
                 }
@@ -61,7 +69,7 @@ namespace PandaShoppingAPI.Services
             {
                 LogError(processName, args, ex);
                 throw;
-            } 
+            }
         }
 
         protected void LogError(string processName, string args, Exception ex)

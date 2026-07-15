@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Models
 {
-    public class LoginModel: BaseModel<User_, UserModel>
+    public class LoginModel : BaseModel<User_, UserModel>
     {
-        public string phone { get; set; }
+        public string username { get; set; }
         public string password { get; set; }
     }
 }

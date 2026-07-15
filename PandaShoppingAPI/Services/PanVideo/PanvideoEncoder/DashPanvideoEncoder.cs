@@ -1,10 +1,14 @@
 using System.IO;
+using Microsoft.Extensions.Configuration;
 
-namespace PandaShoppingAPI.Services 
+namespace PandaShoppingAPI.Services
 {
     public class DashPanvideoEncoder : BasePanvideoEncoder, IPanvideoEncoder
     {
-        public DashPanvideoEncoder(){}
+        public DashPanvideoEncoder(IConfiguration config) : base(config)
+        {
+        }
+
         public bool Encode(string inputVideoPath, string outputVideoDir, string outputVideoName)
         {
             return EncodeDASH(inputVideoPath, outputVideoDir, outputVideoName, 2);
@@ -18,7 +22,7 @@ namespace PandaShoppingAPI.Services
             {
                 // DASH was covnerted before 
                 return false;
-            } 
+            }
 
             Directory.CreateDirectory(dashDir);
             string dashFileName = $"{dashDir}/video.mpd";
@@ -40,10 +44,10 @@ namespace PandaShoppingAPI.Services
             {
                 // DASH was covnerted before 
                 return true;
-            } 
+            }
 
             Directory.CreateDirectory(hlsDir);
-            
+
             // Split input video into first3s video and remaning video
             string first3sVideoPath = $"{hlsDir}/first-3s.mp4";
             TrimDashVideo(inputVideoPath, first3sVideoPath, 0, 3);
@@ -53,10 +57,10 @@ namespace PandaShoppingAPI.Services
 
             // Fragment video 
             string first3sFragVideoPath = $"{hlsDir}/first-3s-frag.mp4";
-            FragmentVideo(first3sVideoPath, first3sFragVideoPath, 1);            
+            FragmentVideo(first3sVideoPath, first3sFragVideoPath, 1);
 
             string remainingFragVideoPath = $"{hlsDir}/remaning-frag.mp4";
-            FragmentVideo(remainingVideoPath, remainingFragVideoPath, 2);            
+            FragmentVideo(remainingVideoPath, remainingFragVideoPath, 2);
 
             // Convert fragment videos to dash and merged into one
             string mp4DashArgs = $"--output-dir={hlsDir} --force --use-segment-timeline {first3sFragVideoPath} {remainingFragVideoPath} --mpd-name video.mpd";
@@ -73,10 +77,10 @@ namespace PandaShoppingAPI.Services
         protected bool TrimDashVideo(string inputVideoPath, string outputPath, int startSec, int? durationInSecs = null)
         {
             ValidateFileExist(inputVideoPath);
-            string startArg =  $"-ss {startSec}";
+            string startArg = $"-ss {startSec}";
             string durationArg = durationInSecs != null ? $"-t {durationInSecs}" : "";
             // Add these args for fixing vidoe not aligned error, but it may reduce video quality 
-            string ignoreAlignedError = "-keyint_min 48 -sc_threshold 0"; 
+            string ignoreAlignedError = "-keyint_min 48 -sc_threshold 0";
             string encodeArgs = $"-c:v libx264 -b:v 2000k -preset fast -c:a aac -b:a 128k {ignoreAlignedError}";
 
             string trimArgs = $"-i {inputVideoPath} {startArg} {durationArg} {encodeArgs} {outputPath}";
