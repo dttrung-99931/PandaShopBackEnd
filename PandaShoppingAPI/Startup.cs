@@ -79,6 +79,8 @@ namespace PandaShoppingAPI
 
             app.UseRouting();
 
+            app.UseCors(Constants.POLICY_CORS_ALL);
+
             // This must be put above app.UseAuthorization();
             // Otherwise 401 always returned 
             app.UseAuthentication();
