@@ -1,12 +1,16 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using Microsoft.Extensions.Configuration;
 using PandaShoppingAPI.Utils.Exceptions;
 
-namespace PandaShoppingAPI.Services 
+namespace PandaShoppingAPI.Services
 {
-    public class ThumbnailVideoService: CmdRunner 
+    public class ThumbnailVideoService : CmdRunner
     {
+        public ThumbnailVideoService(IConfiguration config) : base(config)
+        {
+        }
 
         // Take animated wepb thumb image used for video preview
         public bool GenAnimatedThumbVideoImage(string inputVideoPath, string outputThumbImgPath)
@@ -26,5 +30,5 @@ namespace PandaShoppingAPI.Services
             string thumbnailArgs = $"-ss 00:00:00 -i {inputVideoPath}  -frames:v 1 -c:v libwebp -q:v 92  -y {outputThumbImgPath}";
             return RunFFMPEG(thumbnailArgs);
         }
-   }
+    }
 }
