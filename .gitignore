@@ -341,3 +341,7 @@ healthchecksdb
 
 # Ignore key
 PandaShoppingAPI/Server/firebase-key.json
+
+# App settings
+PandaShoppingAPI/appsettings.*.json
+!PandaShoppingAPI/appsettings.ExampleEnvName.json
