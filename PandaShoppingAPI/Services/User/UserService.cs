@@ -52,7 +52,7 @@ namespace PandaShoppingAPI.Services
             User_ insertUsr = base.MapInsertEntity(requestModel);
             // Currently all created users will be user 
             // TODO: created user with role param
-            insertUsr.UserRole = new List<UserRole> 
+            insertUsr.UserRole = new List<UserRole>
             {
                 new UserRole { roleId = (int)Roles.user }
             };
@@ -82,7 +82,7 @@ namespace PandaShoppingAPI.Services
             user.UserRole.Add(
                 new UserRole()
                 {
-                    roleId = (int) Roles.shop
+                    roleId = (int)Roles.shop
                 }
             );
             _repo.Update(user, user.id);
@@ -95,17 +95,17 @@ namespace PandaShoppingAPI.Services
             _userRoleRepo.Insert(new UserRole
             {
                 userId = user.id,
-                roleId = (int) Roles.driver,
+                roleId = (int)Roles.driver,
             });
             _driverRepo.Insert(
-                new Driver { user = user } 
+                new Driver { user = user }
             );
             return user;
         }
 
         public LoginResponse Login(LoginModel loginModel)
         {
-            var user = _repo.Where(u => u.phone == loginModel.phone)
+            var user = _repo.Where(u => u.phone == loginModel.username)
                 .Include(u => u.UserRole)
                 .ThenInclude(ur => ur.role)
                 .FirstOrDefault();

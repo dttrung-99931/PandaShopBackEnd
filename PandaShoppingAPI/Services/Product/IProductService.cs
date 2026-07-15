@@ -18,5 +18,6 @@ namespace PandaShoppingAPI.Services
         IDResponseModel CreateProductOption(int productId, ProductOptionRequest option);
         void DeleteProductOptions(int productId, List<int> productOptionIDs);
         void UpdateProduct(int productId, UpdateProductModel updateModel);
+        List<ProductOptionResponse> GetProductOptions(int id);
     }
 }

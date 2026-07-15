@@ -1,16 +1,13 @@
 ﻿using AutoMapper;
 using Castle.Core.Internal;
-using Castle.DynamicProxy;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.DataAccesses.Repos;
 using PandaShoppingAPI.Models;
 using PandaShoppingAPI.Models.Base;
 using PandaShoppingAPI.Utils.Exceptions;
 using PandaShoppingAPI.Utils.Extentions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace PandaShoppingAPI.Services
 {
@@ -28,7 +25,7 @@ namespace PandaShoppingAPI.Services
             IProductRepo repo,
             IProductOptionRepo productOptionRepo,
             IProductPropertyValueRepo productPropertyValueRepo,
-            IImageService imageService, 
+            IImageService imageService,
             ICategoryService categoryService,
             IProductDeliveryMethodRepo prodDeliveryMethodRepo,
             IDeliveryMethodRepo deliveryMethodRepo
@@ -47,7 +44,7 @@ namespace PandaShoppingAPI.Services
             var product = GetById(id);
             if (product == null)
             {
-                throw new NotFoundException("Product" , id);
+                throw new NotFoundException("Product", id);
             }
 
             var requiredPropertyIDs =
@@ -58,12 +55,12 @@ namespace PandaShoppingAPI.Services
             foreach (var pvID in propertyValueIDs)
             {
                 var propertyValue = _productPropertyValueRepo.GetById(pvID);
-                
+
                 if (propertyValue == null)
                 {
                     throw NotFoundException.NotFound("Product property", pvID);
                 }
-                
+
                 if (propertyValue.productId != id)
                 {
                     throw NotFoundException.NotContain("Product", id, "Product property", pvID);
@@ -82,7 +79,7 @@ namespace PandaShoppingAPI.Services
 
         public override Product Insert(ProductModel requestModel)
         {
-            var product =  base.Insert(requestModel);
+            var product = base.Insert(requestModel);
 
             _productPropertyValueRepo.InsertRange(product.id, requestModel.properties);
 
@@ -92,10 +89,10 @@ namespace PandaShoppingAPI.Services
             List<DeliveryMethod> allMethods = _deliveryMethodRepo.GetAll();
             _prodDeliveryMethodRepo.InsertRange(
                 allMethods.Select((method) => new ProductDeliveryMethod()
-            {
-                productId = product.id,
-                deliveryMethodId = method.id,
-            }).ToList());
+                {
+                    productId = product.id,
+                    deliveryMethodId = method.id,
+                }).ToList());
 
             return product;
         }
@@ -136,7 +133,7 @@ namespace PandaShoppingAPI.Services
             }
 
             _productPropertyValueRepo.Update(
-                propertyValueReq.id, 
+                propertyValueReq.id,
                 updater => updater.value = propertyValueReq.value);
         }
 
@@ -159,28 +156,28 @@ namespace PandaShoppingAPI.Services
             var filledProducts = base.Fill(filter);
 
             filledProducts = FillByCategory(filledProducts, filter);
-            
+
             filledProducts = FillByPrice(filledProducts, filter);
-            
+
             filledProducts = FillByProvinceOrCityCode(filledProducts, filter);
 
             filledProducts = FillByShopId(filledProducts, filter);
 
             filledProducts = FillByQ(filledProducts, filter);
-            
+
             filledProducts = OrderBy(filledProducts, filter);
-            
+
             return filledProducts;
         }
 
         private IQueryable<Product> FillByQ(
-            IQueryable<Product> filledProducts, 
+            IQueryable<Product> filledProducts,
             ProductFilter filter)
         {
             if (!string.IsNullOrEmpty(filter.q))
             {
                 var unescapedQ = filter.UnescapeQ();
-                
+
                 return filledProducts.Where(
                     product => product.name.Contains(unescapedQ)
                     || product.category.name.Contains(unescapedQ));
@@ -189,13 +186,13 @@ namespace PandaShoppingAPI.Services
         }
 
         private IQueryable<Product> FillByProvinceOrCityCode(
-            IQueryable<Product> filledProducts, 
+            IQueryable<Product> filledProducts,
             ProductFilter filter)
         {
             if (!string.IsNullOrEmpty(filter.provinceOrCityCode))
             {
                 return filledProducts
-                    .Where(product => product.address.provinceOrCityCode == 
+                    .Where(product => product.address.provinceOrCityCode ==
                                       filter.provinceOrCityCode);
             }
             return filledProducts;
@@ -230,16 +227,16 @@ namespace PandaShoppingAPI.Services
                 {
                     products = products.OrderByDescending(
                         product => product.ProductOption.First().price
-                    );  
+                    );
                 }
                 else throw new BadRequestException("Invalid 'orderBy' param");
             }
-            
+
             return products;
         }
 
         private IQueryable<Product> FillByPrice(
-            IQueryable<Product> products, 
+            IQueryable<Product> products,
             ProductFilter filter)
         {
             if (filter.fromPrice != null)
@@ -262,7 +259,7 @@ namespace PandaShoppingAPI.Services
         }
 
         private IQueryable<Product> FillByCategory(
-            IQueryable<Product> products, 
+            IQueryable<Product> products,
             ProductFilter filter)
         {
             if (filter.categoryIdLV3 != null)
@@ -321,7 +318,7 @@ namespace PandaShoppingAPI.Services
             {
                 suggestion.products = Mapper.Map<List<ShortProductResponse>>(
                     GetProductSuggesstions(
-                        requesModel.q, 
+                        requesModel.q,
                         requesModel.suggestionNum - suggestion.categories.Count,
                         requesModel.categoryId)
                 );
@@ -332,7 +329,7 @@ namespace PandaShoppingAPI.Services
 
         private List<Product> GetProductSuggesstions(
             string q,
-            int suggesstionNum = 10, 
+            int suggesstionNum = 10,
             int? categoryId = null)
         {
             var products = _repo.GetIQueryable();
@@ -387,6 +384,15 @@ namespace PandaShoppingAPI.Services
                 product.categoryId = updateModel.categoryId;
                 product.shopId = updateModel.shopId;
             });
+        }
+
+        public List<ProductOptionResponse> GetProductOptions(int productId)
+        {
+            var options = _productOptionRepo.GetIQueryable()
+                .Where((prodOption) => prodOption.productId == productId)
+                .ToList();
+
+            return Mapper.Map<List<ProductOptionResponse>>(options);
         }
     }
 }

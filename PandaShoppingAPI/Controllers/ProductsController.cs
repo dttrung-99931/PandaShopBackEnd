@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using PandaShoppingAPI.Controllers.Base;
 using PandaShoppingAPI.DataAccesses.EF;
 using PandaShoppingAPI.Models;
@@ -29,7 +30,7 @@ namespace PandaShoppingAPI.Controllers
             var exceptionResponse = HandleExceptions(
                     () => _service.UpdatePropertyValues(id, propertyValueReqs)
                 );
-        
+
             return exceptionResponse == null ? ok_update() : exceptionResponse;
         }
 
@@ -39,9 +40,9 @@ namespace PandaShoppingAPI.Controllers
         {
             IDsResponseModel propertyValueIDs = null;
             var exceptionResponse = HandleExceptions(
-                    () => propertyValueIDs  = _service.InsertPropertyValues(id, propertyValueReqs)
+                    () => propertyValueIDs = _service.InsertPropertyValues(id, propertyValueReqs)
                 );
-        
+
             return exceptionResponse == null ? ok_create(propertyValueIDs, propertyValueIDs.IDs) : exceptionResponse;
         }
 
@@ -52,7 +53,7 @@ namespace PandaShoppingAPI.Controllers
             var exceptionResponse = HandleExceptions(
                     () => _service.DeletePropertyValues(id, propertyValueIDs)
                 );
-        
+
             return exceptionResponse == null ? ok_delete() : exceptionResponse;
         }
 
@@ -61,7 +62,7 @@ namespace PandaShoppingAPI.Controllers
             int id, [FromBody] List<ProductImageRequest> images)
         {
             List<ProductImageResponse> insertedImages = null;
-            
+
             var exceptionResponse = HandleExceptions(() =>
                     {
                         insertedImages = Mapper.Map<List<ProductImageResponse>>
@@ -71,8 +72,8 @@ namespace PandaShoppingAPI.Controllers
                     }
                 );
 
-            return exceptionResponse == null 
-                ? ok_create(insertedImages, insertedImages.Select(img => img.id)) 
+            return exceptionResponse == null
+                ? ok_create(insertedImages, insertedImages.Select(img => img.id))
                 : exceptionResponse;
         }
 
@@ -90,8 +91,8 @@ namespace PandaShoppingAPI.Controllers
                     }
                 );
 
-            return exceptionResponse == null 
-                ? ok_create(images, images.Select(img => img.id)) 
+            return exceptionResponse == null
+                ? ok_create(images, images.Select(img => img.id))
                 : exceptionResponse;
         }
 
@@ -115,8 +116,8 @@ namespace PandaShoppingAPI.Controllers
                     () => response = _service.CreateProductOption(id, option)
                 );
 
-            return exceptionResponse == null ? 
-                ok_create(response, new List<int> {response.id}) 
+            return exceptionResponse == null ?
+                ok_create(response, new List<int> { response.id })
                 : exceptionResponse;
         }
 
@@ -129,6 +130,17 @@ namespace PandaShoppingAPI.Controllers
                 );
 
             return exceptionResponse == null ? ok_delete() : exceptionResponse;
+        }
+
+
+        [HttpGet("{id}/Options")]
+        public ActionResult<ResponseWrapper> GetProductOptions(int id)
+        {
+            return Handle(() =>
+            {
+                var options = _service.GetProductOptions(id);
+                return ok_get(options);
+            });
         }
 
 
@@ -150,7 +162,7 @@ namespace PandaShoppingAPI.Controllers
         [HttpGet("SearchSuggestions")]
         public ActionResult<ResponseWrapper> GetSearchSuggestions(
             [FromQuery] SearchSuggestionRequest requesModel)
-        { 
+        {
             SearchSuggestion suggestions = null;
 
             var exceptionResponse = HandleExceptions(() =>
