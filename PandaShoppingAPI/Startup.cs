@@ -32,7 +32,7 @@ namespace PandaShoppingAPI
             MapperConfig.Config(Configuration);
 
             ServiceDIConfig.Config(services);
-            
+
             RepoDIConfig.Config(services);
 
             AuthConfig.Config(services, Configuration);
@@ -46,7 +46,7 @@ namespace PandaShoppingAPI
                 .AddNewtonsoftJson();
 
             SwaggerConfig.Config(services);
-            
+
             SignalRConfig.Config(services);
 
             FirebaseAdminConfig.Config(services, Configuration);
@@ -60,7 +60,7 @@ namespace PandaShoppingAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, 
+        public void Configure(IApplicationBuilder app,
             IWebHostEnvironment env, FileConfig configUtil)
         {
             if (env.IsDevelopment())
@@ -71,7 +71,40 @@ namespace PandaShoppingAPI
 
             app.UseSwagger();
             app.UseSwaggerUI(
-                action => action.SwaggerEndpoint("v1/swagger.json", "Panda shop api"));
+                action =>
+                {
+                    action.SwaggerEndpoint("v1/swagger.json", "Panda shop api");
+                    // Add js intercepto to auto set token after login sucessfully
+                    action.HeadContent = @"
+                    <script>
+                       window.addEventListener('load', () => {
+                        const originalFetch = window.fetch;
+                            window.fetch = async function (...args) {
+                            const response = await originalFetch.apply(this, args);
+                            const url = typeof args[0] === 'string'
+                                ? args[0] : args[0]?.url ?? '';
+                            if (url.includes('Users/login') && response.ok){
+                                console.log('Handling authorize after login successfully!');
+                                const body = await response.clone().json();
+                                const token = body?.data?.token;
+                                if (token && window.ui){
+                                window.ui.authActions.authorize({
+                                    Bearer: {
+                                        name: 'Authorization',
+                                        schema: { type: 'apiKey', in: 'header', name: 'Authorization' },
+                                        value: token
+                                    }
+                                });
+                                }
+                            }
+                            return response;
+                            }    
+                       });
+                    
+                    </script>
+
+                    ";
+                });
 
             app.UseHttpsRedirection();
 
@@ -94,7 +127,7 @@ namespace PandaShoppingAPI
                 endpoints.MapControllers();
                 endpoints.MapHub<SignalRNotificationHub>
                 (
-                    APIPaths.singalR, 
+                    APIPaths.singalR,
                     options =>
                     {
                         options.Transports =
@@ -106,7 +139,7 @@ namespace PandaShoppingAPI
 
             // Config image storing folder, base request image url 
             configUtil.ConfigFiles(app);
-            
+
 
             // Config file access for App_Data folder
             string baseDir = env.ContentRootPath;
