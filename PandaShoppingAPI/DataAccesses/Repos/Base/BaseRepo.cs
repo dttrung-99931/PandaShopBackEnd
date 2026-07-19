@@ -49,7 +49,7 @@ namespace PandaShoppingAPI.DataAccesses.Repos
             {
                 return _dbSet;
             }
-            return _dbSet.Where((entity) =>  !entity.isDeleted);
+            return _dbSet.Where((entity) => !entity.isDeleted);
         }
 
         public List<T> GetAll(bool includeDeleted = false)
@@ -233,7 +233,8 @@ namespace PandaShoppingAPI.DataAccesses.Repos
 
         public void DeleteRange(IEnumerable<T> entities)
         {
-            foreach(T entity in entities){
+            foreach (T entity in entities)
+            {
                 entity.isDeleted = true;
             }
             UpdateRange(entities);

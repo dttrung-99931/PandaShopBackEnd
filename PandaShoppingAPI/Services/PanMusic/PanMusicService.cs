@@ -12,15 +12,15 @@ using PandaShoppingAPI.Utils;
 
 namespace PandaShoppingAPI.Services
 {
-    public class PanMusicService : IPanMusicService
+    public class PanMusicService : BaseService<IPanMusicRepo, PanMusic, CreatePanMusicRequest, PanMusicFilter>, IPanMusicService
     {
-        private readonly IPanMusicRepo _repo;
         private readonly IFileRepo _fileRepo;
         private UserIdentifier _user;
         private IBackgroundJobClient _backgroundJobClient;
         private readonly FileConfig _fileConfig;
 
-        public PanMusicService(IPanMusicRepo PanMusicRepo, IFileRepo fileRepo, IBackgroundJobClient backgroundJobClient, FileConfig fileConfig)
+        public PanMusicService(IPanMusicRepo PanMusicRepo, IFileRepo fileRepo, IBackgroundJobClient backgroundJobClient, FileConfig fileConfig) :
+            base(PanMusicRepo)
         {
             _repo = PanMusicRepo;
             _fileRepo = fileRepo;
@@ -52,7 +52,7 @@ namespace PandaShoppingAPI.Services
                     fileName = _fileRepo.UploadFile(request.music, FileType.PanMusic),
                 };
                 _repo.Insert(PanMusic);
-                
+
                 // TODO: convert music to aac
             }
             catch (Exception)
@@ -110,6 +110,40 @@ namespace PandaShoppingAPI.Services
         {
             return _repo.GetIQueryable()
                 .Where((entity) => !entity.isDeleted);
+        }
+
+        public void UpdatePanMusic(int id, UpdatePanMusicRequest request)
+        {
+            try
+            {
+                string musicFileToDelete = null;
+
+                _repo.Update(id, (panMusic) =>
+                {
+                    if (request.title != null)
+                    {
+                        panMusic.title = request.title;
+                    }
+                    if (request.durationInSecs != null)
+                    {
+                        panMusic.durationInSecs = request.durationInSecs.Value;
+                    }
+                    if (request.music != null)
+                    {
+                        musicFileToDelete = panMusic.fileName;
+                        panMusic.fileName = _fileRepo.UploadFile(request.music, FileType.PanMusic);
+                    }
+                });
+
+                if (musicFileToDelete != null)
+                {
+                    _fileRepo.RemoveFile(FileType.PanMusic, musicFileToDelete);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }
