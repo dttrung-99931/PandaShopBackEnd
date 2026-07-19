@@ -1,10 +1,13 @@
 using System;
 using Hangfire;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Hangfire.Dashboard.BasicAuthorization;
+using Microsoft.Extensions.Configuration;
 
 namespace PandaShoppingAPI.Configs
 {
-    class HangfireConfig
+    public static class HangfireConfig
     {
         public static void Config(IServiceCollection services, Microsoft.Extensions.Configuration.IConfiguration configuration)
         {
@@ -25,6 +28,34 @@ namespace PandaShoppingAPI.Configs
             );
 
             services.AddHangfireServer();
+        }
+
+
+        public static IApplicationBuilder UsePandaHangfireDashboard(this IApplicationBuilder app, IConfiguration configuration)
+        {
+            app.UseHangfireDashboard(
+               "/hangfire",
+               new DashboardOptions
+               {
+                   Authorization = new[]
+                   {
+                        new BasicAuthAuthorizationFilter(new BasicAuthAuthorizationFilterOptions
+                        {
+                            RequireSsl = false,
+                            Users = new []
+                            {
+                                new BasicAuthAuthorizationUser
+                                {
+                                    Login = configuration["Hangfire:DashboardLogin:Username"],
+                                    PasswordClear =  configuration["Hangfire:DashboardLogin:Password"]
+                                }
+                            }
+
+                        })
+                   }
+               }
+           );
+            return app;
         }
     }
 }

@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using GarageSystem.Config;
 using GarageSystem.Services;
-using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Connections;
@@ -63,48 +62,14 @@ namespace PandaShoppingAPI
         public void Configure(IApplicationBuilder app,
             IWebHostEnvironment env, FileConfig configUtil)
         {
-            if (env.IsDevelopment())
+
+            if (!env.IsProduction())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UsePandaSwaggerUI();
             }
 
-
-            app.UseSwagger();
-            app.UseSwaggerUI(
-                action =>
-                {
-                    action.SwaggerEndpoint("v1/swagger.json", "Panda shop api");
-                    // Add js intercepto to auto set token after login sucessfully
-                    action.HeadContent = @"
-                    <script>
-                       window.addEventListener('load', () => {
-                        const originalFetch = window.fetch;
-                            window.fetch = async function (...args) {
-                            const response = await originalFetch.apply(this, args);
-                            const url = typeof args[0] === 'string'
-                                ? args[0] : args[0]?.url ?? '';
-                            if (url.includes('Users/login') && response.ok){
-                                console.log('Handling authorize after login successfully!');
-                                const body = await response.clone().json();
-                                const token = body?.data?.token;
-                                if (token && window.ui){
-                                window.ui.authActions.authorize({
-                                    Bearer: {
-                                        name: 'Authorization',
-                                        schema: { type: 'apiKey', in: 'header', name: 'Authorization' },
-                                        value: `Bearer ${token}`
-                                    }
-                                });
-                                }
-                            }
-                            return response;
-                            }    
-                       });
-                    
-                    </script>
-
-                    ";
-                });
 
             app.UseHttpsRedirection();
 
@@ -120,7 +85,7 @@ namespace PandaShoppingAPI
 
             app.UseAuthorization();
 
-            app.UseHangfireDashboard();
+            app.UsePandaHangfireDashboard(Configuration);
 
             app.UseEndpoints(endpoints =>
             {

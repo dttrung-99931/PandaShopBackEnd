@@ -1,10 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
 
+
 namespace PandaShoppingAPI.Configs
 {
-    public class SwaggerConfig
+    public static class SwaggerConfig
     {
         internal static void Config(IServiceCollection services)
         {
@@ -55,5 +57,46 @@ namespace PandaShoppingAPI.Configs
             );
 
         }
+        public static IApplicationBuilder UsePandaSwaggerUI(this IApplicationBuilder app)
+        {
+            app.UseSwaggerUI(
+                    action =>
+                    {
+                        action.SwaggerEndpoint("v1/swagger.json", "Panda shop api");
+                        // Add js intercepto to auto set token after login sucessfully
+                        action.HeadContent = @"
+                    <script>
+                       window.addEventListener('load', () => {
+                        const originalFetch = window.fetch;
+                            window.fetch = async function (...args) {
+                            const response = await originalFetch.apply(this, args);
+                            const url = typeof args[0] === 'string'
+                                ? args[0] : args[0]?.url ?? '';
+                            if (url.includes('Users/login') && response.ok){
+                                console.log('Handling authorize after login successfully!');
+                                const body = await response.clone().json();
+                                const token = body?.data?.token;
+                                if (token && window.ui){
+                                window.ui.authActions.authorize({
+                                    Bearer: {
+                                        name: 'Authorization',
+                                        schema: { type: 'apiKey', in: 'header', name: 'Authorization' },
+                                        value: `Bearer ${token}`
+                                    }
+                                });
+                                }
+                            }
+                            return response;
+                            }    
+                       });
+                    
+                    </script>
+
+                    ";
+                    });
+            return app;
+        }
+
     }
+
 }
