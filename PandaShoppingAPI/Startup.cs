@@ -92,7 +92,7 @@ namespace PandaShoppingAPI
                                     Bearer: {
                                         name: 'Authorization',
                                         schema: { type: 'apiKey', in: 'header', name: 'Authorization' },
-                                        value: token
+                                        value: `Bearer ${token}`
                                     }
                                 });
                                 }
