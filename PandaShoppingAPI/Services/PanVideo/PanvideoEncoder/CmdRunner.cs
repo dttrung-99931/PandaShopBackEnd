@@ -17,17 +17,17 @@ namespace PandaShoppingAPI.Services
 
         protected bool RunMp4Fragment(string args)
         {
-            return Run(_config["Mp4FragmentToolPath"], args);
+            return Run(_config["Path:Mp4FragmentToolPath"], args);
         }
 
         protected bool RunMp4Dash(string args)
         {
-            return Run(_config["Mp4DashToolPath"], args);
+            return Run(_config["Path:Mp4DashToolPath"], args);
         }
 
         protected bool RunFFMPEG(string args)
         {
-            return Run(_config["FfmpegToolPath"], args);
+            return Run(_config["Path:FfmpegToolPath"], args);
         }
 
         protected void ValidateFileExist(string filePath)
